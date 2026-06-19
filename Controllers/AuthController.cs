@@ -4,7 +4,7 @@ using OnlineJobRecruitmentSystem.Data;
 using OnlineJobRecruitmentSystem.DTOs;
 using OnlineJobRecruitmentSystem.Models;
 using OnlineJobRecruitmentSystem.Services.Interfaces;
-using OnlineJobRecruitmentSystem.Validations;
+using OnlineJobRecruitmentSystem.Validations.UserDtoValidation;
 
 namespace OnlineJobRecruitmentSystem.Controllers
 {

@@ -14,6 +14,19 @@ namespace OnlineJobRecruitmentSystem.Data
         public DbSet<Application> Applications { get; set; }
         public DbSet<SavedJob> SavedJobs { get; set; }
 
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            var entries = ChangeTracker.Entries<BaseEntity>();
+
+            foreach (var entry in entries)
+            {
+                if (entry.State == EntityState.Added)
+                    entry.Entity.CreatedAt = DateTime.UtcNow;
+            }
+
+            return base.SaveChangesAsync(cancellationToken);
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Application>()

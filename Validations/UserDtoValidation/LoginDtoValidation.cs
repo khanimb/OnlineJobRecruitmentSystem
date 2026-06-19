@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using OnlineJobRecruitmentSystem.DTOs;
 
-namespace OnlineJobRecruitmentSystem.Validations
+namespace OnlineJobRecruitmentSystem.Validations.UserDtoValidation
 {
     public class LoginDtoValidation : AbstractValidator<LoginDto>
     {
