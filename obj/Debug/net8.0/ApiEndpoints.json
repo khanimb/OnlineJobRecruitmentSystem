@@ -169,6 +169,16 @@
   },
   {
     "ContainingType": "OnlineJobRecruitmentSystem.Controllers.EmployerController",
+    "Method": "GetProfile",
+    "RelativePath": "api/Employer/profile",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "OnlineJobRecruitmentSystem.Controllers.EmployerController",
     "Method": "UpdateProfile",
     "RelativePath": "api/Employer/profile",
     "HttpMethod": "PUT",
@@ -179,6 +189,22 @@
         "Name": "dto",
         "Type": "OnlineJobRecruitmentSystem.DTOs.EmployerDtos.UpdateEmployerDto",
         "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "OnlineJobRecruitmentSystem.Controllers.EmployerController",
+    "Method": "UploadLogo",
+    "RelativePath": "api/Employer/upload-logo",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "file",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -306,6 +332,16 @@
   },
   {
     "ContainingType": "OnlineJobRecruitmentSystem.Controllers.JobSeekerController",
+    "Method": "GetProfile",
+    "RelativePath": "api/JobSeeker/profile",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "OnlineJobRecruitmentSystem.Controllers.JobSeekerController",
     "Method": "UpdateProfile",
     "RelativePath": "api/JobSeeker/profile",
     "HttpMethod": "PUT",
@@ -358,6 +394,22 @@
         "Name": "jobId",
         "Type": "System.Int32",
         "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "OnlineJobRecruitmentSystem.Controllers.JobSeekerController",
+    "Method": "UploadCv",
+    "RelativePath": "api/JobSeeker/upload-cv",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "file",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []

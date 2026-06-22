@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OnlineJobRecruitmentSystem.Data;
 using OnlineJobRecruitmentSystem.DTOs.JobSeekerDtos;
+using OnlineJobRecruitmentSystem.Extensions;
 using OnlineJobRecruitmentSystem.Models;
 using System.Security.Claims;
 
@@ -15,7 +16,8 @@ namespace OnlineJobRecruitmentSystem.Controllers
     public class JobSeekerController(
         AppDbContext context,
         IValidator<CreateJobSeekerDto> createValidator,
-        IValidator<UpdateJobSeekerDto> updateValidator
+        IValidator<UpdateJobSeekerDto> updateValidator,
+        FileManager fileManager 
     ) : ControllerBase
     {
         private int GetUserId() => int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
@@ -56,6 +58,27 @@ namespace OnlineJobRecruitmentSystem.Controllers
             }, "Job seeker profile created."));
         }
 
+        [HttpGet("profile")]
+        public async Task<IActionResult> GetProfile()
+        {
+            var userId = GetUserId();
+
+            var profile = await context.JobSeekerProfiles.FirstOrDefaultAsync(j => j.UserId == userId);
+            if (profile == null)
+                return NotFound(ResponseModel<string>.Fail("Job seeker profile not found."));
+
+            return Ok(ResponseModel<ReturnJobSeekerDto>.Ok(new ReturnJobSeekerDto
+            {
+                Id = profile.Id,
+                UserId = profile.UserId,
+                FullName = profile.FullName,
+                Phone = profile.Phone,
+                Skills = profile.Skills,
+                WorkExperience = profile.WorkExperience,
+                CvUrl = profile.CvUrl
+            }));
+        }
+
         [HttpPut("profile")]
         public async Task<IActionResult> UpdateProfile(UpdateJobSeekerDto dto)
         {
@@ -86,6 +109,33 @@ namespace OnlineJobRecruitmentSystem.Controllers
                 WorkExperience = profile.WorkExperience,
                 CvUrl = profile.CvUrl
             }, "Job seeker profile updated."));
+        }
+
+        [HttpPost("upload-cv")]
+        public async Task<IActionResult> UploadCv(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+                return BadRequest(ResponseModel<string>.Fail("File is required."));
+
+            if (!file.IsValidType(".pdf", ".doc", ".docx"))
+                return BadRequest(ResponseModel<string>.Fail("Only PDF, DOC, DOCX files are allowed."));
+
+            if (!file.IsValidSize(5 * 1024 * 1024))
+                return BadRequest(ResponseModel<string>.Fail("File size must not exceed 5 MB."));
+
+            var userId = GetUserId();
+
+            var profile = await context.JobSeekerProfiles.FirstOrDefaultAsync(j => j.UserId == userId);
+            if (profile == null)
+                return NotFound(ResponseModel<string>.Fail("Job seeker profile not found."));
+
+            if (!string.IsNullOrEmpty(profile.CvUrl))
+                fileManager.Delete(profile.CvUrl);
+
+            profile.CvUrl = await fileManager.UploadAsync(file, "cvs");
+            await context.SaveChangesAsync();
+
+            return Ok(ResponseModel<string>.Ok(profile.CvUrl, "CV uploaded successfully."));
         }
 
         [HttpGet("saved")]

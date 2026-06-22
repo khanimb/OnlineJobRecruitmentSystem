@@ -149,3 +149,4 @@ C:\Users\Xanim\Desktop\OnlineJobRecruitmentSystem\bin\Debug\net8.0\Microsoft.Ext
 C:\Users\Xanim\Desktop\OnlineJobRecruitmentSystem\bin\Debug\net8.0\Microsoft.Extensions.Options.dll
 C:\Users\Xanim\Desktop\OnlineJobRecruitmentSystem\bin\Debug\net8.0\Microsoft.Extensions.Primitives.dll
 C:\Users\Xanim\Desktop\OnlineJobRecruitmentSystem\bin\Debug\net8.0\System.Diagnostics.DiagnosticSource.dll
+C:\Users\Xanim\Desktop\OnlineJobRecruitmentSystem\bin\Debug\net8.0\OnlineJobRecruitmentSystem.staticwebassets.runtime.json

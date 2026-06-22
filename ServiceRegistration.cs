@@ -1,11 +1,12 @@
 ﻿using FluentValidation;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using OnlineJobRecruitmentSystem.Data;
+using OnlineJobRecruitmentSystem.Extensions;
 using OnlineJobRecruitmentSystem.Profiles;
 using OnlineJobRecruitmentSystem.Services;
 using OnlineJobRecruitmentSystem.Services.Interfaces;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
 namespace OnlineJobRecruitmentSystem
@@ -50,6 +51,7 @@ namespace OnlineJobRecruitmentSystem
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
             services.AddScoped<IJwtService, JwtService>();
+            services.AddScoped<FileManager>();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>

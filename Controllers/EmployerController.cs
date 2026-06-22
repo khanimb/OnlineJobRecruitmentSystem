@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using OnlineJobRecruitmentSystem.Data;
 using OnlineJobRecruitmentSystem.DTOs.ApplicationDtos;
 using OnlineJobRecruitmentSystem.DTOs.EmployerDtos;
+using OnlineJobRecruitmentSystem.Extensions;
 using OnlineJobRecruitmentSystem.Models;
 using System.Security.Claims;
 
@@ -17,7 +18,8 @@ namespace OnlineJobRecruitmentSystem.Controllers
         AppDbContext context,
         IValidator<CreateEmployerDto> createValidator,
         IValidator<UpdateEmployerDto> updateValidator,
-        IValidator<UpdateApplicationStatusDto> statusValidator
+        IValidator<UpdateApplicationStatusDto> statusValidator,
+        FileManager fileManager
     ) : ControllerBase
     {
         private int GetUserId() => int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
@@ -56,6 +58,26 @@ namespace OnlineJobRecruitmentSystem.Controllers
             }, "Employer profile created."));
         }
 
+        [HttpGet("profile")]
+        public async Task<IActionResult> GetProfile()
+        {
+            var userId = GetUserId();
+
+            var profile = await context.EmployerProfiles.FirstOrDefaultAsync(e => e.UserId == userId);
+            if (profile == null)
+                return NotFound(ResponseModel<string>.Fail("Employer profile not found."));
+
+            return Ok(ResponseModel<ReturnEmployerDto>.Ok(new ReturnEmployerDto
+            {
+                Id = profile.Id,
+                UserId = profile.UserId,
+                CompanyName = profile.CompanyName,
+                Description = profile.Description,
+                Website = profile.Website,
+                LogoUrl = profile.LogoUrl
+            }));
+        }
+
         [HttpPut("profile")]
         public async Task<IActionResult> UpdateProfile(UpdateEmployerDto dto)
         {
@@ -84,6 +106,33 @@ namespace OnlineJobRecruitmentSystem.Controllers
                 Website = profile.Website,
                 LogoUrl = profile.LogoUrl
             }, "Employer profile updated."));
+        }
+
+        [HttpPost("upload-logo")]
+        public async Task<IActionResult> UploadLogo(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+                return BadRequest(ResponseModel<string>.Fail("File is required."));
+
+            if (!file.IsValidType(".jpg", ".jpeg", ".png"))
+                return BadRequest(ResponseModel<string>.Fail("Only JPG, JPEG, PNG files are allowed."));
+
+            if (!file.IsValidSize(2 * 1024 * 1024))
+                return BadRequest(ResponseModel<string>.Fail("File size must not exceed 2 MB."));
+
+            var userId = GetUserId();
+
+            var profile = await context.EmployerProfiles.FirstOrDefaultAsync(e => e.UserId == userId);
+            if (profile == null)
+                return NotFound(ResponseModel<string>.Fail("Employer profile not found."));
+
+            if (!string.IsNullOrEmpty(profile.LogoUrl))
+                fileManager.Delete(profile.LogoUrl);
+
+            profile.LogoUrl = await fileManager.UploadAsync(file, "logos");
+            await context.SaveChangesAsync();
+
+            return Ok(ResponseModel<string>.Ok(profile.LogoUrl, "Logo uploaded successfully."));
         }
 
         [HttpGet("applications")]
