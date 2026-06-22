@@ -1,12 +1,7 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\",
-  "Documents": [
-    {
-      "AbsoluteMoniker": "D:0:0:{0435C6CF-C055-4346-9630-F9BE123827CD}|OnlineJobRecruitmentSystem.csproj|c:\\users\\xanim\\desktop\\onlinejobrecruitmentsystem\\validations\\jobseekerdtovalidation\\updatejobseekerdtovalidation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0435C6CF-C055-4346-9630-F9BE123827CD}|OnlineJobRecruitmentSystem.csproj|solutionrelative:validations\\jobseekerdtovalidation\\updatejobseekerdtovalidation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    }
-  ],
+  "Documents": [],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -14,7 +9,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 116,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": -1,
           "Children": [
             {
               "$type": "Bookmark",
@@ -31,19 +26,6 @@
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "UpdateJobSeekerDtoValidation.cs",
-              "DocumentMoniker": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\Validations\\JobSeekerDtoValidation\\UpdateJobSeekerDtoValidation.cs",
-              "RelativeDocumentMoniker": "Validations\\JobSeekerDtoValidation\\UpdateJobSeekerDtoValidation.cs",
-              "ToolTip": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\Validations\\JobSeekerDtoValidation\\UpdateJobSeekerDtoValidation.cs",
-              "RelativeToolTip": "Validations\\JobSeekerDtoValidation\\UpdateJobSeekerDtoValidation.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABoAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-22T12:48:44.641Z",
-              "EditorCaption": ""
             }
           ]
         },

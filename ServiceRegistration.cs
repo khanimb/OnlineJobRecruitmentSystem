@@ -19,7 +19,32 @@ namespace OnlineJobRecruitmentSystem
             services.AddAutoMapper(cfg => cfg.AddProfile<MapperProfile>());
             services.AddValidatorsFromAssemblyContaining<Program>();
             services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen();
+            services.AddSwaggerGen(
+                c =>
+                {
+                    c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+                    {
+                        Name = "Authorization",
+                        Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,
+                        Scheme = "Bearer",
+                        BearerFormat = "JWT",
+                        In = Microsoft.OpenApi.Models.ParameterLocation.Header
+                    });
+                    c.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+                    {
+                        {
+                             new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+                             {
+                                 Reference = new Microsoft.OpenApi.Models.OpenApiReference
+                                 {
+                                     Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                                     Id = "Bearer"
+                                 }
+                        },
+                        Array.Empty<string>()
+                    }
+                });
+            });
 
             services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
