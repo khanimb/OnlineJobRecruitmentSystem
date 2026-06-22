@@ -41,7 +41,7 @@ namespace OnlineJobRecruitmentSystem.Controllers
             if (salaryMax.HasValue)
                 query = query.Where(j => j.SalaryMax <= salaryMax);
 
-            var jobs = await query.Select(j => new JobReturnDto
+            var jobs = await query.Select(j => new ReturnJobDto
             {
                 Id = j.Id,
                 Title = j.Title,
@@ -57,7 +57,7 @@ namespace OnlineJobRecruitmentSystem.Controllers
                 CompanyName = j.EmployerProfile!.CompanyName
             }).ToListAsync();
 
-            return Ok(ResponseModel<List<JobReturnDto>>.Ok(jobs));
+            return Ok(ResponseModel<List<ReturnJobDto>>.Ok(jobs));
         }
 
         [HttpGet("{id}")]
@@ -70,7 +70,7 @@ namespace OnlineJobRecruitmentSystem.Controllers
             if (job == null)
                 return NotFound(ResponseModel<string>.Fail("Job not found."));
 
-            var dto = new JobReturnDto
+            var dto = new ReturnJobDto
             {
                 Id = job.Id,
                 Title = job.Title,
@@ -86,7 +86,7 @@ namespace OnlineJobRecruitmentSystem.Controllers
                 CompanyName = job.EmployerProfile!.CompanyName
             };
 
-            return Ok(ResponseModel<JobReturnDto>.Ok(dto));
+            return Ok(ResponseModel<ReturnJobDto>.Ok(dto));
         }
 
         [HttpPost]

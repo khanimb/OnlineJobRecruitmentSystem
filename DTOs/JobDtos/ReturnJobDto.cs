@@ -1,6 +1,6 @@
 ﻿namespace OnlineJobRecruitmentSystem.DTOs.JobDtos
 {
-    public class JobReturnDto
+    public class ReturnJobDto
     {
         public int Id { get; set; }
         public string Title { get; set; } = string.Empty;
