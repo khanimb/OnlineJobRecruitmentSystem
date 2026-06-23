@@ -1,8 +1,6 @@
-﻿using MailKit.Net.Smtp;
-using MailKit.Security;
+﻿using MailKit.Security;
 using MimeKit;
 using OnlineJobRecruitmentSystem.Services.Interfaces;
-using System.Net.Mail;
 
 namespace OnlineJobRecruitmentSystem.Services
 {
