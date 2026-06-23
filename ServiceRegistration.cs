@@ -52,6 +52,8 @@ namespace OnlineJobRecruitmentSystem
 
             services.AddScoped<IJwtService, JwtService>();
             services.AddScoped<FileManager>();
+            services.AddScoped<IEmailService, EmailService>();
+            services.AddHostedService<JobExpiryService>();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>

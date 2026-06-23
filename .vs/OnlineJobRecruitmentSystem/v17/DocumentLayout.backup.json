@@ -3,100 +3,40 @@
   "WorkspaceRootPath": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{0435C6CF-C055-4346-9630-F9BE123827CD}|OnlineJobRecruitmentSystem.csproj|c:\\users\\xanim\\desktop\\onlinejobrecruitmentsystem\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0435C6CF-C055-4346-9630-F9BE123827CD}|OnlineJobRecruitmentSystem.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{0435C6CF-C055-4346-9630-F9BE123827CD}|OnlineJobRecruitmentSystem.csproj|c:\\users\\xanim\\desktop\\onlinejobrecruitmentsystem\\services\\emailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0435C6CF-C055-4346-9630-F9BE123827CD}|OnlineJobRecruitmentSystem.csproj|solutionrelative:services\\emailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0435C6CF-C055-4346-9630-F9BE123827CD}|OnlineJobRecruitmentSystem.csproj|c:\\users\\xanim\\desktop\\onlinejobrecruitmentsystem\\controllers\\jobseekercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0435C6CF-C055-4346-9630-F9BE123827CD}|OnlineJobRecruitmentSystem.csproj|solutionrelative:controllers\\jobseekercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{0435C6CF-C055-4346-9630-F9BE123827CD}|OnlineJobRecruitmentSystem.csproj|c:\\users\\xanim\\desktop\\onlinejobrecruitmentsystem\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{0435C6CF-C055-4346-9630-F9BE123827CD}|OnlineJobRecruitmentSystem.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0435C6CF-C055-4346-9630-F9BE123827CD}|OnlineJobRecruitmentSystem.csproj|c:\\users\\xanim\\desktop\\onlinejobrecruitmentsystem\\services\\interfaces\\iemailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0435C6CF-C055-4346-9630-F9BE123827CD}|OnlineJobRecruitmentSystem.csproj|solutionrelative:services\\interfaces\\iemailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{0435C6CF-C055-4346-9630-F9BE123827CD}|OnlineJobRecruitmentSystem.csproj|c:\\users\\xanim\\desktop\\onlinejobrecruitmentsystem\\controllers\\employercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{0435C6CF-C055-4346-9630-F9BE123827CD}|OnlineJobRecruitmentSystem.csproj|solutionrelative:controllers\\employercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0435C6CF-C055-4346-9630-F9BE123827CD}|OnlineJobRecruitmentSystem.csproj|c:\\users\\xanim\\desktop\\onlinejobrecruitmentsystem\\extentions\\filemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0435C6CF-C055-4346-9630-F9BE123827CD}|OnlineJobRecruitmentSystem.csproj|solutionrelative:extentions\\filemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{0435C6CF-C055-4346-9630-F9BE123827CD}|OnlineJobRecruitmentSystem.csproj|c:\\users\\xanim\\desktop\\onlinejobrecruitmentsystem\\serviceregistration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{0435C6CF-C055-4346-9630-F9BE123827CD}|OnlineJobRecruitmentSystem.csproj|solutionrelative:serviceregistration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0435C6CF-C055-4346-9630-F9BE123827CD}|OnlineJobRecruitmentSystem.csproj|c:\\users\\xanim\\desktop\\onlinejobrecruitmentsystem\\extentions\\fileextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0435C6CF-C055-4346-9630-F9BE123827CD}|OnlineJobRecruitmentSystem.csproj|solutionrelative:extentions\\fileextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{0435C6CF-C055-4346-9630-F9BE123827CD}|OnlineJobRecruitmentSystem.csproj|c:\\users\\xanim\\desktop\\onlinejobrecruitmentsystem\\controllers\\jobcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0435C6CF-C055-4346-9630-F9BE123827CD}|OnlineJobRecruitmentSystem.csproj|solutionrelative:controllers\\jobcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0435C6CF-C055-4346-9630-F9BE123827CD}|OnlineJobRecruitmentSystem.csproj|c:\\users\\xanim\\desktop\\onlinejobrecruitmentsystem\\attributes\\filetypesattribute.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0435C6CF-C055-4346-9630-F9BE123827CD}|OnlineJobRecruitmentSystem.csproj|solutionrelative:attributes\\filetypesattribute.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{0435C6CF-C055-4346-9630-F9BE123827CD}|OnlineJobRecruitmentSystem.csproj|c:\\users\\xanim\\desktop\\onlinejobrecruitmentsystem\\dtos\\jobdtos\\returnjobdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0435C6CF-C055-4346-9630-F9BE123827CD}|OnlineJobRecruitmentSystem.csproj|solutionrelative:dtos\\jobdtos\\returnjobdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0435C6CF-C055-4346-9630-F9BE123827CD}|OnlineJobRecruitmentSystem.csproj|c:\\users\\xanim\\desktop\\onlinejobrecruitmentsystem\\attributes\\filelengthattribute.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0435C6CF-C055-4346-9630-F9BE123827CD}|OnlineJobRecruitmentSystem.csproj|solutionrelative:attributes\\filelengthattribute.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{0435C6CF-C055-4346-9630-F9BE123827CD}|OnlineJobRecruitmentSystem.csproj|c:\\users\\xanim\\desktop\\onlinejobrecruitmentsystem\\dtos\\jobdtos\\updatejobdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0435C6CF-C055-4346-9630-F9BE123827CD}|OnlineJobRecruitmentSystem.csproj|solutionrelative:dtos\\jobdtos\\updatejobdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\Migrations\\20260622172502_AddConfigurations.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Migrations\\20260622172502_AddConfigurations.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0435C6CF-C055-4346-9630-F9BE123827CD}|OnlineJobRecruitmentSystem.csproj|c:\\users\\xanim\\desktop\\onlinejobrecruitmentsystem\\data\\configurations\\savedjobconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0435C6CF-C055-4346-9630-F9BE123827CD}|OnlineJobRecruitmentSystem.csproj|solutionrelative:data\\configurations\\savedjobconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0435C6CF-C055-4346-9630-F9BE123827CD}|OnlineJobRecruitmentSystem.csproj|c:\\users\\xanim\\desktop\\onlinejobrecruitmentsystem\\data\\configurations\\applicationconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0435C6CF-C055-4346-9630-F9BE123827CD}|OnlineJobRecruitmentSystem.csproj|solutionrelative:data\\configurations\\applicationconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0435C6CF-C055-4346-9630-F9BE123827CD}|OnlineJobRecruitmentSystem.csproj|c:\\users\\xanim\\desktop\\onlinejobrecruitmentsystem\\data\\configurations\\jobpostconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0435C6CF-C055-4346-9630-F9BE123827CD}|OnlineJobRecruitmentSystem.csproj|solutionrelative:data\\configurations\\jobpostconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0435C6CF-C055-4346-9630-F9BE123827CD}|OnlineJobRecruitmentSystem.csproj|c:\\users\\xanim\\desktop\\onlinejobrecruitmentsystem\\data\\configurations\\employerprofileconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0435C6CF-C055-4346-9630-F9BE123827CD}|OnlineJobRecruitmentSystem.csproj|solutionrelative:data\\configurations\\employerprofileconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0435C6CF-C055-4346-9630-F9BE123827CD}|OnlineJobRecruitmentSystem.csproj|c:\\users\\xanim\\desktop\\onlinejobrecruitmentsystem\\data\\configurations\\jobseekerprofileconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0435C6CF-C055-4346-9630-F9BE123827CD}|OnlineJobRecruitmentSystem.csproj|solutionrelative:data\\configurations\\jobseekerprofileconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0435C6CF-C055-4346-9630-F9BE123827CD}|OnlineJobRecruitmentSystem.csproj|c:\\users\\xanim\\desktop\\onlinejobrecruitmentsystem\\data\\configurations\\userconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0435C6CF-C055-4346-9630-F9BE123827CD}|OnlineJobRecruitmentSystem.csproj|solutionrelative:data\\configurations\\userconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0435C6CF-C055-4346-9630-F9BE123827CD}|OnlineJobRecruitmentSystem.csproj|c:\\users\\xanim\\desktop\\onlinejobrecruitmentsystem\\data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0435C6CF-C055-4346-9630-F9BE123827CD}|OnlineJobRecruitmentSystem.csproj|solutionrelative:data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0435C6CF-C055-4346-9630-F9BE123827CD}|OnlineJobRecruitmentSystem.csproj|c:\\users\\xanim\\desktop\\onlinejobrecruitmentsystem\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0435C6CF-C055-4346-9630-F9BE123827CD}|OnlineJobRecruitmentSystem.csproj|solutionrelative:models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0435C6CF-C055-4346-9630-F9BE123827CD}|OnlineJobRecruitmentSystem.csproj|c:\\users\\xanim\\desktop\\onlinejobrecruitmentsystem\\models\\savedjob.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0435C6CF-C055-4346-9630-F9BE123827CD}|OnlineJobRecruitmentSystem.csproj|solutionrelative:models\\savedjob.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0435C6CF-C055-4346-9630-F9BE123827CD}|OnlineJobRecruitmentSystem.csproj|c:\\users\\xanim\\desktop\\onlinejobrecruitmentsystem\\models\\responsemodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0435C6CF-C055-4346-9630-F9BE123827CD}|OnlineJobRecruitmentSystem.csproj|solutionrelative:models\\responsemodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0435C6CF-C055-4346-9630-F9BE123827CD}|OnlineJobRecruitmentSystem.csproj|c:\\users\\xanim\\desktop\\onlinejobrecruitmentsystem\\models\\jobseekerprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0435C6CF-C055-4346-9630-F9BE123827CD}|OnlineJobRecruitmentSystem.csproj|solutionrelative:models\\jobseekerprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0435C6CF-C055-4346-9630-F9BE123827CD}|OnlineJobRecruitmentSystem.csproj|c:\\users\\xanim\\desktop\\onlinejobrecruitmentsystem\\models\\jobpost.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0435C6CF-C055-4346-9630-F9BE123827CD}|OnlineJobRecruitmentSystem.csproj|solutionrelative:models\\jobpost.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0435C6CF-C055-4346-9630-F9BE123827CD}|OnlineJobRecruitmentSystem.csproj|c:\\users\\xanim\\desktop\\onlinejobrecruitmentsystem\\models\\baseentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0435C6CF-C055-4346-9630-F9BE123827CD}|OnlineJobRecruitmentSystem.csproj|solutionrelative:models\\baseentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0435C6CF-C055-4346-9630-F9BE123827CD}|OnlineJobRecruitmentSystem.csproj|c:\\users\\xanim\\desktop\\onlinejobrecruitmentsystem\\models\\employerprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0435C6CF-C055-4346-9630-F9BE123827CD}|OnlineJobRecruitmentSystem.csproj|solutionrelative:models\\employerprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0435C6CF-C055-4346-9630-F9BE123827CD}|OnlineJobRecruitmentSystem.csproj|c:\\users\\xanim\\desktop\\onlinejobrecruitmentsystem\\models\\application.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0435C6CF-C055-4346-9630-F9BE123827CD}|OnlineJobRecruitmentSystem.csproj|solutionrelative:models\\application.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{0435C6CF-C055-4346-9630-F9BE123827CD}|OnlineJobRecruitmentSystem.csproj|c:\\users\\xanim\\desktop\\onlinejobrecruitmentsystem\\services\\jobexpiryservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0435C6CF-C055-4346-9630-F9BE123827CD}|OnlineJobRecruitmentSystem.csproj|solutionrelative:services\\jobexpiryservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -106,242 +46,8 @@
       "DocumentGroups": [
         {
           "DockedWidth": 116,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 6,
           "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\Program.cs",
-              "RelativeDocumentMoniker": "Program.cs",
-              "ToolTip": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\Program.cs",
-              "RelativeToolTip": "Program.cs",
-              "ViewState": "AgIAABIAAAAAAAAAAAAAACMAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-22T17:46:46.502Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "FileExtensions.cs",
-              "DocumentMoniker": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\Extentions\\FileExtensions.cs",
-              "RelativeDocumentMoniker": "Extentions\\FileExtensions.cs",
-              "ToolTip": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\Extentions\\FileExtensions.cs",
-              "RelativeToolTip": "Extentions\\FileExtensions.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-22T17:34:36.083Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "FileManager.cs",
-              "DocumentMoniker": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\Extentions\\FileManager.cs",
-              "RelativeDocumentMoniker": "Extentions\\FileManager.cs",
-              "ToolTip": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\Extentions\\FileManager.cs",
-              "RelativeToolTip": "Extentions\\FileManager.cs",
-              "ViewState": "AgIAAAUAAAAAAAAAAAAAwBQAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-22T17:33:51.006Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "FileTypesAttribute.cs",
-              "DocumentMoniker": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\Attributes\\FileTypesAttribute.cs",
-              "RelativeDocumentMoniker": "Attributes\\FileTypesAttribute.cs",
-              "ToolTip": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\Attributes\\FileTypesAttribute.cs",
-              "RelativeToolTip": "Attributes\\FileTypesAttribute.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-22T17:33:24.401Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "FileLengthAttribute.cs",
-              "DocumentMoniker": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\Attributes\\FileLengthAttribute.cs",
-              "RelativeDocumentMoniker": "Attributes\\FileLengthAttribute.cs",
-              "ToolTip": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\Attributes\\FileLengthAttribute.cs",
-              "RelativeToolTip": "Attributes\\FileLengthAttribute.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-22T17:32:58.831Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "20260622172502_AddConfigurations.cs",
-              "DocumentMoniker": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\Migrations\\20260622172502_AddConfigurations.cs",
-              "RelativeDocumentMoniker": "Migrations\\20260622172502_AddConfigurations.cs",
-              "ToolTip": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\Migrations\\20260622172502_AddConfigurations.cs",
-              "RelativeToolTip": "Migrations\\20260622172502_AddConfigurations.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-22T17:25:02.961Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "SavedJobConfiguration.cs",
-              "DocumentMoniker": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\Data\\Configurations\\SavedJobConfiguration.cs",
-              "RelativeDocumentMoniker": "Data\\Configurations\\SavedJobConfiguration.cs",
-              "ToolTip": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\Data\\Configurations\\SavedJobConfiguration.cs",
-              "RelativeToolTip": "Data\\Configurations\\SavedJobConfiguration.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-22T17:24:20.03Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "ApplicationConfiguration.cs",
-              "DocumentMoniker": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\Data\\Configurations\\ApplicationConfiguration.cs",
-              "RelativeDocumentMoniker": "Data\\Configurations\\ApplicationConfiguration.cs",
-              "ToolTip": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\Data\\Configurations\\ApplicationConfiguration.cs",
-              "RelativeToolTip": "Data\\Configurations\\ApplicationConfiguration.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAACIAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-22T17:23:54.322Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "JobPostConfiguration.cs",
-              "DocumentMoniker": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\Data\\Configurations\\JobPostConfiguration.cs",
-              "RelativeDocumentMoniker": "Data\\Configurations\\JobPostConfiguration.cs",
-              "ToolTip": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\Data\\Configurations\\JobPostConfiguration.cs",
-              "RelativeToolTip": "Data\\Configurations\\JobPostConfiguration.cs",
-              "ViewState": "AgIAAAIAAAAAAAAAAAAIwBUAAAAkAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-22T17:23:31.194Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 13,
-              "Title": "JobSeekerProfileConfiguration.cs",
-              "DocumentMoniker": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\Data\\Configurations\\JobSeekerProfileConfiguration.cs",
-              "RelativeDocumentMoniker": "Data\\Configurations\\JobSeekerProfileConfiguration.cs",
-              "ToolTip": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\Data\\Configurations\\JobSeekerProfileConfiguration.cs",
-              "RelativeToolTip": "Data\\Configurations\\JobSeekerProfileConfiguration.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAACIAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-22T17:22:46.725Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 12,
-              "Title": "EmployerProfileConfiguration.cs",
-              "DocumentMoniker": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\Data\\Configurations\\EmployerProfileConfiguration.cs",
-              "RelativeDocumentMoniker": "Data\\Configurations\\EmployerProfileConfiguration.cs",
-              "ToolTip": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\Data\\Configurations\\EmployerProfileConfiguration.cs",
-              "RelativeToolTip": "Data\\Configurations\\EmployerProfileConfiguration.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB8AAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-22T17:21:24.86Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 14,
-              "Title": "UserConfiguration.cs",
-              "DocumentMoniker": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\Data\\Configurations\\UserConfiguration.cs",
-              "RelativeDocumentMoniker": "Data\\Configurations\\UserConfiguration.cs",
-              "ToolTip": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\Data\\Configurations\\UserConfiguration.cs",
-              "RelativeToolTip": "Data\\Configurations\\UserConfiguration.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAACIAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-22T17:20:43.897Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "JobSeekerController.cs",
-              "DocumentMoniker": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\Controllers\\JobSeekerController.cs",
-              "RelativeDocumentMoniker": "Controllers\\JobSeekerController.cs",
-              "ToolTip": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\Controllers\\JobSeekerController.cs",
-              "RelativeToolTip": "Controllers\\JobSeekerController.cs",
-              "ViewState": "AgIAAC0AAAAAAAAAAAAYwE8AAAAJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-22T17:18:50.614Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "EmployerController.cs",
-              "DocumentMoniker": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\Controllers\\EmployerController.cs",
-              "RelativeDocumentMoniker": "Controllers\\EmployerController.cs",
-              "ToolTip": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\Controllers\\EmployerController.cs",
-              "RelativeToolTip": "Controllers\\EmployerController.cs",
-              "ViewState": "AgIAACoAAAAAAAAAAAAYwE4AAAAJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-22T17:18:41.72Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 15,
-              "Title": "AppDbContext.cs",
-              "DocumentMoniker": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\Data\\AppDbContext.cs",
-              "RelativeDocumentMoniker": "Data\\AppDbContext.cs",
-              "ToolTip": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\Data\\AppDbContext.cs",
-              "RelativeToolTip": "Data\\AppDbContext.cs",
-              "ViewState": "AgIAABMAAAAAAAAAAADwvyIAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-22T17:16:27.371Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 16,
-              "Title": "User.cs",
-              "DocumentMoniker": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\Models\\User.cs",
-              "RelativeDocumentMoniker": "Models\\User.cs",
-              "ToolTip": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\Models\\User.cs",
-              "RelativeToolTip": "Models\\User.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAbAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-22T17:16:01.208Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 17,
-              "Title": "SavedJob.cs",
-              "DocumentMoniker": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\Models\\SavedJob.cs",
-              "RelativeDocumentMoniker": "Models\\SavedJob.cs",
-              "ToolTip": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\Models\\SavedJob.cs",
-              "RelativeToolTip": "Models\\SavedJob.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAmAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-22T17:15:53.538Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 18,
-              "Title": "ResponseModel.cs",
-              "DocumentMoniker": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\Models\\ResponseModel.cs",
-              "RelativeDocumentMoniker": "Models\\ResponseModel.cs",
-              "ToolTip": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\Models\\ResponseModel.cs",
-              "RelativeToolTip": "Models\\ResponseModel.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAA/AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-22T17:15:34.204Z",
-              "EditorCaption": ""
-            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
@@ -360,67 +66,80 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 19,
-              "Title": "JobSeekerProfile.cs",
-              "DocumentMoniker": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\Models\\JobSeekerProfile.cs",
-              "RelativeDocumentMoniker": "Models\\JobSeekerProfile.cs",
-              "ToolTip": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\Models\\JobSeekerProfile.cs",
-              "RelativeToolTip": "Models\\JobSeekerProfile.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAA2AAAAAAAAAA==",
+              "DocumentIndex": 3,
+              "Title": "EmployerController.cs",
+              "DocumentMoniker": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\Controllers\\EmployerController.cs",
+              "RelativeDocumentMoniker": "Controllers\\EmployerController.cs",
+              "ToolTip": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\Controllers\\EmployerController.cs",
+              "RelativeToolTip": "Controllers\\EmployerController.cs",
+              "ViewState": "AgIAAM8AAAAAAAAAAAAcwOkAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-22T17:15:34.892Z",
+              "WhenOpened": "2026-06-23T13:18:32.826Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 20,
-              "Title": "JobPost.cs",
-              "DocumentMoniker": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\Models\\JobPost.cs",
-              "RelativeDocumentMoniker": "Models\\JobPost.cs",
-              "ToolTip": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\Models\\JobPost.cs",
-              "RelativeToolTip": "Models\\JobPost.cs",
-              "ViewState": "AgIAAAIAAAAAAAAAAAAAABAAAAAsAAAAAAAAAA==",
+              "DocumentIndex": 2,
+              "Title": "IEmailService.cs",
+              "DocumentMoniker": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\Services\\Interfaces\\IEmailService.cs",
+              "RelativeDocumentMoniker": "Services\\Interfaces\\IEmailService.cs",
+              "ToolTip": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\Services\\Interfaces\\IEmailService.cs",
+              "RelativeToolTip": "Services\\Interfaces\\IEmailService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-22T17:15:00.64Z",
+              "WhenOpened": "2026-06-23T13:16:06.211Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 21,
-              "Title": "BaseEntity.cs",
-              "DocumentMoniker": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\Models\\BaseEntity.cs",
-              "RelativeDocumentMoniker": "Models\\BaseEntity.cs",
-              "ToolTip": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\Models\\BaseEntity.cs",
-              "RelativeToolTip": "Models\\BaseEntity.cs",
+              "DocumentIndex": 0,
+              "Title": "EmailService.cs",
+              "DocumentMoniker": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\Services\\EmailService.cs",
+              "RelativeDocumentMoniker": "Services\\EmailService.cs",
+              "ToolTip": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\Services\\EmailService.cs",
+              "RelativeToolTip": "Services\\EmailService.cs",
+              "ViewState": "AgIAAAcAAAAAAAAAAAAcwCEAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-23T13:15:38.294Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\appsettings.json",
+              "RelativeDocumentMoniker": "appsettings.json",
+              "ToolTip": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\appsettings.json",
+              "RelativeToolTip": "appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-06-23T13:13:42.13Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "ReturnJobDto.cs",
+              "DocumentMoniker": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\DTOs\\JobDtos\\ReturnJobDto.cs",
+              "RelativeDocumentMoniker": "DTOs\\JobDtos\\ReturnJobDto.cs",
+              "ToolTip": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\DTOs\\JobDtos\\ReturnJobDto.cs",
+              "RelativeToolTip": "DTOs\\JobDtos\\ReturnJobDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-23T12:53:09.762Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "UpdateJobDto.cs",
+              "DocumentMoniker": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\DTOs\\JobDtos\\UpdateJobDto.cs",
+              "RelativeDocumentMoniker": "DTOs\\JobDtos\\UpdateJobDto.cs",
+              "ToolTip": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\DTOs\\JobDtos\\UpdateJobDto.cs",
+              "RelativeToolTip": "DTOs\\JobDtos\\UpdateJobDto.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-22T17:14:49.809Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 22,
-              "Title": "EmployerProfile.cs",
-              "DocumentMoniker": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\Models\\EmployerProfile.cs",
-              "RelativeDocumentMoniker": "Models\\EmployerProfile.cs",
-              "ToolTip": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\Models\\EmployerProfile.cs",
-              "RelativeToolTip": "Models\\EmployerProfile.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-22T17:14:41.09Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 23,
-              "Title": "Application.cs",
-              "DocumentMoniker": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\Models\\Application.cs",
-              "RelativeDocumentMoniker": "Models\\Application.cs",
-              "ToolTip": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\Models\\Application.cs",
-              "RelativeToolTip": "Models\\Application.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-22T17:14:26.951Z",
+              "WhenOpened": "2026-06-23T12:53:08.826Z",
               "EditorCaption": ""
             },
             {
@@ -431,9 +150,35 @@
               "RelativeDocumentMoniker": "ServiceRegistration.cs",
               "ToolTip": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\ServiceRegistration.cs",
               "RelativeToolTip": "ServiceRegistration.cs",
-              "ViewState": "AgIAAB8AAAAAAAAAAAAswDUAAAAuAAAAAAAAAA==",
+              "ViewState": "AgIAACsAAAAAAAAAAAAQwD8AAAAwAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-22T13:54:50.028Z",
+              "WhenOpened": "2026-06-23T12:51:27.475Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "JobExpiryService.cs",
+              "DocumentMoniker": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\Services\\JobExpiryService.cs",
+              "RelativeDocumentMoniker": "Services\\JobExpiryService.cs",
+              "ToolTip": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\Services\\JobExpiryService.cs",
+              "RelativeToolTip": "Services\\JobExpiryService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACMAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-23T12:50:23.263Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "JobController.cs",
+              "DocumentMoniker": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\Controllers\\JobController.cs",
+              "RelativeDocumentMoniker": "Controllers\\JobController.cs",
+              "ToolTip": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\Controllers\\JobController.cs",
+              "RelativeToolTip": "Controllers\\JobController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB0AAAAoAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-23T12:42:57.463Z",
               "EditorCaption": ""
             }
           ]

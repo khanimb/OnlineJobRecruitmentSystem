@@ -23,10 +23,13 @@ namespace OnlineJobRecruitmentSystem.Controllers
             [FromQuery] string? location,
             [FromQuery] string? jobType,
             [FromQuery] decimal? salaryMin,
-            [FromQuery] decimal? salaryMax)
+            [FromQuery] decimal? salaryMax,
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 10)
         {
             var query = context.JobPosts
                 .Include(j => j.EmployerProfile)
+                .Include(j => j.Applications)
                 .Where(j => j.IsActive)
                 .AsQueryable();
 
@@ -41,23 +44,37 @@ namespace OnlineJobRecruitmentSystem.Controllers
             if (salaryMax.HasValue)
                 query = query.Where(j => j.SalaryMax <= salaryMax);
 
-            var jobs = await query.Select(j => new ReturnJobDto
-            {
-                Id = j.Id,
-                Title = j.Title,
-                Description = j.Description,
-                Requirements = j.Requirements,
-                Location = j.Location,
-                JobType = j.JobType,
-                Category = j.Category,
-                SalaryMin = j.SalaryMin,
-                SalaryMax = j.SalaryMax,
-                Deadline = j.Deadline,
-                IsActive = j.IsActive,
-                CompanyName = j.EmployerProfile!.CompanyName
-            }).ToListAsync();
+            var totalCount = await query.CountAsync();
+            var totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
 
-            return Ok(ResponseModel<List<ReturnJobDto>>.Ok(jobs));
+            var jobs = await query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .Select(j => new ReturnJobDto
+                {
+                    Id = j.Id,
+                    Title = j.Title,
+                    Description = j.Description,
+                    Requirements = j.Requirements,
+                    Location = j.Location,
+                    JobType = j.JobType,
+                    Category = j.Category,
+                    SalaryMin = j.SalaryMin,
+                    SalaryMax = j.SalaryMax,
+                    Deadline = j.Deadline,
+                    IsActive = j.IsActive,
+                    CompanyName = j.EmployerProfile!.CompanyName,
+                    ApplicationCount = j.Applications.Count
+                }).ToListAsync();
+
+            return Ok(ResponseModel<object>.Ok(new
+            {
+                TotalCount = totalCount,
+                TotalPages = totalPages,
+                CurrentPage = page,
+                PageSize = pageSize,
+                Data = jobs
+            }));
         }
 
         [HttpGet("{id}")]
@@ -83,7 +100,8 @@ namespace OnlineJobRecruitmentSystem.Controllers
                 SalaryMax = job.SalaryMax,
                 Deadline = job.Deadline,
                 IsActive = job.IsActive,
-                CompanyName = job.EmployerProfile!.CompanyName
+                CompanyName = job.EmployerProfile!.CompanyName,
+                ApplicationCount = await context.Applications.CountAsync(a => a.JobPostId == job.Id)
             };
 
             return Ok(ResponseModel<ReturnJobDto>.Ok(dto));

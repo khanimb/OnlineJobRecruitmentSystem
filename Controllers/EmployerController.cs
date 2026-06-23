@@ -7,6 +7,7 @@ using OnlineJobRecruitmentSystem.DTOs.ApplicationDtos;
 using OnlineJobRecruitmentSystem.DTOs.EmployerDtos;
 using OnlineJobRecruitmentSystem.Extensions;
 using OnlineJobRecruitmentSystem.Models;
+using OnlineJobRecruitmentSystem.Services.Interfaces;
 using System.Security.Claims;
 
 namespace OnlineJobRecruitmentSystem.Controllers
@@ -19,7 +20,8 @@ namespace OnlineJobRecruitmentSystem.Controllers
         IValidator<CreateEmployerDto> createValidator,
         IValidator<UpdateEmployerDto> updateValidator,
         IValidator<UpdateApplicationStatusDto> statusValidator,
-        FileManager fileManager
+        FileManager fileManager,
+        IEmailService emailService
     ) : ControllerBase
     {
         private int GetUserId() => int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
@@ -221,6 +223,7 @@ namespace OnlineJobRecruitmentSystem.Controllers
 
             var application = await context.Applications
                 .Include(a => a.JobPost)
+                .Include(a => a.JobSeekerProfile)
                 .FirstOrDefaultAsync(a => a.Id == id && a.JobPost!.EmployerProfileId == employer.Id);
 
             if (application == null)
@@ -230,6 +233,22 @@ namespace OnlineJobRecruitmentSystem.Controllers
             application.Notes = dto.Notes;
 
             await context.SaveChangesAsync();
+
+            var jobSeeker = await context.JobSeekerProfiles
+                .Include(j => j.User)
+                .FirstOrDefaultAsync(j => j.Id == application.JobSeekerProfileId);
+
+            if (jobSeeker?.User != null)
+            {
+                await emailService.SendEmailAsync(
+                    jobSeeker.User.Email,
+                    "Application Status Updated",
+                    $"<h3>Your application status has been updated.</h3>" +
+                    $"<p>Job: <b>{application.JobPost!.Title}</b></p>" +
+                    $"<p>New Status: <b>{application.Status}</b></p>"
+                );
+            }
+
 
             return Ok(ResponseModel<string>.Ok(null!, "Application status updated."));
         }

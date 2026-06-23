@@ -14,5 +14,6 @@
         public DateTime Deadline { get; set; }
         public bool IsActive { get; set; }
         public string CompanyName { get; set; } = string.Empty;
+        public int ApplicationCount { get; set; }
     }
 }
