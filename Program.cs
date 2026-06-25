@@ -18,8 +18,10 @@ app.MapScalarApiReference(options =>
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
+app.UseDefaultFiles();
 app.UseStaticFiles();
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
+app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

@@ -17,6 +17,15 @@ namespace OnlineJobRecruitmentSystem
             this IServiceCollection services, IConfiguration configuration)
         {
             services.AddControllers();
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll", policy =>
+                {
+                    policy.AllowAnyOrigin()
+                          .AllowAnyMethod()
+                          .AllowAnyHeader();
+                });
+            });
             services.AddAutoMapper(cfg => cfg.AddProfile<MapperProfile>());
             services.AddValidatorsFromAssemblyContaining<Program>();
             services.AddEndpointsApiExplorer();

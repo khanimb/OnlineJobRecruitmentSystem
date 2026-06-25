@@ -1,0 +1,360 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NexHire - Create Account</title>
+    <link rel="stylesheet" href="../../assets/css/style.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+    <style>
+        body {
+            background: #f8faff;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .auth-wrapper {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 1rem;
+        }
+
+        .auth-card {
+            background: #fff;
+            border: 0.5px solid #e0eaff;
+            border-radius: 16px;
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 480px;
+            box-shadow: 0 8px 32px rgba(37,99,235,0.08);
+        }
+
+        .auth-logo {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+            .auth-logo a {
+                font-size: 22px;
+                font-weight: 500;
+                color: #0f172a;
+                text-decoration: none;
+            }
+
+        .auth-title {
+            font-size: 22px;
+            font-weight: 500;
+            color: #0f172a;
+            margin-bottom: 6px;
+        }
+
+        .auth-sub {
+            font-size: 14px;
+            color: #94a3b8;
+            margin-bottom: 28px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+            .form-group label {
+                display: block;
+                font-size: 13px;
+                font-weight: 500;
+                color: #374151;
+                margin-bottom: 6px;
+            }
+
+            .form-group input, .form-group select {
+                width: 100%;
+                padding: 10px 14px;
+                border: 0.5px solid #e0eaff;
+                border-radius: 8px;
+                font-size: 14px;
+                color: #0f172a;
+                outline: none;
+                background: #f8faff;
+            }
+
+                .form-group input:focus, .form-group select:focus {
+                    border-color: #93c5fd;
+                    background: #fff;
+                }
+
+        .form-row-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .role-selector {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .role-card {
+            border: 0.5px solid #e0eaff;
+            border-radius: 10px;
+            padding: 16px;
+            text-align: center;
+            cursor: pointer;
+            background: #f8faff;
+        }
+
+            .role-card:hover {
+                border-color: #93c5fd;
+                background: #eff6ff;
+            }
+
+            .role-card.active {
+                border-color: #2563EB;
+                background: #eff6ff;
+            }
+
+            .role-card i {
+                font-size: 24px;
+                color: #2563EB;
+                margin-bottom: 8px;
+                display: block;
+            }
+
+            .role-card .role-name {
+                font-size: 14px;
+                font-weight: 500;
+                color: #0f172a;
+            }
+
+            .role-card .role-desc {
+                font-size: 12px;
+                color: #94a3b8;
+                margin-top: 2px;
+            }
+
+        .btn-submit {
+            width: 100%;
+            background: #2563EB;
+            color: #fff;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+            .btn-submit:hover {
+                background: #1d4ed8;
+            }
+
+        .auth-footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 13px;
+            color: #94a3b8;
+        }
+
+            .auth-footer a {
+                color: #2563EB;
+                text-decoration: none;
+            }
+
+        .error-msg {
+            background: #fef2f2;
+            border: 0.5px solid #fecaca;
+            color: #dc2626;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            margin-bottom: 16px;
+            display: none;
+        }
+
+        .success-msg {
+            background: #f0fdf4;
+            border: 0.5px solid #bbf7d0;
+            color: #16a34a;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            margin-bottom: 16px;
+            display: none;
+        }
+
+        .input-icon {
+            position: relative;
+        }
+
+            .input-icon i {
+                position: absolute;
+                right: 12px;
+                top: 50%;
+                transform: translateY(-50%);
+                color: #94a3b8;
+                cursor: pointer;
+                font-size: 16px;
+            }
+
+            .input-icon input {
+                padding-right: 40px;
+            }
+
+        .role-label {
+            font-size: 13px;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">
+            <a href="../../index.html" style="text-decoration:none;color:inherit;display:flex;align-items:center;gap:8px">
+                <i class="ti ti-brand-speedtest" style="color:#2563EB"></i> NexHire<span class="logo-accent">.</span>
+            </a>
+        </div>
+        <div class="nav-links">
+            <a href="../../index.html">Home</a>
+            <a href="jobs.html">Find Jobs</a>
+            <a href="#">About</a>
+        </div>
+        <div class="nav-btns">
+            <button class="btn-outline" onclick="window.location.href='login.html'">Sign in</button>
+            <button class="btn-primary" onclick="window.location.href='register.html'">Get started</button>
+        </div>
+    </nav>
+
+    <div class="auth-wrapper">
+        <div class="auth-card">
+            <div class="auth-logo">
+                <a href="../../index.html">
+                    <i class="ti ti-brand-speedtest" style="color:#2563EB"></i> NexHire<span style="color:#2563EB">.</span>
+                </a>
+            </div>
+            <div class="auth-title">Create your account</div>
+            <div class="auth-sub">Join NexHire and find your perfect match</div>
+
+            <div class="error-msg" id="errorMsg"></div>
+            <div class="success-msg" id="successMsg"></div>
+
+            <div class="role-label">I am a...</div>
+            <div class="role-selector">
+                <div class="role-card active" id="roleJobSeeker" onclick="selectRole('JobSeeker')">
+                    <i class="ti ti-user"></i>
+                    <div class="role-name">Job Seeker</div>
+                    <div class="role-desc">Looking for a job</div>
+                </div>
+                <div class="role-card" id="roleEmployer" onclick="selectRole('Employer')">
+                    <i class="ti ti-building"></i>
+                    <div class="role-name">Employer</div>
+                    <div class="role-desc">Hiring talent</div>
+                </div>
+            </div>
+
+            <div class="form-row-2">
+                <div class="form-group">
+                    <label>First name</label>
+                    <input type="text" id="firstName" placeholder="John" />
+                </div>
+                <div class="form-group">
+                    <label>Last name</label>
+                    <input type="text" id="lastName" placeholder="Doe" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" id="username" placeholder="johndoe" />
+            </div>
+
+            <div class="form-group">
+                <label>Email address</label>
+                <input type="email" id="email" placeholder="you@example.com" />
+            </div>
+
+            <div class="form-group">
+                <label>Password</label>
+                <div class="input-icon">
+                    <input type="password" id="password" placeholder="Min. 6 characters" />
+                    <i class="ti ti-eye" onclick="togglePassword()"></i>
+                </div>
+            </div>
+
+            <button class="btn-submit" onclick="register()">Create account</button>
+
+            <div class="auth-footer">
+                Already have an account? <a href="login.html">Sign in</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../assets/js/api.js"></script>
+    <script src="../../assets/js/auth.js"></script>
+    <script>
+  let selectedRole = 'JobSeeker';
+
+  function selectRole(role) {
+    selectedRole = role;
+    document.getElementById('roleJobSeeker').classList.remove('active');
+    document.getElementById('roleEmployer').classList.remove('active');
+    document.getElementById('role' + role).classList.add('active');
+  }
+
+  function togglePassword() {
+    const input = document.getElementById('password');
+    const icon = document.querySelector('.input-icon .ti');
+    if (input.type === 'password') {
+      input.type = 'text';
+      icon.classList.replace('ti-eye', 'ti-eye-off');
+    } else {
+      input.type = 'password';
+      icon.classList.replace('ti-eye-off', 'ti-eye');
+    }
+  }
+
+  async function register() {
+    const firstName = document.getElementById('firstName').value;
+    const lastName = document.getElementById('lastName').value;
+    const username = document.getElementById('username').value;
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const errorMsg = document.getElementById('errorMsg');
+    const successMsg = document.getElementById('successMsg');
+
+    errorMsg.style.display = 'none';
+    successMsg.style.display = 'none';
+
+    if (!firstName || !lastName || !username || !email || !password) {
+      errorMsg.textContent = 'Please fill in all fields.';
+      errorMsg.style.display = 'block';
+      return;
+    }
+
+    try {
+        await apiFetch('/Auth/register', {
+        method: 'POST',
+        body: JSON.stringify({ firstName, lastName, username, email, password, role: selectedRole })
+      });
+
+      successMsg.textContent = 'Account created! Redirecting to login...';
+      successMsg.style.display = 'block';
+      
+      setTimeout(() => {
+        window.location.href = 'login.html';
+      }, 1500);
+    } catch (err) {
+      errorMsg.textContent = err.message || 'Registration failed. Please try again.';
+      errorMsg.style.display = 'block';
+    }
+  }
+    </script>
+</body>
+</html>

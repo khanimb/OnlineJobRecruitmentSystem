@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OnlineJobRecruitmentSystem.Data;
 using OnlineJobRecruitmentSystem.DTOs;
@@ -48,6 +49,7 @@ namespace OnlineJobRecruitmentSystem.Controllers
         }
 
         [HttpPost("login")]
+        [AllowAnonymous]
         public async Task<IActionResult> Login(LoginDto dto)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == dto.Email);
@@ -57,7 +59,7 @@ namespace OnlineJobRecruitmentSystem.Controllers
 
             var token = _jwtService.GenerateToken(user);
 
-            return Ok(ResponseModel<object>.Ok(new { token }, "Login successful."));
+            return Ok(ResponseModel<object>.Ok(new { token, role = user.Role }, "Login successful."));
         }
     }
 }

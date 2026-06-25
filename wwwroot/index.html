@@ -1,0 +1,260 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NexHire - Find the job you actually want</title>
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="logo">
+            <i class="ti ti-brand-speedtest"></i> NexHire<span class="logo-accent">.</span>
+        </div>
+        <div class="nav-links">
+            <a href="#">Find Jobs</a>
+            <a href="#">Companies</a>
+            <a href="#">Pricing</a>
+            <a href="#">About</a>
+            <a href="#">Contact</a>
+        </div>
+        <div class="nav-btns">
+            <button class="btn-outline" onclick="window.location.href='pages/login.html'">Sign in</button>
+            <button class="btn-primary" onclick="window.location.href='pages/register.html'">Get started</button>
+        </div>
+        <button class="hamburger" onclick="toggleMenu()"><i class="ti ti-menu-2"></i></button>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-inner">
+            <div class="hero-left">
+                <div class="hero-badge"><i class="ti ti-sparkles"></i> AI-powered job matching</div>
+                <h1>Find the job<br>you <em>actually</em><br>want.</h1>
+                <p>NexHire connects ambitious professionals with forward-thinking companies. Smart matching, real opportunities.</p>
+                <div class="search-box">
+                    <i class="ti ti-search search-icon"></i>
+                    <input type="text" id="searchKeyword" placeholder="Role, skill or company..." />
+                    <div class="search-divider"></div>
+                    <input type="text" id="searchLocation" placeholder="Location" class="location-input" />
+                    <button onclick="searchJobs()"><i class="ti ti-search"></i> Search</button>
+                </div>
+                <div class="hero-tags">
+                    <span class="trending-label">Trending:</span>
+                    <span class="hero-tag" onclick="quickSearch('Designer')">Designer</span>
+                    <span class="hero-tag" onclick="quickSearch('Developer')">Developer</span>
+                    <span class="hero-tag" onclick="quickSearch('Marketing')">Marketing</span>
+                    <span class="hero-tag" onclick="quickSearch('Remote')">Remote</span>
+                </div>
+            </div>
+            <div class="hero-card">
+                <div class="card-label">Latest openings</div>
+                <div class="mini-job">
+                    <div class="mini-avatar" style="background:#eff6ff;color:#2563EB">G</div>
+                    <div class="mini-info"><div class="mini-title">UI/UX Designer</div><div class="mini-sub">Google · Remote</div></div>
+                    <div class="mini-salary">$4,800</div>
+                </div>
+                <div class="mini-job">
+                    <div class="mini-avatar" style="background:#f0fdfa;color:#0f766e">M</div>
+                    <div class="mini-info"><div class="mini-title">Product Manager</div><div class="mini-sub">Meta · Hybrid</div></div>
+                    <div class="mini-salary">$5,500</div>
+                </div>
+                <div class="mini-job">
+                    <div class="mini-avatar" style="background:#f0f9ff;color:#0369a1">A</div>
+                    <div class="mini-info"><div class="mini-title">Backend Engineer</div><div class="mini-sub">Apple · On-site</div></div>
+                    <div class="mini-salary">$4,200</div>
+                </div>
+                <div class="mini-job">
+                    <div class="mini-avatar" style="background:#f0fdf4;color:#166534">S</div>
+                    <div class="mini-info"><div class="mini-title">Data Scientist</div><div class="mini-sub">Spotify · Remote</div></div>
+                    <div class="mini-salary">$5,100</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- STATS -->
+    <div class="stats-bar">
+        <div class="stats-inner">
+            <div class="stat"><div class="stat-num">18,400+</div><div class="stat-label">Active jobs</div></div>
+            <div class="stat"><div class="stat-num">4,200+</div><div class="stat-label">Companies</div></div>
+            <div class="stat"><div class="stat-num">120,000+</div><div class="stat-label">Job seekers</div></div>
+            <div class="stat"><div class="stat-num">94%</div><div class="stat-label">Success rate</div></div>
+        </div>
+    </div>
+
+    <!-- FEATURED JOBS -->
+    <section class="section">
+        <div class="section-header">
+            <div>
+                <div class="section-title">Featured jobs</div>
+                <div class="section-sub">Hand-picked opportunities from top companies</div>
+            </div>
+            <a class="see-all" href="pages/jobs.html">See all <i class="ti ti-arrow-right"></i></a>
+        </div>
+        <div class="jobs-grid" id="featuredJobs">
+            <div class="job-card">
+                <div class="card-top">
+                    <div class="company-logo" style="background:#eff6ff;color:#2563EB">G</div>
+                    <i class="ti ti-bookmark bookmark"></i>
+                </div>
+                <div class="job-title">Senior Frontend Developer</div>
+                <div class="job-company"><i class="ti ti-map-pin"></i> Google · Baku, AZ</div>
+                <div class="job-tags">
+                    <span class="tag tag-blue">Full-time</span>
+                    <span class="tag tag-teal">Remote</span>
+                    <span class="tag tag-gray">React</span>
+                </div>
+                <div class="job-footer">
+                    <span class="salary">$4,500 / mo</span>
+                    <button class="apply-btn" onclick="window.location.href='pages/job-detail.html'">Quick apply</button>
+                </div>
+            </div>
+            <div class="job-card">
+                <div class="card-top">
+                    <div class="company-logo" style="background:#f0fdfa;color:#0f766e">M</div>
+                    <i class="ti ti-bookmark bookmark"></i>
+                </div>
+                <div class="job-title">Product Manager</div>
+                <div class="job-company"><i class="ti ti-map-pin"></i> Microsoft · Remote</div>
+                <div class="job-tags">
+                    <span class="tag tag-blue">Full-time</span>
+                    <span class="tag tag-gray">Strategy</span>
+                    <span class="tag tag-sky">Senior</span>
+                </div>
+                <div class="job-footer">
+                    <span class="salary">$5,200 / mo</span>
+                    <button class="apply-btn" onclick="window.location.href='pages/job-detail.html'">Quick apply</button>
+                </div>
+            </div>
+            <div class="job-card">
+                <div class="card-top">
+                    <div class="company-logo" style="background:#f0f9ff;color:#0369a1">A</div>
+                    <i class="ti ti-bookmark bookmark"></i>
+                </div>
+                <div class="job-title">Backend Engineer</div>
+                <div class="job-company"><i class="ti ti-map-pin"></i> Amazon · Hybrid</div>
+                <div class="job-tags">
+                    <span class="tag tag-blue">Full-time</span>
+                    <span class="tag tag-gray">.NET</span>
+                    <span class="tag tag-green">SQL Server</span>
+                </div>
+                <div class="job-footer">
+                    <span class="salary">$4,000 / mo</span>
+                    <button class="apply-btn" onclick="window.location.href='pages/job-detail.html'">Quick apply</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CATEGORIES -->
+    <div class="categories-section">
+        <div class="categories-inner">
+            <div class="section-header">
+                <div>
+                    <div class="section-title">Browse by category</div>
+                    <div class="section-sub">Explore thousands of roles across industries</div>
+                </div>
+            </div>
+            <div class="cat-grid">
+                <div class="cat-card"><div class="cat-icon"><i class="ti ti-code"></i></div><div class="cat-name">Technology</div><div class="cat-count">2,340 jobs</div></div>
+                <div class="cat-card"><div class="cat-icon"><i class="ti ti-chart-line"></i></div><div class="cat-name">Finance</div><div class="cat-count">1,120 jobs</div></div>
+                <div class="cat-card"><div class="cat-icon"><i class="ti ti-heart-rate-monitor"></i></div><div class="cat-name">Healthcare</div><div class="cat-count">890 jobs</div></div>
+                <div class="cat-card"><div class="cat-icon"><i class="ti ti-school"></i></div><div class="cat-name">Education</div><div class="cat-count">670 jobs</div></div>
+                <div class="cat-card"><div class="cat-icon"><i class="ti ti-ad-2"></i></div><div class="cat-name">Marketing</div><div class="cat-count">540 jobs</div></div>
+                <div class="cat-card"><div class="cat-icon"><i class="ti ti-palette"></i></div><div class="cat-name">Design</div><div class="cat-count">430 jobs</div></div>
+                <div class="cat-card"><div class="cat-icon"><i class="ti ti-building"></i></div><div class="cat-name">Real Estate</div><div class="cat-count">380 jobs</div></div>
+                <div class="cat-card"><div class="cat-icon"><i class="ti ti-truck"></i></div><div class="cat-name">Logistics</div><div class="cat-count">560 jobs</div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- HOW IT WORKS -->
+    <section class="how-section">
+        <div class="section-title">How NexHire works</div>
+        <div class="section-sub" style="margin-top:6px">Get hired in 3 simple steps</div>
+        <div class="steps">
+            <div class="step-line"></div>
+            <div class="step">
+                <div class="step-num"><i class="ti ti-user-plus"></i></div>
+                <div class="step-title">Create your profile</div>
+                <div class="step-desc">Sign up and build your professional profile. Upload your CV and let employers find you.</div>
+            </div>
+            <div class="step">
+                <div class="step-num"><i class="ti ti-search"></i></div>
+                <div class="step-title">Find matching jobs</div>
+                <div class="step-desc">Browse thousands of listings or let our AI match you with the best opportunities.</div>
+            </div>
+            <div class="step">
+                <div class="step-num"><i class="ti ti-send"></i></div>
+                <div class="step-title">Apply with one click</div>
+                <div class="step-desc">Apply instantly and track your application status in real time.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <div class="cta">
+        <h2>Your next career move<br>starts here.</h2>
+        <p>Join over 120,000 professionals already using NexHire</p>
+        <div class="cta-btns">
+            <button class="btn-white" onclick="window.location.href='pages/jobs.html'"><i class="ti ti-search"></i> Find a job</button>
+            <button class="btn-ghost" onclick="window.location.href='pages/register.html'"><i class="ti ti-plus"></i> Post a job</button>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-grid">
+            <div>
+                <div class="footer-brand"><i class="ti ti-brand-speedtest" style="color:#2563EB"></i> NexHire<span style="color:#2563EB">.</span></div>
+                <div class="footer-desc">Connecting ambitious professionals with forward-thinking companies. Smart hiring for the modern world.</div>
+            </div>
+            <div class="footer-col">
+                <h4>For job seekers</h4>
+                <a href="pages/jobs.html">Browse jobs</a>
+                <a href="pages/jobseeker-dashboard.html">My applications</a>
+                <a href="pages/jobseeker-dashboard.html">Saved jobs</a>
+            </div>
+            <div class="footer-col">
+                <h4>For employers</h4>
+                <a href="pages/employer-dashboard.html">Post a job</a>
+                <a href="pages/employer-dashboard.html">Dashboard</a>
+            </div>
+            <div class="footer-col">
+                <h4>Company</h4>
+                <a href="#">About us</a>
+                <a href="#">Contact</a>
+                <a href="#">Privacy policy</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>© 2026 NexHire. All rights reserved.</span>
+            <span>Built for job seekers <i class="ti ti-heart" style="color:#2563EB"></i></span>
+        </div>
+    </footer>
+
+    <script src="assets/js/api.js"></script>
+    <script src="assets/js/auth.js"></script>
+    <script>
+  function toggleMenu() {
+    document.querySelector('.nav-links').classList.toggle('open');
+  }
+  function searchJobs() {
+    const keyword = document.getElementById('searchKeyword').value;
+    const location = document.getElementById('searchLocation').value;
+    window.location.href = `pages/jobs.html?keyword=${keyword}&location=${location}`;
+  }
+  function quickSearch(term) {
+    window.location.href = `pages/jobs.html?keyword=${term}`;
+  }
+  function filterCategory(category) {
+    window.location.href = `pages/jobs.html?category=${category}`;
+  }
+    </script>
+</body>
+</html>
