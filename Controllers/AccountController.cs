@@ -4,7 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using OnlineJobRecruitmentSystem.Data;
 using OnlineJobRecruitmentSystem.DTOs.AccountDtos;
 using OnlineJobRecruitmentSystem.Models;
+using QuestPDF.Fluent;
 using System.Security.Claims;
+using QuestPDF.Helpers;
 
 namespace OnlineJobRecruitmentSystem.Controllers
 {
@@ -80,6 +82,52 @@ namespace OnlineJobRecruitmentSystem.Controllers
             await context.SaveChangesAsync();
 
             return Ok(ResponseModel<string>.Ok(profile.CvUrl, "CV uploaded successfully."));
+        }
+
+        [HttpGet("cv/download")]
+        [Authorize(Roles = "JobSeeker")]
+        public async Task<IActionResult> DownloadCvAsPdf()
+        {
+            var userId = GetUserId();
+
+            var profile = await context.JobSeekerProfiles
+                .Include(j => j.User)
+                .FirstOrDefaultAsync(j => j.UserId == userId);
+
+            if (profile == null)
+                return NotFound(ResponseModel<string>.Fail("Job seeker profile not found."));
+
+            QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
+
+            var pdf = QuestPDF.Fluent.Document.Create(container =>
+            {
+                container.Page(page =>
+                {
+                    page.Size(PageSizes.A4);
+                    page.Margin(40);
+                    page.DefaultTextStyle(x => x.FontSize(12));
+
+                    page.Content().Column(col =>
+                    {
+                        col.Item().Text(profile.FullName)
+                            .FontSize(24).Bold();
+
+                        col.Item().Text(profile.User!.Email)
+                            .FontSize(12).FontColor("#666666");
+
+                        col.Item().Text(profile.Phone)
+                            .FontSize(12).FontColor("#666666");
+
+                        col.Item().PaddingTop(20).Text("Skills").FontSize(16).Bold();
+                        col.Item().Text(profile.Skills);
+
+                        col.Item().PaddingTop(20).Text("Work Experience").FontSize(16).Bold();
+                        col.Item().Text(profile.WorkExperience);
+                    });
+                });
+            }).GeneratePdf();
+
+            return File(pdf, "application/pdf", $"{profile.FullName}_CV.pdf");
         }
     }
 }

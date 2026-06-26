@@ -195,5 +195,38 @@ namespace OnlineJobRecruitmentSystem.Controllers
 
             return Ok(ResponseModel<string>.Ok(null!, "Job deleted successfully."));
         }
+
+        [HttpGet("{id}/similar")]
+        public async Task<IActionResult> GetSimilarJobs(int id)
+        {
+            var job = await context.JobPosts.FindAsync(id);
+            if (job == null)
+                return NotFound(ResponseModel<string>.Fail("Job not found."));
+
+            var similarJobs = await context.JobPosts
+                .Include(j => j.EmployerProfile)
+                .Include(j => j.Applications)
+                .Where(j => j.IsActive && j.Id != id &&
+                            (j.Category == job.Category || j.JobType == job.JobType))
+                .Take(5)
+                .Select(j => new ReturnJobDto
+                {
+                    Id = j.Id,
+                    Title = j.Title,
+                    Description = j.Description,
+                    Requirements = j.Requirements,
+                    Location = j.Location,
+                    JobType = j.JobType,
+                    Category = j.Category,
+                    SalaryMin = j.SalaryMin,
+                    SalaryMax = j.SalaryMax,
+                    Deadline = j.Deadline,
+                    IsActive = j.IsActive,
+                    CompanyName = j.EmployerProfile!.CompanyName,
+                    ApplicationCount = j.Applications.Count
+                }).ToListAsync();
+
+            return Ok(ResponseModel<List<ReturnJobDto>>.Ok(similarJobs));
+        }
     }
 }

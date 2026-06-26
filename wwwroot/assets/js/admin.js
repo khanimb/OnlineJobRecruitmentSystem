@@ -41,7 +41,7 @@ async function loadUsers() {
 }
 
 async function loadJobs() {
-    try { const r = await apiFetch('/Job'); allJobs = r.data || []; } catch { allJobs = []; }
+    try { const r = await apiFetch('/Job'); allJobs = r.data?.data || []; } catch { allJobs = []; }
     renderJobs(allJobs);
     document.getElementById('totalJobs').textContent = allJobs.length;
     document.getElementById('jobsBadge').textContent = allJobs.length;
@@ -96,7 +96,7 @@ function jobItemHTML(job, i) {
       <div class="job-name">${title}</div>
       <div class="job-meta"><span><i class="ti ti-map-pin"></i> ${job.location || 'Remote'}</span><span><i class="ti ti-clock"></i> ${job.jobType || 'Full-time'}</span></div>
     </div>
-    <span class="job-status status-active">Active</span>
+    <span class="job-status ${job.isActive ? 'status-active' : 'status-expired'}">${job.isActive ? 'Active' : 'Expired'}</span>
     <div class="job-actions">
       <button class="act-btn danger" onclick="deleteJob(${job.id})" title="Delete"><i class="ti ti-trash"></i></button>
     </div>

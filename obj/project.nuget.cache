@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "/C5HSrU1Awg=",
+  "dgSpecHash": "grSeGY1H97o=",
   "success": true,
   "projectFilePath": "C:\\Users\\Xanim\\Desktop\\OnlineJobRecruitmentSystem\\OnlineJobRecruitmentSystem.csproj",
   "expectedPackageFiles": [
@@ -53,6 +53,7 @@
     "C:\\Users\\Xanim\\.nuget\\packages\\microsoft.win32.systemevents\\6.0.0\\microsoft.win32.systemevents.6.0.0.nupkg.sha512",
     "C:\\Users\\Xanim\\.nuget\\packages\\mimekit\\4.17.0\\mimekit.4.17.0.nupkg.sha512",
     "C:\\Users\\Xanim\\.nuget\\packages\\mono.texttemplating\\2.2.1\\mono.texttemplating.2.2.1.nupkg.sha512",
+    "C:\\Users\\Xanim\\.nuget\\packages\\questpdf\\2026.6.1\\questpdf.2026.6.1.nupkg.sha512",
     "C:\\Users\\Xanim\\.nuget\\packages\\scalar.aspnetcore\\2.16.3\\scalar.aspnetcore.2.16.3.nupkg.sha512",
     "C:\\Users\\Xanim\\.nuget\\packages\\swashbuckle.aspnetcore\\8.0.0\\swashbuckle.aspnetcore.8.0.0.nupkg.sha512",
     "C:\\Users\\Xanim\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\8.0.0\\swashbuckle.aspnetcore.swagger.8.0.0.nupkg.sha512",

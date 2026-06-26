@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using OnlineJobRecruitmentSystem.Data;
 using OnlineJobRecruitmentSystem.DTOs.ApplicationDtos;
 using OnlineJobRecruitmentSystem.Models;
+using OnlineJobRecruitmentSystem.Services;
+using OnlineJobRecruitmentSystem.Services.Interfaces;
 using System.Security.Claims;
 
 namespace OnlineJobRecruitmentSystem.Controllers
@@ -15,7 +17,8 @@ namespace OnlineJobRecruitmentSystem.Controllers
     public class ApplicationController(
         AppDbContext context,
         IValidator<CreateApplicationDto> createValidator,
-        IValidator<UpdateApplicationStatusDto> updateValidator
+        IValidator<UpdateApplicationStatusDto> updateValidator,
+        IEmailService emailService
     ) : ControllerBase
     {
         private int GetUserId() => int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
@@ -98,6 +101,8 @@ namespace OnlineJobRecruitmentSystem.Controllers
 
             var application = await context.Applications
                 .Include(a => a.JobPost)
+                .Include(a => a.JobSeekerProfile)
+                    .ThenInclude(j => j!.User)      // ← əlavə et
                 .FirstOrDefaultAsync(a => a.Id == id && a.JobPost!.EmployerProfileId == employer.Id);
 
             if (application == null)
@@ -106,6 +111,12 @@ namespace OnlineJobRecruitmentSystem.Controllers
             application.Status = dto.Status;
             application.Notes = dto.Notes;
             await context.SaveChangesAsync();
+
+            await emailService.SendEmailAsync(
+                application.JobSeekerProfile!.User!.Email,
+                "Your Application Status Updated",
+                $"Your application for '{application.JobPost!.Title}' has been updated to: {dto.Status}."
+            );
 
             return Ok(ResponseModel<string>.Ok(null!, "Status updated."));
         }
