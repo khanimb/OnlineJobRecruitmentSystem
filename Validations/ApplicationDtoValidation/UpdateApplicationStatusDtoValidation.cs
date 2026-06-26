@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using OnlineJobRecruitmentSystem.DTOs.ApplicationDtos;
+using OnlineJobRecruitmentSystem.Models;
 
 namespace OnlineJobRecruitmentSystem.Validations.ApplicationDtoValidation
 {
@@ -8,9 +9,7 @@ namespace OnlineJobRecruitmentSystem.Validations.ApplicationDtoValidation
         public UpdateApplicationStatusDtoValidation()
         {
             RuleFor(x => x.Status)
-                .NotEmpty().WithMessage("Status is required.")
-                .Must(s => new[] { "Applied", "Reviewed", "Shortlisted", "Rejected" }.Contains(s))
-                .WithMessage("Status must be: Applied, Reviewed, Shortlisted or Rejected.");
+                .IsInEnum().WithMessage("Status must be: Applied, Reviewed, Shortlisted or Rejected.");
 
             RuleFor(x => x.Notes)
                 .MaximumLength(500).WithMessage("Notes cannot exceed 500 characters.");

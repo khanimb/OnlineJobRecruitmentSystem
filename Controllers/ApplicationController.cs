@@ -14,7 +14,8 @@ namespace OnlineJobRecruitmentSystem.Controllers
     [Authorize]
     public class ApplicationController(
         AppDbContext context,
-        IValidator<CreateApplicationDto> createValidator
+        IValidator<CreateApplicationDto> createValidator,
+        IValidator<UpdateApplicationStatusDto> updateValidator
     ) : ControllerBase
     {
         private int GetUserId() => int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
@@ -45,7 +46,7 @@ namespace OnlineJobRecruitmentSystem.Controllers
                 JobPostId = jobId,
                 JobSeekerProfileId = profile.Id,
                 CoverLetter = dto.CoverLetter,
-                Status = "Applied"
+                Status = ApplicationStatus.Applied
             });
 
             await context.SaveChangesAsync();
@@ -73,12 +74,40 @@ namespace OnlineJobRecruitmentSystem.Controllers
                     JobPostId = a.JobPostId,
                     JobTitle = a.JobPost!.Title,
                     CompanyName = a.JobPost.EmployerProfile!.CompanyName,
-                    Status = a.Status,
+                    Status = a.Status.ToString(),
                     CoverLetter = a.CoverLetter,
                     AppliedAt = a.AppliedAt
                 }).ToListAsync();
 
             return Ok(ResponseModel<List<ReturnApplicationDto>>.Ok(list));
+        }
+
+        [HttpPatch("{id}/status")]
+        [Authorize(Roles = "Employer")]
+        public async Task<IActionResult> UpdateStatus(int id, UpdateApplicationStatusDto dto)
+        {
+            var result = await updateValidator.ValidateAsync(dto);
+            if (!result.IsValid)
+                return BadRequest(ResponseModel<string>.Fail(result.Errors[0].ErrorMessage));
+
+            var userId = GetUserId();
+
+            var employer = await context.EmployerProfiles.FirstOrDefaultAsync(e => e.UserId == userId);
+            if (employer == null)
+                return NotFound(ResponseModel<string>.Fail("Employer profile not found."));
+
+            var application = await context.Applications
+                .Include(a => a.JobPost)
+                .FirstOrDefaultAsync(a => a.Id == id && a.JobPost!.EmployerProfileId == employer.Id);
+
+            if (application == null)
+                return NotFound(ResponseModel<string>.Fail("Application not found."));
+
+            application.Status = dto.Status;
+            application.Notes = dto.Notes;
+            await context.SaveChangesAsync();
+
+            return Ok(ResponseModel<string>.Ok(null!, "Status updated."));
         }
     }
 }

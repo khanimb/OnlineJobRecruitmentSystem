@@ -1,10 +1,154 @@
 ﻿<!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <title></title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Job Detail — NexHire</title>
+    <link rel="stylesheet" href="../../assets/css/style.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 </head>
 <body>
 
+    <nav class="navbar">
+        <div class="logo" onclick="window.location.href='../../index.html'" style="cursor:pointer">
+            <i class="ti ti-brand-speedtest"></i> NexHire<span class="logo-accent">.</span>
+        </div>
+        <div class="nav-links">
+            <a href="../../index.html">Home</a>
+            <a href="jobs.html">Find Jobs</a>
+            <a href="#">Companies</a>
+            <a href="#">About</a>
+        </div>
+        <div class="nav-btns" id="navBtns">
+            <button class="btn-outline" onclick="window.location.href='login.html'">Sign in</button>
+            <button class="btn-primary" onclick="window.location.href='register.html'">Get started</button>
+        </div>
+    </nav>
+
+    <div class="job-detail-page">
+
+        <div class="job-detail-main">
+            <a href="jobs.html" class="back-link"><i class="ti ti-arrow-left"></i> Back to jobs</a>
+
+            <div id="jobContent">
+                <div class="empty-state"><div class="empty-icon"><i class="ti ti-loader"></i></div><div class="empty-title">Loading...</div></div>
+            </div>
+        </div>
+
+        <aside class="job-detail-sidebar">
+            <div class="detail-apply-card" id="applyCard" style="display:none">
+                <div class="detail-salary" id="detailSalary"></div>
+                <div class="detail-salary-label">Monthly salary</div>
+                <button class="btn-apply" id="applyBtn" onclick="applyJob()">
+                    <i class="ti ti-send"></i> Apply Now
+                </button>
+                <button class="btn-save-job" onclick="saveJob()">
+                    <i class="ti ti-bookmark"></i> Save Job
+                </button>
+                <div class="detail-meta-list" id="detailMeta"></div>
+            </div>
+        </aside>
+
+    </div>
+
+    <div class="toast" id="toast"><i class="ti ti-circle-check"></i><span id="toastMsg">Done!</span></div>
+
+    <script src="../../assets/js/api.js"></script>
+    <script src="../../assets/js/auth.js"></script>
+    <script>
+  let currentJob = null;
+
+  function showToast(msg, ok=true) {
+    const t = document.getElementById('toast');
+    t.querySelector('i').style.color = ok ? '#10b981' : '#ef4444';
+    document.getElementById('toastMsg').textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  async function loadJob() {
+    const id = new URLSearchParams(window.location.search).get('id');
+    if (!id) { document.getElementById('jobContent').innerHTML = `<div class="empty-state"><div class="empty-icon"><i class="ti ti-alert-circle"></i></div><div class="empty-title">Job not found</div></div>`; return; }
+
+    try {
+      const r = await apiFetch('/Job/' + id);
+      currentJob = r.data;
+      renderJob(currentJob);
+    } catch {
+      document.getElementById('jobContent').innerHTML = `<div class="empty-state"><div class="empty-icon"><i class="ti ti-alert-circle"></i></div><div class="empty-title">Job not found</div></div>`;
+    }
+  }
+
+  function renderJob(job) {
+    const title = job.title || job.jobTitle || 'Job';
+    const company = job.companyName || 'Company';
+    const loc = job.location || 'Remote';
+    const type = job.jobType || 'Full-time';
+    const cat = job.category || '';
+    const desc = job.description || '';
+    const reqs = job.requirements || '';
+    const salMin = job.salaryMin || 0;
+    const salMax = job.salaryMax || 0;
+
+    document.title = title + ' — NexHire';
+
+    document.getElementById('jobContent').innerHTML = `
+      <div class="job-detail-header">
+        <div class="job-detail-logo">${company[0].toUpperCase()}</div>
+        <div>
+          <div class="job-detail-title">${title}</div>
+          <div class="job-detail-company"><i class="ti ti-building"></i> ${company} &nbsp;·&nbsp; <i class="ti ti-map-pin"></i> ${loc}</div>
+          <div class="job-detail-tags">
+            <span class="tag tag-blue">${type}</span>
+            ${cat ? `<span class="tag tag-gray">${cat}</span>` : ''}
+          </div>
+        </div>
+      </div>
+
+      <div class="job-detail-section">
+        <div class="job-detail-section-title">About the role</div>
+        <div class="job-detail-text">${desc || 'No description provided.'}</div>
+      </div>
+
+      ${reqs ? `<div class="job-detail-section">
+        <div class="job-detail-section-title">Requirements</div>
+        <div class="job-detail-text">${reqs}</div>
+      </div>` : ''}
+    `;
+
+    document.getElementById('detailSalary').textContent = salMin ? `$${salMin.toLocaleString()} – $${salMax.toLocaleString()}` : 'Negotiable';
+    document.getElementById('detailMeta').innerHTML = `
+      <div class="detail-meta-item"><i class="ti ti-clock"></i> ${type}</div>
+      <div class="detail-meta-item"><i class="ti ti-map-pin"></i> ${loc}</div>
+      ${cat ? `<div class="detail-meta-item"><i class="ti ti-tag"></i> ${cat}</div>` : ''}
+    `;
+    document.getElementById('applyCard').style.display = 'block';
+  }
+
+  async function applyJob() {
+    const user = getUser ? getUser() : null;
+    if (!user) { window.location.href = 'login.html'; return; }
+    if (user.role !== 'JobSeeker') { showToast('Only job seekers can apply', false); return; }
+
+    const btn = document.getElementById('applyBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="ti ti-loader"></i> Applying...';
+
+    try {
+      await apiFetch('/Application', { method: 'POST', body: JSON.stringify({ jobId: currentJob.id }) });
+      showToast('Application submitted!');
+      btn.innerHTML = '<i class="ti ti-check"></i> Applied';
+    } catch(err) {
+      showToast(err.message || 'Failed to apply', false);
+      btn.disabled = false;
+      btn.innerHTML = '<i class="ti ti-send"></i> Apply Now';
+    }
+  }
+
+  function saveJob() { showToast('Job saved!'); }
+
+  window.addEventListener('DOMContentLoaded', loadJob);
+    </script>
 </body>
 </html>

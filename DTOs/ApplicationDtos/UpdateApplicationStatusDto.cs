@@ -1,8 +1,10 @@
-﻿namespace OnlineJobRecruitmentSystem.DTOs.ApplicationDtos
+﻿using OnlineJobRecruitmentSystem.Models;
+
+namespace OnlineJobRecruitmentSystem.DTOs.ApplicationDtos
 {
     public class UpdateApplicationStatusDto
     {
-        public string Status { get; set; } = string.Empty;
+        public ApplicationStatus Status { get; set; }
         public string Notes { get; set; } = string.Empty;
     }
 }

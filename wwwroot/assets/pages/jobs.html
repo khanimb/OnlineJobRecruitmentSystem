@@ -1,10 +1,98 @@
 ﻿<!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <title></title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Find Jobs — NexHire</title>
+    <link rel="stylesheet" href="../../assets/css/style.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 </head>
 <body>
 
+    <nav class="navbar">
+        <div class="logo" onclick="window.location.href='../../index.html'" style="cursor:pointer">
+            <i class="ti ti-brand-speedtest"></i> NexHire<span class="logo-accent">.</span>
+        </div>
+        <div class="nav-links">
+            <a href="../../index.html">Home</a>
+            <a href="jobs.html" style="color:#2563EB">Find Jobs</a>
+            <a href="#">Companies</a>
+            <a href="#">About</a>
+        </div>
+        <div class="nav-btns" id="navBtns">
+            <button class="btn-outline" onclick="window.location.href='login.html'">Sign in</button>
+            <button class="btn-primary" onclick="window.location.href='register.html'">Get started</button>
+        </div>
+    </nav>
+
+    <div class="jobs-page">
+
+        <!-- FILTERS SIDEBAR -->
+        <aside class="filters-sidebar">
+            <div class="filters-title">Filters</div>
+
+            <div class="filter-group">
+                <div class="filter-label">Job Type</div>
+                <label class="filter-check"><input type="checkbox" value="Full-time" onchange="applyFilters()"> Full-time</label>
+                <label class="filter-check"><input type="checkbox" value="Part-time" onchange="applyFilters()"> Part-time</label>
+                <label class="filter-check"><input type="checkbox" value="Remote" onchange="applyFilters()"> Remote</label>
+                <label class="filter-check"><input type="checkbox" value="Contract" onchange="applyFilters()"> Contract</label>
+                <label class="filter-check"><input type="checkbox" value="Internship" onchange="applyFilters()"> Internship</label>
+            </div>
+
+            <div class="filter-group">
+                <div class="filter-label">Category</div>
+                <label class="filter-check"><input type="checkbox" value="Technology" onchange="applyFilters()"> Technology</label>
+                <label class="filter-check"><input type="checkbox" value="Finance" onchange="applyFilters()"> Finance</label>
+                <label class="filter-check"><input type="checkbox" value="Healthcare" onchange="applyFilters()"> Healthcare</label>
+                <label class="filter-check"><input type="checkbox" value="Education" onchange="applyFilters()"> Education</label>
+                <label class="filter-check"><input type="checkbox" value="Marketing" onchange="applyFilters()"> Marketing</label>
+                <label class="filter-check"><input type="checkbox" value="Design" onchange="applyFilters()"> Design</label>
+            </div>
+
+            <div class="filter-group">
+                <div class="filter-label">Salary Range</div>
+                <select id="salaryFilter" onchange="applyFilters()" style="width:100%;padding:8px 10px;border:1px solid #e2e8f0;border-radius:8px;font-size:13px;font-family:Inter,sans-serif;outline:none;color:#334155">
+                    <option value="">Any salary</option>
+                    <option value="1000">$1,000+</option>
+                    <option value="2000">$2,000+</option>
+                    <option value="3000">$3,000+</option>
+                    <option value="5000">$5,000+</option>
+                </select>
+            </div>
+
+            <button class="filter-reset" onclick="resetFilters()">Reset filters</button>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <div class="jobs-main">
+            <div class="jobs-search-bar">
+                <div class="jobs-search-input">
+                    <i class="ti ti-search"></i>
+                    <input type="text" id="searchInput" placeholder="Job title, skill or company..." oninput="applyFilters()" />
+                </div>
+                <div class="jobs-search-input">
+                    <i class="ti ti-map-pin"></i>
+                    <input type="text" id="locationInput" placeholder="Location..." oninput="applyFilters()" />
+                </div>
+                <button class="btn-primary" onclick="applyFilters()">Search</button>
+            </div>
+
+            <div class="jobs-header">
+                <div class="jobs-count" id="jobsCount">Loading...</div>
+                <select id="sortSelect" onchange="applyFilters()" style="padding:7px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:13px;font-family:Inter,sans-serif;outline:none;color:#334155">
+                    <option value="newest">Newest first</option>
+                    <option value="salary">Highest salary</option>
+                </select>
+            </div>
+
+            <div id="jobsList"></div>
+        </div>
+    </div>
+
+    <script src="../../assets/js/api.js"></script>
+    <script src="../../assets/js/auth.js"></script>
+    <script src="../../assets/js/jobs.js"></script>
 </body>
 </html>

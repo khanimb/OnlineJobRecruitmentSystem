@@ -27,6 +27,27 @@
   },
   {
     "ContainingType": "OnlineJobRecruitmentSystem.Controllers.ApplicationController",
+    "Method": "UpdateStatus",
+    "RelativePath": "api/Application/{id}/status",
+    "HttpMethod": "PATCH",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "OnlineJobRecruitmentSystem.DTOs.ApplicationDtos.UpdateApplicationStatusDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "OnlineJobRecruitmentSystem.Controllers.ApplicationController",
     "Method": "Apply",
     "RelativePath": "api/Application/{jobId}",
     "HttpMethod": "POST",
@@ -361,6 +382,22 @@
       {
         "Name": "dto",
         "Type": "OnlineJobRecruitmentSystem.DTOs.JobSeekerDtos.UpdateJobSeekerDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "OnlineJobRecruitmentSystem.Controllers.JobSeekerController",
+    "Method": "GetProfileById",
+    "RelativePath": "api/JobSeeker/profile/{userId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Int32",
         "IsRequired": true
       }
     ],

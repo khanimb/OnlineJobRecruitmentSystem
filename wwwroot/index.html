@@ -23,8 +23,8 @@
             <a href="#">Contact</a>
         </div>
         <div class="nav-btns">
-            <button class="btn-outline" onclick="window.location.href='pages/login.html'">Sign in</button>
-            <button class="btn-primary" onclick="window.location.href='pages/register.html'">Get started</button>
+            <button class="btn-outline" onclick="window.location.href='assets/pages/login.html'">Sign in</button>
+            <button class="btn-primary" onclick="window.location.href='assets/pages/register.html'">Get started</button>
         </div>
         <button class="hamburger" onclick="toggleMenu()"><i class="ti ti-menu-2"></i></button>
     </nav>
@@ -94,7 +94,7 @@
                 <div class="section-title">Featured jobs</div>
                 <div class="section-sub">Hand-picked opportunities from top companies</div>
             </div>
-            <a class="see-all" href="pages/jobs.html">See all <i class="ti ti-arrow-right"></i></a>
+            <a class="see-all" href="assets/pages/jobs.html">See all <i class="ti ti-arrow-right"></i></a>
         </div>
         <div class="jobs-grid" id="featuredJobs">
             <div class="job-card">
@@ -111,7 +111,7 @@
                 </div>
                 <div class="job-footer">
                     <span class="salary">$4,500 / mo</span>
-                    <button class="apply-btn" onclick="window.location.href='pages/job-detail.html'">Quick apply</button>
+                    <button class="apply-btn" onclick="window.location.href='assets/pages/job-detail.html'">Quick apply</button>
                 </div>
             </div>
             <div class="job-card">
@@ -128,7 +128,7 @@
                 </div>
                 <div class="job-footer">
                     <span class="salary">$5,200 / mo</span>
-                    <button class="apply-btn" onclick="window.location.href='pages/job-detail.html'">Quick apply</button>
+                    <button class="apply-btn" onclick="window.location.href='assets/pages/job-detail.html'">Quick apply</button>
                 </div>
             </div>
             <div class="job-card">
@@ -145,7 +145,7 @@
                 </div>
                 <div class="job-footer">
                     <span class="salary">$4,000 / mo</span>
-                    <button class="apply-btn" onclick="window.location.href='pages/job-detail.html'">Quick apply</button>
+                    <button class="apply-btn" onclick="window.location.href='assets/pages/job-detail.html'">Quick apply</button>
                 </div>
             </div>
         </div>
@@ -202,8 +202,8 @@
         <h2>Your next career move<br>starts here.</h2>
         <p>Join over 120,000 professionals already using NexHire</p>
         <div class="cta-btns">
-            <button class="btn-white" onclick="window.location.href='pages/jobs.html'"><i class="ti ti-search"></i> Find a job</button>
-            <button class="btn-ghost" onclick="window.location.href='pages/register.html'"><i class="ti ti-plus"></i> Post a job</button>
+            <button class="btn-white" onclick="window.location.href='assets/pages/jobs.html'"><i class="ti ti-search"></i> Find a job</button>
+            <button class="btn-ghost" onclick="window.location.href='assets/pages/register.html'"><i class="ti ti-plus"></i> Post a job</button>
         </div>
     </div>
 
@@ -216,14 +216,14 @@
             </div>
             <div class="footer-col">
                 <h4>For job seekers</h4>
-                <a href="pages/jobs.html">Browse jobs</a>
-                <a href="pages/jobseeker-dashboard.html">My applications</a>
-                <a href="pages/jobseeker-dashboard.html">Saved jobs</a>
+                <a href="assets/pages/jobs.html">Browse jobs</a>
+                <a href="assets/pages/jobseekerdashboard.html">My applications</a>
+                <a href="assets/pages/jobseekerdashboard.html">Saved jobs</a>
             </div>
             <div class="footer-col">
                 <h4>For employers</h4>
-                <a href="pages/employer-dashboard.html">Post a job</a>
-                <a href="pages/employer-dashboard.html">Dashboard</a>
+                <a href="assets/pages/employerdashboard.html">Post a job</a>
+                <a href="assets/pages/employerdashboard.html">Dashboard</a>
             </div>
             <div class="footer-col">
                 <h4>Company</h4>
@@ -247,13 +247,13 @@
   function searchJobs() {
     const keyword = document.getElementById('searchKeyword').value;
     const location = document.getElementById('searchLocation').value;
-    window.location.href = `pages/jobs.html?keyword=${keyword}&location=${location}`;
+    window.location.href = `assets/pages/jobs.html?keyword=${keyword}&location=${location}`;
   }
   function quickSearch(term) {
-    window.location.href = `pages/jobs.html?keyword=${term}`;
+    window.location.href = `assets/pages/jobs.html?keyword=${term}`;
   }
   function filterCategory(category) {
-    window.location.href = `pages/jobs.html?category=${category}`;
+    window.location.href = `assets/pages/jobs.html?category=${category}`;
   }
     </script>
 </body>

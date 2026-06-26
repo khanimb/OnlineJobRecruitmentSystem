@@ -14,7 +14,7 @@ function isLoggedIn() {
 function logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    window.location.href = '/pages/login.html';
+    window.location.href = '/assets/pages/login.html';
 }
 
 function updateNavbar() {
@@ -26,12 +26,12 @@ function updateNavbar() {
 
     if (user.role === 'Employer') {
         navBtns.innerHTML = `
-      <a href="/pages/employer-dashboard.html" class="btn-outline">Dashboard</a>
+      <a href="/assets/pages/employerdashboard.html" class="btn-outline">Dashboard</a>
       <button class="btn-primary" onclick="logout()">Logout</button>
     `;
     } else if (user.role === 'JobSeeker') {
         navBtns.innerHTML = `
-      <a href="/pages/jobseeker-dashboard.html" class="btn-outline">Dashboard</a>
+      <a href="/assets/pages/jobseekerdashboard.html" class="btn-outline">Dashboard</a>
       <button class="btn-primary" onclick="logout()">Logout</button>
     `;
     }

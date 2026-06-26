@@ -152,8 +152,8 @@ namespace OnlineJobRecruitmentSystem.Controllers
                 .Where(a => a.JobPost!.EmployerProfileId == employer.Id)
                 .AsQueryable();
 
-            if (!string.IsNullOrEmpty(status))
-                query = query.Where(a => a.Status == status);
+            if (!string.IsNullOrEmpty(status) && Enum.TryParse<ApplicationStatus>(status, out var statusEnum))
+                query = query.Where(a => a.Status == statusEnum);
 
             var list = await query.Select(a => new
             {
@@ -165,6 +165,7 @@ namespace OnlineJobRecruitmentSystem.Controllers
                 JobTitle = a.JobPost!.Title,
                 JobSeeker = new
                 {
+                    a.JobSeekerProfile!.UserId,
                     a.JobSeekerProfile!.FullName,
                     a.JobSeekerProfile.Skills,
                     a.JobSeekerProfile.CvUrl
@@ -268,10 +269,10 @@ namespace OnlineJobRecruitmentSystem.Controllers
                 .CountAsync(a => a.JobPost!.EmployerProfileId == employer.Id);
             var shortlisted = await context.Applications
                 .Include(a => a.JobPost)
-                .CountAsync(a => a.JobPost!.EmployerProfileId == employer.Id && a.Status == "Shortlisted");
+                .CountAsync(a => a.JobPost!.EmployerProfileId == employer.Id && a.Status == ApplicationStatus.Shortlisted);
             var rejected = await context.Applications
                 .Include(a => a.JobPost)
-                .CountAsync(a => a.JobPost!.EmployerProfileId == employer.Id && a.Status == "Rejected");
+                .CountAsync(a => a.JobPost!.EmployerProfileId == employer.Id && a.Status == ApplicationStatus.Rejected);
 
             return Ok(ResponseModel<object>.Ok(new
             {

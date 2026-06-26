@@ -12,8 +12,9 @@ namespace OnlineJobRecruitmentSystem.Data.Configurations
 
             builder.Property(a => a.Status)
                 .IsRequired()
+                .HasConversion<string>()
                 .HasMaxLength(20)
-                .HasDefaultValue("Applied");
+                .HasDefaultValue(ApplicationStatus.Applied);
 
             builder.Property(a => a.CoverLetter)
                 .HasMaxLength(2000);

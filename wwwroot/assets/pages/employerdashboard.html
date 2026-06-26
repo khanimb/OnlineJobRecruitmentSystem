@@ -1,10 +1,199 @@
 ﻿<!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <title></title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Employer Dashboard — NexHire</title>
+    <link rel="stylesheet" href="../../assets/css/style.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 </head>
 <body>
 
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <i class="ti ti-brand-speedtest"></i> NexHire<span>.</span>
+        </div>
+        <div class="sidebar-section">Main</div>
+        <a class="nav-item active" onclick="showTab('overview',this)"><i class="ti ti-layout-dashboard"></i> Overview</a>
+        <a class="nav-item" onclick="showTab('jobs',this)"><i class="ti ti-briefcase"></i> My Jobs <span class="nav-badge" id="jobsBadge">0</span></a>
+        <a class="nav-item" onclick="showTab('applicants',this)"><i class="ti ti-users"></i> Applicants <span class="nav-badge" id="appsBadge">0</span></a>
+        <div class="sidebar-section">Account</div>
+        <a class="nav-item" onclick="showTab('profile',this)"><i class="ti ti-user-circle"></i> Company Profile</a>
+        <a class="nav-item" href="jobs.html"><i class="ti ti-world"></i> Browse Jobs</a>
+        <div class="sidebar-bottom">
+            <div class="sidebar-user">
+                <div class="user-avatar" id="sidebarAvatar">E</div>
+                <div>
+                    <div class="user-name" id="sidebarName">Employer</div>
+                    <div class="user-role-label">Employer Account</div>
+                </div>
+                <button class="logout-btn" onclick="logout()"><i class="ti ti-logout"></i></button>
+            </div>
+        </div>
+    </aside>
+
+    <div class="dash-main">
+        <div class="topbar">
+            <div class="topbar-left">
+                <h1 id="pageTitle">Overview</h1>
+                <p id="pageSubtitle">Welcome back! Here's what's happening.</p>
+            </div>
+            <div class="topbar-right">
+                <div class="icon-btn"><i class="ti ti-bell"></i><div class="notif-dot"></div></div>
+                <button class="btn-post" onclick="openModal()"><i class="ti ti-plus"></i> Post a Job</button>
+            </div>
+        </div>
+
+        <div class="dash-content">
+
+            <!-- OVERVIEW -->
+            <div id="tab-overview">
+                <div class="stats-row">
+                    <div class="stat-card">
+                        <div class="stat-card-top">
+                            <div class="stat-icon" style="background:#eff6ff;color:#2563EB"><i class="ti ti-briefcase"></i></div>
+                            <span class="stat-change up"><i class="ti ti-arrow-up"></i> Active</span>
+                        </div>
+                        <div class="stat-num-big" id="totalJobs">0</div>
+                        <div class="stat-label">Posted Jobs</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-top">
+                            <div class="stat-icon" style="background:#ecfdf5;color:#10b981"><i class="ti ti-users"></i></div>
+                            <span class="stat-change up"><i class="ti ti-arrow-up"></i> New</span>
+                        </div>
+                        <div class="stat-num-big" id="totalApps">0</div>
+                        <div class="stat-label">Total Applicants</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-top">
+                            <div class="stat-icon" style="background:#fffbeb;color:#f59e0b"><i class="ti ti-eye"></i></div>
+                            <span class="stat-change neutral">This week</span>
+                        </div>
+                        <div class="stat-num-big">1,240</div>
+                        <div class="stat-label">Profile Views</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-top">
+                            <div class="stat-icon" style="background:#f0fdf4;color:#16a34a"><i class="ti ti-check"></i></div>
+                            <span class="stat-change neutral">Total</span>
+                        </div>
+                        <div class="stat-num-big">0</div>
+                        <div class="stat-label">Hired</div>
+                    </div>
+                </div>
+
+                <div class="dash-grid-2">
+                    <div class="dash-card">
+                        <div class="dash-card-header">
+                            <div><div class="dash-card-title">Recent Job Listings</div><div class="dash-card-sub">Your latest posted positions</div></div>
+                            <button class="dash-card-action" onclick="showTab('jobs',null)">View all →</button>
+                        </div>
+                        <div id="recentJobsList"></div>
+                    </div>
+                    <div class="dash-card">
+                        <div class="dash-card-header">
+                            <div><div class="dash-card-title">Recent Applicants</div><div class="dash-card-sub">Latest candidates</div></div>
+                            <button class="dash-card-action" onclick="showTab('applicants',null)">View all →</button>
+                        </div>
+                        <div id="recentAppsList"></div>
+                    </div>
+                </div>
+
+                <div class="dash-card">
+                    <div class="dash-card-header">
+                        <div><div class="dash-card-title">Application Activity</div><div class="dash-card-sub">Last 7 days</div></div>
+                    </div>
+                    <div class="chart-area" id="chartArea"></div>
+                    <div class="mini-stats">
+                        <div class="mini-stat"><div class="mini-stat-num" id="miniNew">0</div><div class="mini-stat-label">New this week</div></div>
+                        <div class="mini-stat"><div class="mini-stat-num">0</div><div class="mini-stat-label">Under review</div></div>
+                        <div class="mini-stat"><div class="mini-stat-num">0</div><div class="mini-stat-label">Shortlisted</div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- JOBS TAB -->
+            <div id="tab-jobs" style="display:none">
+                <div class="dash-card">
+                    <div class="dash-card-header">
+                        <div><div class="dash-card-title">All Job Listings</div><div class="dash-card-sub" id="jobsSubtitle">0 positions posted</div></div>
+                        <button class="btn-post" onclick="openModal()"><i class="ti ti-plus"></i> Post a Job</button>
+                    </div>
+                    <div id="allJobsList"></div>
+                </div>
+            </div>
+
+            <!-- APPLICANTS TAB -->
+            <div id="tab-applicants" style="display:none">
+                <div class="dash-card">
+                    <div class="dash-card-header">
+                        <div><div class="dash-card-title">All Applicants</div><div class="dash-card-sub">Manage your candidates</div></div>
+                    </div>
+                    <div id="allApplicantsList"></div>
+                </div>
+            </div>
+
+            <!-- PROFILE TAB -->
+            <div id="tab-profile" style="display:none">
+                <div class="dash-card" style="max-width:640px">
+                    <div class="dash-card-header"><div class="dash-card-title">Company Profile</div></div>
+                    <div style="padding:24px 28px;display:flex;flex-direction:column;gap:16px">
+                        <div class="form-group">
+                            <label>Company Name</label>
+                            <input type="text" id="companyName" placeholder="Your company" />
+                        </div>
+                        <div class="form-group">
+                            <label>Website</label>
+                            <input type="url" id="companyWebsite" placeholder="https://yourcompany.com" />
+                        </div>
+                        <div class="form-group">
+                            <label>About</label>
+                            <textarea id="companyDesc" placeholder="Describe your company..." style="width:100%;padding:10px 14px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:0.875rem;font-family:Inter,sans-serif;min-height:100px;outline:none;resize:vertical"></textarea>
+                        </div>
+                        <button class="btn-primary" onclick="saveProfile()" style="width:100%;justify-content:center">Save Profile</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODAL -->
+            <div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
+                <div class="modal">
+                    <div class="modal-header">
+                        <div class="modal-title">Post a New Job</div>
+                        <button class="modal-close" onclick="closeModal()"><i class="ti ti-x"></i></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-row-2">
+                            <div class="form-group"><label>Job Title *</label><input type="text" id="jobTitle" placeholder="e.g. Senior Developer" /></div>
+                            <div class="form-group"><label>Location *</label><input type="text" id="jobLocation" placeholder="e.g. Baku, AZ" /></div>
+                        </div>
+                        <div class="form-row-2">
+                            <div class="form-group"><label>Job Type</label><select id="jobType"><option value="Full-time">Full-time</option><option value="Part-time">Part-time</option><option value="Remote">Remote</option><option value="Contract">Contract</option><option value="Internship">Internship</option></select></div>
+                            <div class="form-group"><label>Category</label><select id="jobCategory"><option value="Technology">Technology</option><option value="Finance">Finance</option><option value="Healthcare">Healthcare</option><option value="Education">Education</option><option value="Marketing">Marketing</option><option value="Design">Design</option><option value="Other">Other</option></select></div>
+                        </div>
+                        <div class="form-row-2">
+                            <div class="form-group"><label>Min Salary ($)</label><input type="number" id="salaryMin" placeholder="3000" /></div>
+                            <div class="form-group"><label>Max Salary ($)</label><input type="number" id="salaryMax" placeholder="6000" /></div>
+                        </div>
+                        <div class="form-group"><label>Job Description *</label><textarea id="jobDesc" style="width:100%;padding:10px 14px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:0.875rem;font-family:Inter,sans-serif;min-height:90px;outline:none;background:#f8faff" placeholder="Describe the role..."></textarea></div>
+                        <div class="form-group"><label>Requirements</label><textarea id="jobReqs" style="width:100%;padding:10px 14px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:0.875rem;font-family:Inter,sans-serif;min-height:70px;outline:none;background:#f8faff" placeholder="Required skills..."></textarea></div>
+                        <div class="form-group">
+                            <label>Application Deadline</label>
+                            <input type="date" id="jobDeadline" />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+                        <button class="btn-save" onclick="postJob()"><i class="ti ti-send"></i> Post Job</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="toast" id="toast"><i class="ti ti-circle-check"></i><span id="toastMsg">Done!</span></div>
+
+            <script src="../../assets/js/api.js"></script>
+            <script src="../../assets/js/employer.js"></script>
 </body>
 </html>

@@ -138,6 +138,27 @@ namespace OnlineJobRecruitmentSystem.Controllers
             return Ok(ResponseModel<string>.Ok(profile.CvUrl, "CV uploaded successfully."));
         }
 
+        [HttpGet("profile/{userId}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetProfileById(int userId)
+        {
+            var profile = await context.JobSeekerProfiles
+                .FirstOrDefaultAsync(j => j.UserId == userId);
+            if (profile == null)
+                return NotFound(ResponseModel<string>.Fail("Profile not found."));
+
+            return Ok(ResponseModel<ReturnJobSeekerDto>.Ok(new ReturnJobSeekerDto
+            {
+                Id = profile.Id,
+                UserId = profile.UserId,
+                FullName = profile.FullName,
+                Phone = profile.Phone,
+                Skills = profile.Skills,
+                WorkExperience = profile.WorkExperience,
+                CvUrl = profile.CvUrl
+            }));
+        }
+
         [HttpGet("saved")]
         public async Task<IActionResult> GetSavedJobs()
         {

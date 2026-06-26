@@ -1,10 +1,175 @@
 ﻿<!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <title></title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Job Seeker Dashboard — NexHire</title>
+    <link rel="stylesheet" href="../../assets/css/style.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 </head>
 <body>
 
+    <aside class="sidebar">
+        <div class="sidebar-logo"><i class="ti ti-brand-speedtest"></i> NexHire<span>.</span></div>
+        <div class="sidebar-section">Main</div>
+        <a class="nav-item active" onclick="showTab('overview',this)"><i class="ti ti-layout-dashboard"></i> Overview</a>
+        <a class="nav-item" onclick="showTab('applications',this)"><i class="ti ti-file-text"></i> My Applications <span class="nav-badge" id="appsBadge">0</span></a>
+        <a class="nav-item" onclick="showTab('saved',this)"><i class="ti ti-bookmark"></i> Saved Jobs <span class="nav-badge" id="savedBadge">0</span></a>
+        <a class="nav-item" onclick="showTab('browse',this)"><i class="ti ti-search"></i> Browse Jobs</a>
+        <div class="sidebar-section">Account</div>
+        <a class="nav-item" onclick="showTab('profile',this)"><i class="ti ti-user-circle"></i> My Profile</a>
+        <div class="sidebar-bottom">
+            <div class="sidebar-user">
+                <div class="user-avatar" id="sidebarAvatar">J</div>
+                <div>
+                    <div class="user-name" id="sidebarName">Job Seeker</div>
+                    <div class="user-role-label">Job Seeker</div>
+                </div>
+                <button class="logout-btn" onclick="logout()"><i class="ti ti-logout"></i></button>
+            </div>
+        </div>
+    </aside>
+
+    <div class="dash-main">
+        <div class="topbar">
+            <div class="topbar-left">
+                <h1 id="pageTitle">Overview</h1>
+                <p id="pageSubtitle">Here's your job search summary.</p>
+            </div>
+            <div class="topbar-right">
+                <div class="icon-btn"><i class="ti ti-bell"></i><div class="notif-dot"></div></div>
+                <button class="btn-post" onclick="window.location.href='/assets/pages/jobs.html'"><i class="ti ti-search"></i> Find Jobs</button>
+            </div>
+        </div>
+
+        <div class="dash-content">
+
+            <!-- OVERVIEW -->
+            <div id="tab-overview">
+                <div class="stats-row">
+                    <div class="stat-card">
+                        <div class="stat-card-top">
+                            <div class="stat-icon" style="background:#eff6ff;color:#2563EB"><i class="ti ti-file-text"></i></div>
+                            <span class="stat-change neutral">Total</span>
+                        </div>
+                        <div class="stat-num-big" id="totalApplications">0</div>
+                        <div class="stat-label">Applications</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-top">
+                            <div class="stat-icon" style="background:#fffbeb;color:#f59e0b"><i class="ti ti-clock"></i></div>
+                            <span class="stat-change neutral">Active</span>
+                        </div>
+                        <div class="stat-num-big" id="pendingCount">0</div>
+                        <div class="stat-label">Pending</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-top">
+                            <div class="stat-icon" style="background:#ecfdf5;color:#10b981"><i class="ti ti-check"></i></div>
+                            <span class="stat-change up"><i class="ti ti-arrow-up"></i> Great</span>
+                        </div>
+                        <div class="stat-num-big" id="acceptedCount">0</div>
+                        <div class="stat-label">Accepted</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-top">
+                            <div class="stat-icon" style="background:#fdf4ff;color:#a855f7"><i class="ti ti-bookmark"></i></div>
+                            <span class="stat-change neutral">Saved</span>
+                        </div>
+                        <div class="stat-num-big" id="savedCount">0</div>
+                        <div class="stat-label">Saved Jobs</div>
+                    </div>
+                </div>
+                <div class="dash-grid-2">
+                    <div class="dash-card">
+                        <div class="dash-card-header">
+                            <div><div class="dash-card-title">Recent Applications</div><div class="dash-card-sub">Your latest job applications</div></div>
+                            <button class="dash-card-action" onclick="showTab('applications',null)">View all →</button>
+                        </div>
+                        <div id="recentApplicationsList"></div>
+                    </div>
+                    <div class="dash-card">
+                        <div class="dash-card-header">
+                            <div><div class="dash-card-title">Saved Jobs</div><div class="dash-card-sub">Jobs you bookmarked</div></div>
+                            <button class="dash-card-action" onclick="showTab('saved',null)">View all →</button>
+                        </div>
+                        <div id="recentSavedList"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- APPLICATIONS TAB -->
+            <div id="tab-applications" style="display:none">
+                <div class="dash-card">
+                    <div class="dash-card-header">
+                        <div><div class="dash-card-title">My Applications</div><div class="dash-card-sub" id="appsSubtitle">0 applications</div></div>
+                    </div>
+                    <div id="allApplicationsList"></div>
+                </div>
+            </div>
+
+            <!-- SAVED TAB -->
+            <div id="tab-saved" style="display:none">
+                <div class="dash-card">
+                    <div class="dash-card-header">
+                        <div><div class="dash-card-title">Saved Jobs</div><div class="dash-card-sub">Jobs you bookmarked</div></div>
+                    </div>
+                    <div id="allSavedList"></div>
+                </div>
+            </div>
+
+            <!-- BROWSE TAB -->
+            <div id="tab-browse" style="display:none">
+                <div class="dash-card">
+                    <div class="dash-card-header">
+                        <div><div class="dash-card-title">Browse Jobs</div><div class="dash-card-sub">Find your next opportunity</div></div>
+                    </div>
+                    <div id="browseJobsList"></div>
+                </div>
+            </div>
+
+            <!-- PROFILE TAB -->
+            <div id="tab-profile" style="display:none">
+                <div class="dash-card" style="max-width:640px">
+                    <div class="dash-card-header"><div class="dash-card-title">My Profile</div></div>
+                    <div style="padding:24px 28px;display:flex;flex-direction:column;gap:16px">
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input type="text" id="profileFullName" placeholder="John Doe" />
+                        </div>
+                        <div class="form-group">
+                            <label>Phone</label>
+                            <input type="text" id="profilePhone" placeholder="+994 50 000 00 00" />
+                        </div>
+                        <div class="form-group">
+                            <label>Skills</label>
+                            <input type="text" id="profileSkills" placeholder="React, Node.js, SQL..." />
+                        </div>
+                        <div class="form-group">
+                            <label>Work Experience</label>
+                            <textarea id="profileExperience" placeholder="Describe your work experience..." style="width:100%;padding:10px 14px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:0.875rem;font-family:Inter,sans-serif;min-height:100px;outline:none;resize:vertical"></textarea>
+                        </div>
+                        <button class="btn-primary" onclick="saveProfile()" style="width:100%;justify-content:center">Save Profile</button>
+                        <hr style="border:none;border-top:1px solid #e2e8f0" />
+                        <div class="form-group">
+                            <label>CV / Resume</label>
+                            <input type="file" id="cvFile" accept=".pdf,.doc,.docx" style="padding:8px" />
+                        </div>
+                        <div style="display:flex;gap:12px;align-items:center">
+                            <button class="btn-outline" onclick="uploadCv()"><i class="ti ti-upload"></i> Upload CV</button>
+                            <a id="cvLink" href="#" target="_blank" style="display:none;color:#2563EB;font-size:0.875rem"><i class="ti ti-file-text"></i> View current CV</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="toast" id="toast"><i class="ti ti-circle-check"></i><span id="toastMsg">Done!</span></div>
+
+    <script src="../../assets/js/api.js"></script>
+    <script src="../../assets/js/jobseeker.js"></script>
 </body>
 </html>
