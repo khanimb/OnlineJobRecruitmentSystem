@@ -1,6 +1,0 @@
-@OnlineJobRecruitmentSystem_HostAddress = http://localhost:5076
-
-GET {{OnlineJobRecruitmentSystem_HostAddress}}/scalar/
-Accept: application/json
-
-###

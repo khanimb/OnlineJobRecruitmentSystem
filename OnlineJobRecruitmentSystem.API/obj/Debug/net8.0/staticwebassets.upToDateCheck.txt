@@ -1,0 +1,17 @@
+wwwroot\assets\css\style.css
+wwwroot\assets\js\admin.js
+wwwroot\assets\js\api.js
+wwwroot\assets\js\auth.js
+wwwroot\assets\js\employer.js
+wwwroot\assets\js\jobs.js
+wwwroot\assets\js\jobseeker.js
+wwwroot\assets\js\payment.js
+wwwroot\assets\pages\admindashboard.html
+wwwroot\assets\pages\employerdashboard.html
+wwwroot\assets\pages\jobdetail.html
+wwwroot\assets\pages\jobs.html
+wwwroot\assets\pages\jobseekerdashboard.html
+wwwroot\assets\pages\login.html
+wwwroot\assets\pages\profile.html
+wwwroot\assets\pages\register.html
+wwwroot\index.html
