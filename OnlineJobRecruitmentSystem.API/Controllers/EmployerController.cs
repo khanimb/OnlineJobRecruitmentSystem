@@ -21,7 +21,7 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
         AppDbContext context,
         IValidator<CreateEmployerDto> createValidator,
         IValidator<UpdateEmployerDto> updateValidator,
-        IValidator<UpdateApplicationStatusDto> statusValidator,
+        IValidator<UpdateJobApplicationStatusDto> statusValidator,
         FileManager fileManager,
         IEmailService emailService
     ) : ControllerBase
@@ -212,7 +212,7 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
         }
 
         [HttpPut("applications/{id}/status")]
-        public async Task<IActionResult> UpdateApplicationStatus(int id, UpdateApplicationStatusDto dto)
+        public async Task<IActionResult> UpdateApplicationStatus(int id, UpdateJobApplicationStatusDto dto)
         {
             var result = await statusValidator.ValidateAsync(dto);
             if (!result.IsValid)

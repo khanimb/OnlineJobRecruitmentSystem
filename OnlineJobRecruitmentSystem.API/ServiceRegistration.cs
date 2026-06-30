@@ -26,30 +26,32 @@ namespace OnlineJobRecruitmentSystem.API
                           .AllowAnyHeader();
                 });
             });
+
+            services.AddSignalR();
+
             services.AddAutoMapper(cfg => cfg.AddProfile<MapperProfile>());
             services.AddValidatorsFromAssembly(typeof(OnlineJobRecruitmentSystem.Application.DTOs.JobDtos.CreateJobDto).Assembly);
             services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen(
-                c =>
+            services.AddSwaggerGen(c =>
+            {
+                c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
                 {
-                    c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+                    Name = "Authorization",
+                    Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,
+                    Scheme = "Bearer",
+                    BearerFormat = "JWT",
+                    In = Microsoft.OpenApi.Models.ParameterLocation.Header
+                });
+                c.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+                {
                     {
-                        Name = "Authorization",
-                        Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,
-                        Scheme = "Bearer",
-                        BearerFormat = "JWT",
-                        In = Microsoft.OpenApi.Models.ParameterLocation.Header
-                    });
-                    c.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
-                    {
+                        new Microsoft.OpenApi.Models.OpenApiSecurityScheme
                         {
-                             new Microsoft.OpenApi.Models.OpenApiSecurityScheme
-                             {
-                                 Reference = new Microsoft.OpenApi.Models.OpenApiReference
-                                 {
-                                     Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
-                                     Id = "Bearer"
-                                 }
+                            Reference = new Microsoft.OpenApi.Models.OpenApiReference
+                            {
+                                Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
                         },
                         Array.Empty<string>()
                     }
@@ -63,6 +65,15 @@ namespace OnlineJobRecruitmentSystem.API
             services.AddScoped<FileManager>();
             services.AddScoped<IEmailService, EmailService>();
             services.AddHostedService<JobExpiryService>();
+            services.AddHostedService<JobAlertBackgroundService>();
+
+            services.AddScoped<IMessageService, MessageService>();
+            services.AddScoped<INotificationService, NotificationService>();
+            services.AddScoped<IReviewService, ReviewService>();
+            services.AddScoped<IJobAlertService, JobAlertService>();
+            services.AddScoped<IPortfolioService, PortfolioService>();
+            services.AddScoped<IAnalyticsService, AnalyticsService>();
+            services.AddScoped<IPaymentService, PaymentService>();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -77,6 +88,22 @@ namespace OnlineJobRecruitmentSystem.API
                         ValidAudience = configuration["Jwt:Audience"],
                         IssuerSigningKey = new SymmetricSecurityKey(
                             Encoding.UTF8.GetBytes(configuration["Jwt:Key"]!))
+                    };
+
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnMessageReceived = context =>
+                        {
+                            var accessToken = context.Request.Query["access_token"];
+                            var path = context.HttpContext.Request.Path;
+                            if (!string.IsNullOrEmpty(accessToken) &&
+                                (path.StartsWithSegments("/hubs/chat") ||
+                                 path.StartsWithSegments("/hubs/notification")))
+                            {
+                                context.Token = accessToken;
+                            }
+                            return Task.CompletedTask;
+                        }
                     };
                 });
 

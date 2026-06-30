@@ -3,9 +3,9 @@ using OnlineJobRecruitmentSystem.Application.DTOs.ApplicationDtos;
 
 namespace OnlineJobRecruitmentSystem.Application.Validations.ApplicationDtoValidation
 {
-    public class CreateApplicationDtoValidation : AbstractValidator<CreateApplicationDto>
+    public class SendMessageDtoValidation : AbstractValidator<CreateJobApplicationDto>
     {
-        public CreateApplicationDtoValidation()
+        public SendMessageDtoValidation()
         {
             RuleFor(x => x.CoverLetter)
                 .NotEmpty().WithMessage("Cover letter is required.")

@@ -1,31 +1,14 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\Xanim\\Desktop\\FinalApp\\",
-  "Documents": [
-    {
-      "AbsoluteMoniker": "D:0:0:{A1C8584D-E6EC-406B-B8E9-A820AE576A47}|OnlineJobRecruitmentSystem.API\\OnlineJobRecruitmentSystem.API.csproj|c:\\users\\xanim\\desktop\\finalapp\\onlinejobrecruitmentsystem.api\\controllers\\employercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A1C8584D-E6EC-406B-B8E9-A820AE576A47}|OnlineJobRecruitmentSystem.API\\OnlineJobRecruitmentSystem.API.csproj|solutionrelative:onlinejobrecruitmentsystem.api\\controllers\\employercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3D92982E-48F3-4FEC-90AE-5A31B06065E4}|OnlineJobRecruitmentSystem.Application\\OnlineJobRecruitmentSystem.Application.csproj|c:\\users\\xanim\\desktop\\finalapp\\onlinejobrecruitmentsystem.application\\validations\\jobdtovalidation\\createjobdtovalidation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3D92982E-48F3-4FEC-90AE-5A31B06065E4}|OnlineJobRecruitmentSystem.Application\\OnlineJobRecruitmentSystem.Application.csproj|solutionrelative:onlinejobrecruitmentsystem.application\\validations\\jobdtovalidation\\createjobdtovalidation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3D92982E-48F3-4FEC-90AE-5A31B06065E4}|OnlineJobRecruitmentSystem.Application\\OnlineJobRecruitmentSystem.Application.csproj|c:\\users\\xanim\\desktop\\finalapp\\onlinejobrecruitmentsystem.application\\validations\\jobdtovalidation\\updatejobdtovalidation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3D92982E-48F3-4FEC-90AE-5A31B06065E4}|OnlineJobRecruitmentSystem.Application\\OnlineJobRecruitmentSystem.Application.csproj|solutionrelative:onlinejobrecruitmentsystem.application\\validations\\jobdtovalidation\\updatejobdtovalidation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A1C8584D-E6EC-406B-B8E9-A820AE576A47}|OnlineJobRecruitmentSystem.API\\OnlineJobRecruitmentSystem.API.csproj|c:\\users\\xanim\\desktop\\finalapp\\onlinejobrecruitmentsystem.api\\serviceregistration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A1C8584D-E6EC-406B-B8E9-A820AE576A47}|OnlineJobRecruitmentSystem.API\\OnlineJobRecruitmentSystem.API.csproj|solutionrelative:onlinejobrecruitmentsystem.api\\serviceregistration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    }
-  ],
+  "WorkspaceRootPath": "C:\\Users\\Xanim\\Desktop\\Final\\",
+  "Documents": [],
   "DocumentGroupContainers": [
     {
       "Orientation": 1,
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
-          "DockedHeight": 316,
+          "DockedHeight": 311,
           "SelectedChildIndex": -1,
           "Children": [
             {
@@ -35,65 +18,9 @@
           ]
         },
         {
-          "DockedHeight": 84,
-          "SelectedChildIndex": 0,
+          "DockedHeight": 89,
+          "SelectedChildIndex": -1,
           "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "EmployerController.cs",
-              "DocumentMoniker": "C:\\Users\\Xanim\\Desktop\\FinalApp\\OnlineJobRecruitmentSystem.API\\Controllers\\EmployerController.cs",
-              "RelativeDocumentMoniker": "OnlineJobRecruitmentSystem.API\\Controllers\\EmployerController.cs",
-              "ToolTip": "C:\\Users\\Xanim\\Desktop\\FinalApp\\OnlineJobRecruitmentSystem.API\\Controllers\\EmployerController.cs",
-              "RelativeToolTip": "OnlineJobRecruitmentSystem.API\\Controllers\\EmployerController.cs",
-              "ViewState": "AgIAAPMAAAAAAAAAAAAcwBABAAAoAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-28T15:55:18.082Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "UpdateJobDtoValidation.cs",
-              "DocumentMoniker": "C:\\Users\\Xanim\\Desktop\\FinalApp\\OnlineJobRecruitmentSystem.Application\\Validations\\JobDtoValidation\\UpdateJobDtoValidation.cs",
-              "RelativeDocumentMoniker": "OnlineJobRecruitmentSystem.Application\\Validations\\JobDtoValidation\\UpdateJobDtoValidation.cs",
-              "ToolTip": "C:\\Users\\Xanim\\Desktop\\FinalApp\\OnlineJobRecruitmentSystem.Application\\Validations\\JobDtoValidation\\UpdateJobDtoValidation.cs",
-              "RelativeToolTip": "OnlineJobRecruitmentSystem.Application\\Validations\\JobDtoValidation\\UpdateJobDtoValidation.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAnAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-28T15:52:51.837Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "CreateJobDtoValidation.cs",
-              "DocumentMoniker": "C:\\Users\\Xanim\\Desktop\\FinalApp\\OnlineJobRecruitmentSystem.Application\\Validations\\JobDtoValidation\\CreateJobDtoValidation.cs",
-              "RelativeDocumentMoniker": "OnlineJobRecruitmentSystem.Application\\Validations\\JobDtoValidation\\CreateJobDtoValidation.cs",
-              "ToolTip": "C:\\Users\\Xanim\\Desktop\\FinalApp\\OnlineJobRecruitmentSystem.Application\\Validations\\JobDtoValidation\\CreateJobDtoValidation.cs",
-              "RelativeToolTip": "OnlineJobRecruitmentSystem.Application\\Validations\\JobDtoValidation\\CreateJobDtoValidation.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAaAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-28T15:52:29.417Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "ServiceRegistration.cs",
-              "DocumentMoniker": "C:\\Users\\Xanim\\Desktop\\FinalApp\\OnlineJobRecruitmentSystem.API\\ServiceRegistration.cs",
-              "RelativeDocumentMoniker": "OnlineJobRecruitmentSystem.API\\ServiceRegistration.cs",
-              "ToolTip": "C:\\Users\\Xanim\\Desktop\\FinalApp\\OnlineJobRecruitmentSystem.API\\ServiceRegistration.cs",
-              "RelativeToolTip": "OnlineJobRecruitmentSystem.API\\ServiceRegistration.cs",
-              "ViewState": "AgIAAAcAAAAAAAAAAAAmwB0AAABQAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-28T15:46:30.608Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{0ad07096-bba9-4900-a651-0598d26f6d24}"
-            },
             {
               "$type": "Bookmark",
               "Name": "ST:4:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
@@ -105,10 +32,6 @@
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{004be353-6879-467c-9d1e-9ac23cdf6d49}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
             }
           ]
         }

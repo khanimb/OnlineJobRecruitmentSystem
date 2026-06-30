@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Xanim\\Desktop\\FinalApp\\OnlineJobRecruitmentSystem.Infrastructure\\OnlineJobRecruitmentSystem.Infrastructure.csproj": {}
+    "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.Infrastructure\\OnlineJobRecruitmentSystem.Infrastructure.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Xanim\\Desktop\\FinalApp\\OnlineJobRecruitmentSystem.Application\\OnlineJobRecruitmentSystem.Application.csproj": {
+    "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.Application\\OnlineJobRecruitmentSystem.Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Xanim\\Desktop\\FinalApp\\OnlineJobRecruitmentSystem.Application\\OnlineJobRecruitmentSystem.Application.csproj",
+        "projectUniqueName": "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.Application\\OnlineJobRecruitmentSystem.Application.csproj",
         "projectName": "OnlineJobRecruitmentSystem.Application",
-        "projectPath": "C:\\Users\\Xanim\\Desktop\\FinalApp\\OnlineJobRecruitmentSystem.Application\\OnlineJobRecruitmentSystem.Application.csproj",
+        "projectPath": "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.Application\\OnlineJobRecruitmentSystem.Application.csproj",
         "packagesPath": "C:\\Users\\Xanim\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Xanim\\Desktop\\FinalApp\\OnlineJobRecruitmentSystem.Application\\obj\\",
+        "outputPath": "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.Application\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -32,8 +32,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\Xanim\\Desktop\\FinalApp\\OnlineJobRecruitmentSystem.Domain\\OnlineJobRecruitmentSystem.Domain.csproj": {
-                "projectPath": "C:\\Users\\Xanim\\Desktop\\FinalApp\\OnlineJobRecruitmentSystem.Domain\\OnlineJobRecruitmentSystem.Domain.csproj"
+              "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.Domain\\OnlineJobRecruitmentSystem.Domain.csproj": {
+                "projectPath": "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.Domain\\OnlineJobRecruitmentSystem.Domain.csproj"
               }
             }
           }
@@ -78,6 +78,10 @@
               "target": "Package",
               "version": "[8.0.0, )"
             },
+            "Microsoft.AspNetCore.SignalR": {
+              "target": "Package",
+              "version": "[1.2.11, )"
+            },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
               "version": "[8.0.0, )"
@@ -106,6 +110,10 @@
               "target": "Package",
               "version": "[2.16.6, )"
             },
+            "Stripe.net": {
+              "target": "Package",
+              "version": "[52.1.0, )"
+            },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[8.0.0, )"
@@ -131,14 +139,14 @@
         }
       }
     },
-    "C:\\Users\\Xanim\\Desktop\\FinalApp\\OnlineJobRecruitmentSystem.Domain\\OnlineJobRecruitmentSystem.Domain.csproj": {
+    "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.Domain\\OnlineJobRecruitmentSystem.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Xanim\\Desktop\\FinalApp\\OnlineJobRecruitmentSystem.Domain\\OnlineJobRecruitmentSystem.Domain.csproj",
+        "projectUniqueName": "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.Domain\\OnlineJobRecruitmentSystem.Domain.csproj",
         "projectName": "OnlineJobRecruitmentSystem.Domain",
-        "projectPath": "C:\\Users\\Xanim\\Desktop\\FinalApp\\OnlineJobRecruitmentSystem.Domain\\OnlineJobRecruitmentSystem.Domain.csproj",
+        "projectPath": "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.Domain\\OnlineJobRecruitmentSystem.Domain.csproj",
         "packagesPath": "C:\\Users\\Xanim\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Xanim\\Desktop\\FinalApp\\OnlineJobRecruitmentSystem.Domain\\obj\\",
+        "outputPath": "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -201,6 +209,10 @@
               "target": "Package",
               "version": "[8.0.0, )"
             },
+            "Microsoft.AspNetCore.SignalR": {
+              "target": "Package",
+              "version": "[1.2.11, )"
+            },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
               "version": "[8.0.0, )"
@@ -229,6 +241,10 @@
               "target": "Package",
               "version": "[2.16.6, )"
             },
+            "Stripe.net": {
+              "target": "Package",
+              "version": "[52.1.0, )"
+            },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[8.0.0, )"
@@ -254,14 +270,14 @@
         }
       }
     },
-    "C:\\Users\\Xanim\\Desktop\\FinalApp\\OnlineJobRecruitmentSystem.Infrastructure\\OnlineJobRecruitmentSystem.Infrastructure.csproj": {
+    "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.Infrastructure\\OnlineJobRecruitmentSystem.Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Xanim\\Desktop\\FinalApp\\OnlineJobRecruitmentSystem.Infrastructure\\OnlineJobRecruitmentSystem.Infrastructure.csproj",
+        "projectUniqueName": "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.Infrastructure\\OnlineJobRecruitmentSystem.Infrastructure.csproj",
         "projectName": "OnlineJobRecruitmentSystem.Infrastructure",
-        "projectPath": "C:\\Users\\Xanim\\Desktop\\FinalApp\\OnlineJobRecruitmentSystem.Infrastructure\\OnlineJobRecruitmentSystem.Infrastructure.csproj",
+        "projectPath": "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.Infrastructure\\OnlineJobRecruitmentSystem.Infrastructure.csproj",
         "packagesPath": "C:\\Users\\Xanim\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Xanim\\Desktop\\FinalApp\\OnlineJobRecruitmentSystem.Infrastructure\\obj\\",
+        "outputPath": "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -282,11 +298,11 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\Xanim\\Desktop\\FinalApp\\OnlineJobRecruitmentSystem.Application\\OnlineJobRecruitmentSystem.Application.csproj": {
-                "projectPath": "C:\\Users\\Xanim\\Desktop\\FinalApp\\OnlineJobRecruitmentSystem.Application\\OnlineJobRecruitmentSystem.Application.csproj"
+              "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.Application\\OnlineJobRecruitmentSystem.Application.csproj": {
+                "projectPath": "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.Application\\OnlineJobRecruitmentSystem.Application.csproj"
               },
-              "C:\\Users\\Xanim\\Desktop\\FinalApp\\OnlineJobRecruitmentSystem.Domain\\OnlineJobRecruitmentSystem.Domain.csproj": {
-                "projectPath": "C:\\Users\\Xanim\\Desktop\\FinalApp\\OnlineJobRecruitmentSystem.Domain\\OnlineJobRecruitmentSystem.Domain.csproj"
+              "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.Domain\\OnlineJobRecruitmentSystem.Domain.csproj": {
+                "projectPath": "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.Domain\\OnlineJobRecruitmentSystem.Domain.csproj"
               }
             }
           }
@@ -331,6 +347,10 @@
               "target": "Package",
               "version": "[8.0.0, )"
             },
+            "Microsoft.AspNetCore.SignalR": {
+              "target": "Package",
+              "version": "[1.2.11, )"
+            },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
               "version": "[8.0.0, )"
@@ -358,6 +378,10 @@
             "Scalar.AspNetCore": {
               "target": "Package",
               "version": "[2.16.6, )"
+            },
+            "Stripe.net": {
+              "target": "Package",
+              "version": "[52.1.0, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",

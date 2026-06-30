@@ -1,4 +1,5 @@
 using OnlineJobRecruitmentSystem.API;
+using OnlineJobRecruitmentSystem.API.Hubs;
 using OnlineJobRecruitmentSystem.API.Middlewares;
 using Scalar.AspNetCore;
 
@@ -28,5 +29,8 @@ app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+
+app.MapHub<ChatHub>("/hubs/chat");
+app.MapHub<NotificationHub>("/hubs/notification");
 
 app.Run();

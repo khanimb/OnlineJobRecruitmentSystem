@@ -3,7 +3,7 @@ using OnlineJobRecruitmentSystem.Application.DTOs.ApplicationDtos;
 
 namespace OnlineJobRecruitmentSystem.Application.Validations.ApplicationDtoValidation
 {
-    public class UpdateApplicationStatusDtoValidation : AbstractValidator<UpdateApplicationStatusDto>
+    public class UpdateApplicationStatusDtoValidation : AbstractValidator<UpdateJobApplicationStatusDto>
     {
         public UpdateApplicationStatusDtoValidation()
         {
