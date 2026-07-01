@@ -20,7 +20,8 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
                     u.Id,
                     u.Email,
                     u.Username,
-                    u.Role
+                    u.Role,
+                    u.IsEmailVerified
                 }).ToListAsync();
 
             return Ok(ResponseModel<object>.Ok(users));
@@ -38,7 +39,8 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
                 user.Id,
                 user.Email,
                 user.Username,
-                user.Role
+                user.Role,
+                user.IsEmailVerified
             }));
         }
 
@@ -175,6 +177,28 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
                 totalPayments,
                 totalRevenue
             }));
+        }
+
+        [HttpGet("contracts")]
+        public async Task<IActionResult> GetContracts()
+        {
+            var contracts = await context.Contracts
+                .Include(c => c.JobPost)
+                .Include(c => c.EmployerProfile)
+                .Include(c => c.JobSeekerProfile)
+                .Select(c => new
+                {
+                    c.Id,
+                    JobTitle = c.JobPost.Title,
+                    EmployerName = c.EmployerProfile.CompanyName,
+                    JobSeekerName = c.JobSeekerProfile.FullName,
+                    c.Amount,
+                    Status = c.Status.ToString(),
+                    c.CreatedAt
+                })
+                .ToListAsync();
+
+            return Ok(ResponseModel<object>.Ok(contracts));
         }
     }
 }

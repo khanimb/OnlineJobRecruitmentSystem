@@ -1,14 +1,19 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\Xanim\\Desktop\\Final\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A1C8584D-E6EC-406B-B8E9-A820AE576A47}|OnlineJobRecruitmentSystem.API\\OnlineJobRecruitmentSystem.API.csproj|c:\\users\\xanim\\desktop\\final\\onlinejobrecruitmentsystem.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A1C8584D-E6EC-406B-B8E9-A820AE576A47}|OnlineJobRecruitmentSystem.API\\OnlineJobRecruitmentSystem.API.csproj|solutionrelative:onlinejobrecruitmentsystem.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 1,
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
-          "DockedHeight": 311,
+          "DockedHeight": 339,
           "SelectedChildIndex": -1,
           "Children": [
             {
@@ -18,8 +23,8 @@
           ]
         },
         {
-          "DockedHeight": 89,
-          "SelectedChildIndex": -1,
+          "DockedHeight": 61,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Bookmark",
@@ -32,6 +37,23 @@
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{004be353-6879-467c-9d1e-9ac23cdf6d49}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.API\\Program.cs",
+              "RelativeDocumentMoniker": "OnlineJobRecruitmentSystem.API\\Program.cs",
+              "ToolTip": "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.API\\Program.cs",
+              "RelativeToolTip": "OnlineJobRecruitmentSystem.API\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-01T11:48:20.233Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
             }
           ]
         }

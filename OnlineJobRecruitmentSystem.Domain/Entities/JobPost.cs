@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using OnlineJobRecruitmentSystem.Domain.Enums;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OnlineJobRecruitmentSystem.Domain.Entities
 {
@@ -17,6 +18,8 @@ namespace OnlineJobRecruitmentSystem.Domain.Entities
         public decimal SalaryMax { get; set; }
         public DateTime Deadline { get; set; }
         public bool IsActive { get; set; } = true;
+        public PaymentType? PaymentType { get; set; }
+        public decimal? Budget { get; set; }
 
         public EmployerProfile? EmployerProfile { get; set; }
         public ICollection<JobApplication> Applications { get; set; } = new List<JobApplication>();

@@ -19,6 +19,8 @@ namespace OnlineJobRecruitmentSystem.Infrastructure.Data
         public DbSet<PortfolioItem> PortfolioItems { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<Payment> Payments { get; set; }
+        public DbSet<Contract> Contracts { get; set; }
+        public DbSet<ContractPayment> ContractPayments { get; set; }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {

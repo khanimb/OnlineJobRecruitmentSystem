@@ -12,6 +12,8 @@ namespace OnlineJobRecruitmentSystem.Domain.Entities
         public string? EmailVerificationToken { get; set; }
         public string? PasswordResetToken { get; set; }
         public DateTime? PasswordResetTokenExpiry { get; set; }
+        public bool IsPremium { get; set; } = false;
+        public DateTime? PremiumExpiryDate { get; set; }
 
         public EmployerProfile? EmployerProfile { get; set; }
         public JobSeekerProfile? JobSeekerProfile { get; set; }

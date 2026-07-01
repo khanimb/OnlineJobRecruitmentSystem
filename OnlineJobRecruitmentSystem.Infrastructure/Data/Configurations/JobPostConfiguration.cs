@@ -42,6 +42,9 @@ namespace OnlineJobRecruitmentSystem.Data.Configurations
                 .WithMany(e => e.JobPosts)
                 .HasForeignKey(j => j.EmployerProfileId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Property(j => j.Budget)
+                 .HasColumnType("decimal(18,2)");
         }
     }
 }

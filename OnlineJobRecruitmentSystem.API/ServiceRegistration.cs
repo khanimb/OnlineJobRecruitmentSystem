@@ -7,6 +7,7 @@ using OnlineJobRecruitmentSystem.Application.Profiles;
 using OnlineJobRecruitmentSystem.Infrastructure.Data;
 using OnlineJobRecruitmentSystem.Infrastructure.Extensions;
 using OnlineJobRecruitmentSystem.Infrastructure.Services;
+using Stripe;
 using System.Text;
 
 namespace OnlineJobRecruitmentSystem.API
@@ -16,6 +17,8 @@ namespace OnlineJobRecruitmentSystem.API
         public static IServiceCollection AddApplicationServices(
             this IServiceCollection services, IConfiguration configuration)
         {
+            StripeConfiguration.ApiKey = configuration["Stripe:SecretKey"];
+
             services.AddControllers();
             services.AddCors(options =>
             {
@@ -69,7 +72,7 @@ namespace OnlineJobRecruitmentSystem.API
 
             services.AddScoped<IMessageService, MessageService>();
             services.AddScoped<INotificationService, NotificationService>();
-            services.AddScoped<IReviewService, ReviewService>();
+            services.AddScoped<IReviewService, OnlineJobRecruitmentSystem.Infrastructure.Services.ReviewService>();
             services.AddScoped<IJobAlertService, JobAlertService>();
             services.AddScoped<IPortfolioService, PortfolioService>();
             services.AddScoped<IAnalyticsService, AnalyticsService>();
