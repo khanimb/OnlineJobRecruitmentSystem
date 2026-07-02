@@ -14,4 +14,5 @@ wwwroot\assets\pages\jobseekerdashboard.html
 wwwroot\assets\pages\login.html
 wwwroot\assets\pages\profile.html
 wwwroot\assets\pages\register.html
+wwwroot\cvs\cv_6_d4b5b839-cf93-4f2b-a622-9994c9d3a390.docx
 wwwroot\index.html

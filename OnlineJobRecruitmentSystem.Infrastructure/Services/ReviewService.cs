@@ -68,29 +68,29 @@ namespace OnlineJobRecruitmentSystem.Infrastructure.Services
             return reviews.Any() ? reviews.Average(r => r.Rating) : 0;
         }
 
-        public async Task UpdateReviewAsync(int reviewId, int reviewerId, UpdateReviewDto dto)
+        public async Task<bool> UpdateReviewAsync(int reviewId, int reviewerId, UpdateReviewDto dto)
         {
             var review = await _context.Reviews
                 .FirstOrDefaultAsync(r => r.Id == reviewId && r.ReviewerId == reviewerId);
 
-            if (review != null)
-            {
-                review.Rating = dto.Rating;
-                review.Comment = dto.Comment ?? string.Empty;
-                await _context.SaveChangesAsync();
-            }
+            if (review == null) return false;
+
+            review.Rating = dto.Rating;
+            review.Comment = dto.Comment ?? string.Empty;
+            await _context.SaveChangesAsync();
+            return true;
         }
 
-        public async Task DeleteReviewAsync(int reviewId, int reviewerId)
+        public async Task<bool> DeleteReviewAsync(int reviewId, int reviewerId)
         {
             var review = await _context.Reviews
                 .FirstOrDefaultAsync(r => r.Id == reviewId && r.ReviewerId == reviewerId);
 
-            if (review != null)
-            {
-                _context.Reviews.Remove(review);
-                await _context.SaveChangesAsync();
-            }
+            if (review == null) return false;
+
+            _context.Reviews.Remove(review);
+            await _context.SaveChangesAsync();
+            return true;
         }
     }
 }

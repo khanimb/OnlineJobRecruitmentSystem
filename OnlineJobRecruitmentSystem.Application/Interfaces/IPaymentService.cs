@@ -1,11 +1,13 @@
 ﻿using OnlineJobRecruitmentSystem.Application.DTOs.PaymentDtos;
+using OnlineJobRecruitmentSystem.Domain.Entities;
 
 namespace OnlineJobRecruitmentSystem.Application.Interfaces
 {
     public interface IPaymentService
     {
-        Task<ReturnPaymentDto> CreatePaymentAsync(int employerId, CreatePaymentDto dto, string stripePaymentId);
+        Task<Payment> CreatePaymentAsync(int employerId, string plan, decimal amount, string stripePaymentId);
+        Task CompleteCheckoutAsync(string stripePaymentId, int userId, int months);
         Task<List<ReturnPaymentDto>> GetUserPaymentsAsync(int employerId);
-        Task UpdatePaymentStatusAsync(string stripePaymentId, string status);
+        Task<ReturnPaymentDto?> GetPaymentByIdAsync(int paymentId, int employerId);
     }
 }

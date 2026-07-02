@@ -61,12 +61,17 @@ namespace OnlineJobRecruitmentSystem.Infrastructure.Services
                     SenderId = m.SenderId,
                     SenderName = m.Sender.Email,
                     ReceiverId = m.ReceiverId,
-                    ReceiverName = m.Receiver.Email,
                     Content = m.Content,
                     IsRead = m.IsRead,
                     CreatedAt = m.CreatedAt
                 })
                 .ToListAsync();
+        }
+
+        public async Task<int> GetUnreadCountAsync(int userId)
+        {
+            return await _context.Messages
+                .CountAsync(m => m.ReceiverId == userId && !m.IsRead);
         }
     }
 }

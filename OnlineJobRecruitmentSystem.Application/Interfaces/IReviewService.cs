@@ -7,7 +7,7 @@ namespace OnlineJobRecruitmentSystem.Application.Interfaces
         Task<ReturnReviewDto> CreateReviewAsync(int reviewerId, CreateReviewDto dto);
         Task<List<ReturnReviewDto>> GetReviewsForUserAsync(int userId);
         Task<double> GetAverageRatingAsync(int userId);
-        Task UpdateReviewAsync(int reviewId, int reviewerId, UpdateReviewDto dto);
-        Task DeleteReviewAsync(int reviewId, int reviewerId);
+        Task<bool> UpdateReviewAsync(int reviewId, int reviewerId, UpdateReviewDto dto);
+        Task<bool> DeleteReviewAsync(int reviewId, int reviewerId);
     }
 }

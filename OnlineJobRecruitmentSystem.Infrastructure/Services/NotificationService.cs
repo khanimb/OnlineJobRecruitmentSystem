@@ -47,16 +47,26 @@ namespace OnlineJobRecruitmentSystem.Infrastructure.Services
                 .ToListAsync();
         }
 
-        public async Task MarkAsReadAsync(int notificationId, int userId)
+        public async Task<bool> MarkAsReadAsync(int notificationId, int userId)
         {
             var notification = await _context.Notifications
                 .FirstOrDefaultAsync(n => n.Id == notificationId && n.UserId == userId);
 
-            if (notification != null)
-            {
-                notification.IsRead = true;
-                await _context.SaveChangesAsync();
-            }
+            if (notification == null) return false;
+
+            notification.IsRead = true;
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task MarkAllAsReadAsync(int userId)
+        {
+            var notifications = await _context.Notifications
+                .Where(n => n.UserId == userId && !n.IsRead)
+                .ToListAsync();
+
+            notifications.ForEach(n => n.IsRead = true);
+            await _context.SaveChangesAsync();
         }
     }
 }

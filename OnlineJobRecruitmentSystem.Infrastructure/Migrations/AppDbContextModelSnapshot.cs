@@ -22,6 +22,37 @@ namespace OnlineJobRecruitmentSystem.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("OnlineJobRecruitmentSystem.Domain.Entities.Comment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("JobPostId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("JobPostId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Comments");
+                });
+
             modelBuilder.Entity("OnlineJobRecruitmentSystem.Domain.Entities.Contract", b =>
                 {
                     b.Property<int>("Id")
@@ -602,6 +633,12 @@ namespace OnlineJobRecruitmentSystem.Infrastructure.Migrations
                     b.Property<DateTime?>("PremiumExpiryDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("RefreshToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("RefreshTokenExpiry")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Role")
                         .IsRequired()
                         .HasMaxLength(20)
@@ -621,6 +658,25 @@ namespace OnlineJobRecruitmentSystem.Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("OnlineJobRecruitmentSystem.Domain.Entities.Comment", b =>
+                {
+                    b.HasOne("OnlineJobRecruitmentSystem.Domain.Entities.JobPost", "JobPost")
+                        .WithMany()
+                        .HasForeignKey("JobPostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("OnlineJobRecruitmentSystem.Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("JobPost");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("OnlineJobRecruitmentSystem.Domain.Entities.Contract", b =>

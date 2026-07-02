@@ -392,3 +392,4 @@ C:\Users\Xanim\Desktop\Final\OnlineJobRecruitmentSystem.API\bin\Debug\net8.0\Mic
 C:\Users\Xanim\Desktop\Final\OnlineJobRecruitmentSystem.API\bin\Debug\net8.0\Newtonsoft.Json.dll
 C:\Users\Xanim\Desktop\Final\OnlineJobRecruitmentSystem.API\bin\Debug\net8.0\System.Net.WebSockets.WebSocketProtocol.dll
 C:\Users\Xanim\Desktop\Final\OnlineJobRecruitmentSystem.API\bin\Debug\net8.0\Stripe.net.dll
+C:\Users\Xanim\Desktop\Final\OnlineJobRecruitmentSystem.API\bin\Debug\net8.0\Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore.dll

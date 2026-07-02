@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OnlineJobRecruitmentSystem.Application.DTOs.ApplicationDtos;
-using OnlineJobRecruitmentSystem.Application.Interfaces;
 using OnlineJobRecruitmentSystem.Common;
 using OnlineJobRecruitmentSystem.Domain.Entities;
 using OnlineJobRecruitmentSystem.Domain.Enums;
@@ -17,9 +16,7 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
     [Authorize]
     public class JobApplicationController(
         AppDbContext context,
-        IValidator<CreateJobApplicationDto> createValidator,
-        IValidator<UpdateJobApplicationStatusDto> updateValidator,
-        IEmailService emailService
+        IValidator<CreateJobApplicationDto> createValidator
     ) : ControllerBase
     {
         private int GetUserId() => int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
@@ -84,42 +81,6 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
                 }).ToListAsync();
 
             return Ok(ResponseModel<List<ReturnJobApplicationDto>>.Ok(list));
-        }
-
-        [HttpPatch("{id}/status")]
-        [Authorize(Roles = "Employer")]
-        public async Task<IActionResult> UpdateStatus(int id, UpdateJobApplicationStatusDto dto)
-        {
-            var result = await updateValidator.ValidateAsync(dto);
-            if (!result.IsValid)
-                return BadRequest(ResponseModel<string>.Fail(result.Errors[0].ErrorMessage));
-
-            var userId = GetUserId();
-
-            var employer = await context.EmployerProfiles.FirstOrDefaultAsync(e => e.UserId == userId);
-            if (employer == null)
-                return NotFound(ResponseModel<string>.Fail("Employer profile not found."));
-
-            var application = await context.JobApplications
-                .Include(a => a.JobPost)
-                .Include(a => a.JobSeekerProfile)
-                .ThenInclude(j => j!.User)     
-                .FirstOrDefaultAsync(a => a.Id == id && a.JobPost!.EmployerProfileId == employer.Id);
-
-            if (application == null)
-                return NotFound(ResponseModel<string>.Fail("Application not found."));
-
-            application.Status = dto.Status;
-            application.Notes = dto.Notes;
-            await context.SaveChangesAsync();
-
-            await emailService.SendEmailAsync(
-                application.JobSeekerProfile!.User!.Email,
-                "Your Application Status Updated",
-                $"Your application for '{application.JobPost!.Title}' has been updated to: {dto.Status}."
-            );
-
-            return Ok(ResponseModel<string>.Ok(null!, "Status updated."));
         }
     }
 }

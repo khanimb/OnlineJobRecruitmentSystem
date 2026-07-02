@@ -64,6 +64,8 @@ namespace OnlineJobRecruitmentSystem.API
             services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
+            services.AddHealthChecks()
+                .AddDbContextCheck<AppDbContext>();
             services.AddScoped<IJwtService, JwtService>();
             services.AddScoped<FileManager>();
             services.AddScoped<IEmailService, EmailService>();

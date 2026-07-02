@@ -7,6 +7,7 @@ using OnlineJobRecruitmentSystem.Application.Validations.UserDtoValidation;
 using OnlineJobRecruitmentSystem.Common;
 using OnlineJobRecruitmentSystem.Domain.Entities;
 using OnlineJobRecruitmentSystem.Infrastructure.Data;
+using System.Security.Claims;
 
 namespace OnlineJobRecruitmentSystem.API.Controllers
 {
@@ -28,6 +29,9 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
 
             if (await context.Users.AnyAsync(u => u.Email == dto.Email))
                 return BadRequest(ResponseModel<string>.Fail("This email already exists."));
+
+            if (await context.Users.AnyAsync(u => u.Username == dto.Username))
+                return BadRequest(ResponseModel<string>.Fail("This username already exists."));
 
             var verificationToken = Guid.NewGuid().ToString();
 
@@ -84,8 +88,13 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
                 return Unauthorized(ResponseModel<string>.Fail("Please verify your email before logging in."));
 
             var token = jwtService.GenerateToken(user);
+            var refreshToken = jwtService.GenerateRefreshToken();
 
-            return Ok(ResponseModel<object>.Ok(new { token, role = user.Role }, "Login successful."));
+            user.RefreshToken = refreshToken;
+            user.RefreshTokenExpiry = DateTime.UtcNow.AddDays(30);
+            await context.SaveChangesAsync();
+
+            return Ok(ResponseModel<object>.Ok(new { token, refreshToken, role = user.Role }, "Login successful."));
         }
 
         [HttpPost("forgot-password")]
@@ -133,6 +142,43 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
             await context.SaveChangesAsync();
 
             return Ok(ResponseModel<string>.Ok(null!, "Password reset successfully."));
+        }
+
+        [HttpPost("refresh-token")]
+        [AllowAnonymous]
+        public async Task<IActionResult> RefreshToken(RefreshTokenDto dto)
+        {
+            var user = await context.Users
+                .FirstOrDefaultAsync(u => u.RefreshToken == dto.RefreshToken);
+
+            if (user == null || user.RefreshTokenExpiry == null || user.RefreshTokenExpiry <= DateTime.UtcNow)
+                return Unauthorized(ResponseModel<string>.Fail("Invalid or expired refresh token."));
+
+            var newToken = jwtService.GenerateToken(user);
+            var newRefreshToken = jwtService.GenerateRefreshToken();
+
+            user.RefreshToken = newRefreshToken;
+            user.RefreshTokenExpiry = DateTime.UtcNow.AddDays(30);
+            await context.SaveChangesAsync();
+
+            return Ok(ResponseModel<object>.Ok(new { token = newToken, refreshToken = newRefreshToken }, "Token refreshed."));
+        }
+
+        [HttpPost("logout")]
+        [Authorize]
+        public async Task<IActionResult> Logout()
+        {
+            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            var user = await context.Users.FindAsync(userId);
+
+            if (user != null)
+            {
+                user.RefreshToken = null;
+                user.RefreshTokenExpiry = null;
+                await context.SaveChangesAsync();
+            }
+
+            return Ok(ResponseModel<string>.Ok(null!, "Logged out."));
         }
     }
 }

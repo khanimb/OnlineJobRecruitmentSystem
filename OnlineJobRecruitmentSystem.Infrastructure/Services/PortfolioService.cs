@@ -53,38 +53,38 @@ namespace OnlineJobRecruitmentSystem.Infrastructure.Services
                 .ToListAsync();
         }
 
-        public async Task UpdateAsync(int itemId, int jobSeekerProfileId, UpdatePortfolioItemDto dto)
+        public async Task<bool> UpdateAsync(int itemId, int jobSeekerProfileId, UpdatePortfolioItemDto dto)
         {
             var item = await _context.PortfolioItems
                 .FirstOrDefaultAsync(p => p.Id == itemId && p.JobSeekerProfileId == jobSeekerProfileId);
 
-            if (item != null)
-            {
-                item.Title = dto.Title ?? string.Empty;
-                item.Description = dto.Description ?? string.Empty;
+            if (item == null) return false;
 
-                if (dto.File != null)
-                {
-                    _fileManager.Delete(item.FileUrl);
-                    item.FileUrl = await _fileManager.UploadAsync(dto.File, "portfolio");
-                    item.FileType = Path.GetExtension(dto.File.FileName);
-                }
+            item.Title = dto.Title ?? string.Empty;
+            item.Description = dto.Description ?? string.Empty;
 
-                await _context.SaveChangesAsync();
-            }
-        }
-
-        public async Task DeleteAsync(int itemId, int jobSeekerProfileId)
-        {
-            var item = await _context.PortfolioItems
-                .FirstOrDefaultAsync(p => p.Id == itemId && p.JobSeekerProfileId == jobSeekerProfileId);
-
-            if (item != null)
+            if (dto.File != null)
             {
                 _fileManager.Delete(item.FileUrl);
-                _context.PortfolioItems.Remove(item);
-                await _context.SaveChangesAsync();
+                item.FileUrl = await _fileManager.UploadAsync(dto.File, "portfolio");
+                item.FileType = Path.GetExtension(dto.File.FileName);
             }
+
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> DeleteAsync(int itemId, int jobSeekerProfileId)
+        {
+            var item = await _context.PortfolioItems
+                .FirstOrDefaultAsync(p => p.Id == itemId && p.JobSeekerProfileId == jobSeekerProfileId);
+
+            if (item == null) return false;
+
+            _fileManager.Delete(item.FileUrl);
+            _context.PortfolioItems.Remove(item);
+            await _context.SaveChangesAsync();
+            return true;
         }
 
         private static ReturnPortfolioItemDto MapToDto(PortfolioItem item) => new ReturnPortfolioItemDto

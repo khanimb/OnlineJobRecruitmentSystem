@@ -15,23 +15,39 @@ namespace OnlineJobRecruitmentSystem.Infrastructure.Services
             _context = context;
         }
 
-        public async Task<ReturnPaymentDto> CreatePaymentAsync(int employerId, CreatePaymentDto dto, string stripePaymentId)
+        public async Task<Payment> CreatePaymentAsync(int employerId, string plan, decimal amount, string stripePaymentId)
         {
-            var amount = dto.Plan == "premium" ? 99.99m : 29.99m;
-
             var payment = new Payment
             {
                 EmployerId = employerId,
                 StripePaymentId = stripePaymentId,
                 Amount = amount,
                 Status = "pending",
-                Plan = dto.Plan ?? string.Empty
+                Plan = plan
             };
 
             _context.Payments.Add(payment);
             await _context.SaveChangesAsync();
+            return payment;
+        }
 
-            return MapToDto(payment);
+        public async Task CompleteCheckoutAsync(string stripePaymentId, int userId, int months)
+        {
+            var payment = await _context.Payments
+                .FirstOrDefaultAsync(p => p.StripePaymentId == stripePaymentId);
+
+            if (payment == null) return;
+
+            payment.Status = "completed";
+
+            var user = await _context.Users.FindAsync(userId);
+            if (user != null)
+            {
+                user.IsPremium = true;
+                user.PremiumExpiryDate = DateTime.UtcNow.AddMonths(months);
+            }
+
+            await _context.SaveChangesAsync();
         }
 
         public async Task<List<ReturnPaymentDto>> GetUserPaymentsAsync(int employerId)
@@ -51,26 +67,22 @@ namespace OnlineJobRecruitmentSystem.Infrastructure.Services
                 .ToListAsync();
         }
 
-        public async Task UpdatePaymentStatusAsync(string stripePaymentId, string status)
+        public async Task<ReturnPaymentDto?> GetPaymentByIdAsync(int paymentId, int employerId)
         {
             var payment = await _context.Payments
-                .FirstOrDefaultAsync(p => p.StripePaymentId == stripePaymentId);
+                .FirstOrDefaultAsync(p => p.Id == paymentId && p.EmployerId == employerId);
 
-            if (payment != null)
+            if (payment == null) return null;
+
+            return new ReturnPaymentDto
             {
-                payment.Status = status;
-                await _context.SaveChangesAsync();
-            }
+                Id = payment.Id,
+                Plan = payment.Plan,
+                Amount = payment.Amount,
+                Status = payment.Status,
+                StripePaymentId = payment.StripePaymentId,
+                CreatedAt = payment.CreatedAt
+            };
         }
-
-        private static ReturnPaymentDto MapToDto(Payment payment) => new ReturnPaymentDto
-        {
-            Id = payment.Id,
-            Plan = payment.Plan,
-            Amount = payment.Amount,
-            Status = payment.Status,
-            StripePaymentId = payment.StripePaymentId,
-            CreatedAt = payment.CreatedAt
-        };
     }
 }

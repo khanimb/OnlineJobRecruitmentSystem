@@ -1,12 +1,11 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
-using Microsoft.EntityFrameworkCore;
 using OnlineJobRecruitmentSystem.API.Hubs;
 using OnlineJobRecruitmentSystem.Application.DTOs.MessageDtos;
+using OnlineJobRecruitmentSystem.Application.DTOs.NotificationDtos;
+using OnlineJobRecruitmentSystem.Application.Interfaces;
 using OnlineJobRecruitmentSystem.Common;
-using OnlineJobRecruitmentSystem.Domain.Entities;
-using OnlineJobRecruitmentSystem.Infrastructure.Data;
 using System.Security.Claims;
 
 namespace OnlineJobRecruitmentSystem.API.Controllers
@@ -15,8 +14,10 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
     [Route("api/[controller]")]
     [Authorize]
     public class MessageController(
-        AppDbContext context,
-        IHubContext<ChatHub> chatHub) : ControllerBase
+        IMessageService messageService,
+        IHubContext<ChatHub> chatHub,
+        INotificationService notificationService
+        ) : ControllerBase
     {
         private int GetUserId() => int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
@@ -24,17 +25,7 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
         public async Task<IActionResult> SendMessage(SendMessageDto dto)
         {
             var senderId = GetUserId();
-
-            var message = new Message
-            {
-                SenderId = senderId,
-                ReceiverId = dto.ReceiverId,
-                Content = dto.Content ?? string.Empty,
-                IsRead = false
-            };
-
-            context.Messages.Add(message);
-            await context.SaveChangesAsync();
+            var message = await messageService.SaveMessageAsync(senderId, dto);
 
             await chatHub.Clients.User(dto.ReceiverId.ToString())
                 .SendAsync("ReceiveMessage", new
@@ -45,67 +36,35 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
                     message.CreatedAt
                 });
 
+            await notificationService.CreateNotificationAsync(new CreateNotificationDto
+            {
+                UserId = dto.ReceiverId,
+                Title = "New Message",
+                Message = "You have received a new message.",
+                Type = "Message"
+            });
+
             return Ok(ResponseModel<string>.Ok(null!, "Message sent."));
         }
 
         [HttpGet("conversation/{otherUserId}")]
         public async Task<IActionResult> GetConversation(int otherUserId)
         {
-            var userId = GetUserId();
-
-            var messages = await context.Messages
-                .Include(m => m.Sender)
-                .Include(m => m.Receiver)
-                .Where(m => (m.SenderId == userId && m.ReceiverId == otherUserId) ||
-                            (m.SenderId == otherUserId && m.ReceiverId == userId))
-                .OrderBy(m => m.CreatedAt)
-                .Select(m => new ReturnMessageDto
-                {
-                    Id = m.Id,
-                    SenderId = m.SenderId,
-                    SenderName = m.Sender.Email,
-                    ReceiverId = m.ReceiverId,
-                    ReceiverName = m.Receiver.Email,
-                    Content = m.Content,
-                    IsRead = m.IsRead,
-                    CreatedAt = m.CreatedAt
-                })
-                .ToListAsync();
-
+            var messages = await messageService.GetConversationAsync(GetUserId(), otherUserId);
             return Ok(ResponseModel<List<ReturnMessageDto>>.Ok(messages));
         }
 
         [HttpGet("inbox")]
         public async Task<IActionResult> GetInbox()
         {
-            var userId = GetUserId();
-
-            var messages = await context.Messages
-                .Include(m => m.Sender)
-                .Where(m => m.ReceiverId == userId)
-                .OrderByDescending(m => m.CreatedAt)
-                .Select(m => new ReturnMessageDto
-                {
-                    Id = m.Id,
-                    SenderId = m.SenderId,
-                    SenderName = m.Sender.Email,
-                    ReceiverId = m.ReceiverId,
-                    Content = m.Content,
-                    IsRead = m.IsRead,
-                    CreatedAt = m.CreatedAt
-                })
-                .ToListAsync();
-
+            var messages = await messageService.GetInboxAsync(GetUserId());
             return Ok(ResponseModel<List<ReturnMessageDto>>.Ok(messages));
         }
 
         [HttpGet("unread-count")]
         public async Task<IActionResult> GetUnreadCount()
         {
-            var userId = GetUserId();
-            var count = await context.Messages
-                .CountAsync(m => m.ReceiverId == userId && !m.IsRead);
-
+            var count = await messageService.GetUnreadCountAsync(GetUserId());
             return Ok(ResponseModel<int>.Ok(count));
         }
     }

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OnlineJobRecruitmentSystem.Application.DTOs.ApplicationDtos;
 using OnlineJobRecruitmentSystem.Application.DTOs.EmployerDtos;
+using OnlineJobRecruitmentSystem.Application.DTOs.NotificationDtos;
 using OnlineJobRecruitmentSystem.Application.Interfaces;
 using OnlineJobRecruitmentSystem.Common;
 using OnlineJobRecruitmentSystem.Domain.Entities;
@@ -23,7 +24,8 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
         IValidator<UpdateEmployerDto> updateValidator,
         IValidator<UpdateJobApplicationStatusDto> statusValidator,
         FileManager fileManager,
-        IEmailService emailService
+        IEmailService emailService,
+        INotificationService notificationService
     ) : ControllerBase
     {
         private int GetUserId() => int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
@@ -250,6 +252,14 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
                     $"<p>Job: <b>{application.JobPost!.Title}</b></p>" +
                     $"<p>New Status: <b>{application.Status}</b></p>"
                 );
+
+                await notificationService.CreateNotificationAsync(new CreateNotificationDto
+                {
+                    UserId = jobSeeker.UserId,
+                    Title = "Application Status Updated",
+                    Message = $"Your application for '{application.JobPost!.Title}' is now: {application.Status}.",
+                    Type = "ApplicationStatus"
+                });
             }
 
 

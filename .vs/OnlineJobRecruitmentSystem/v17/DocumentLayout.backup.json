@@ -3,8 +3,47 @@
   "WorkspaceRootPath": "C:\\Users\\Xanim\\Desktop\\Final\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A1C8584D-E6EC-406B-B8E9-A820AE576A47}|OnlineJobRecruitmentSystem.API\\OnlineJobRecruitmentSystem.API.csproj|c:\\users\\xanim\\desktop\\final\\onlinejobrecruitmentsystem.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A1C8584D-E6EC-406B-B8E9-A820AE576A47}|OnlineJobRecruitmentSystem.API\\OnlineJobRecruitmentSystem.API.csproj|solutionrelative:onlinejobrecruitmentsystem.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A1C8584D-E6EC-406B-B8E9-A820AE576A47}|OnlineJobRecruitmentSystem.API\\OnlineJobRecruitmentSystem.API.csproj|c:\\users\\xanim\\desktop\\final\\onlinejobrecruitmentsystem.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{A1C8584D-E6EC-406B-B8E9-A820AE576A47}|OnlineJobRecruitmentSystem.API\\OnlineJobRecruitmentSystem.API.csproj|solutionrelative:onlinejobrecruitmentsystem.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A1C8584D-E6EC-406B-B8E9-A820AE576A47}|OnlineJobRecruitmentSystem.API\\OnlineJobRecruitmentSystem.API.csproj|c:\\users\\xanim\\desktop\\final\\onlinejobrecruitmentsystem.api\\controllers\\contractpaymentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A1C8584D-E6EC-406B-B8E9-A820AE576A47}|OnlineJobRecruitmentSystem.API\\OnlineJobRecruitmentSystem.API.csproj|solutionrelative:onlinejobrecruitmentsystem.api\\controllers\\contractpaymentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0BD850B8-2CDA-4FF2-A3E2-83BE33815A84}|OnlineJobRecruitmentSystem.Domain\\OnlineJobRecruitmentSystem.Domain.csproj|c:\\users\\xanim\\desktop\\final\\onlinejobrecruitmentsystem.domain\\enums\\contractstatus.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0BD850B8-2CDA-4FF2-A3E2-83BE33815A84}|OnlineJobRecruitmentSystem.Domain\\OnlineJobRecruitmentSystem.Domain.csproj|solutionrelative:onlinejobrecruitmentsystem.domain\\enums\\contractstatus.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3D92982E-48F3-4FEC-90AE-5A31B06065E4}|OnlineJobRecruitmentSystem.Application\\OnlineJobRecruitmentSystem.Application.csproj|c:\\users\\xanim\\desktop\\final\\onlinejobrecruitmentsystem.application\\dtos\\contractdtos\\updatecontractdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3D92982E-48F3-4FEC-90AE-5A31B06065E4}|OnlineJobRecruitmentSystem.Application\\OnlineJobRecruitmentSystem.Application.csproj|solutionrelative:onlinejobrecruitmentsystem.application\\dtos\\contractdtos\\updatecontractdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0BD850B8-2CDA-4FF2-A3E2-83BE33815A84}|OnlineJobRecruitmentSystem.Domain\\OnlineJobRecruitmentSystem.Domain.csproj|c:\\users\\xanim\\desktop\\final\\onlinejobrecruitmentsystem.domain\\enums\\paymenttype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0BD850B8-2CDA-4FF2-A3E2-83BE33815A84}|OnlineJobRecruitmentSystem.Domain\\OnlineJobRecruitmentSystem.Domain.csproj|solutionrelative:onlinejobrecruitmentsystem.domain\\enums\\paymenttype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|ViewDataWindow_MSSQL__/_localdb__MSSQLLocalDB/OnlineJobRecruitmentDB/True/SqlTable/dbo.Users.sql||{0058A1F7-65F3-4DB9-B3D0-CA7E64DD73CD}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A1C8584D-E6EC-406B-B8E9-A820AE576A47}|OnlineJobRecruitmentSystem.API\\OnlineJobRecruitmentSystem.API.csproj|c:\\users\\xanim\\desktop\\final\\onlinejobrecruitmentsystem.api\\controllers\\messagecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A1C8584D-E6EC-406B-B8E9-A820AE576A47}|OnlineJobRecruitmentSystem.API\\OnlineJobRecruitmentSystem.API.csproj|solutionrelative:onlinejobrecruitmentsystem.api\\controllers\\messagecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A1C8584D-E6EC-406B-B8E9-A820AE576A47}|OnlineJobRecruitmentSystem.API\\OnlineJobRecruitmentSystem.API.csproj|c:\\users\\xanim\\desktop\\final\\onlinejobrecruitmentsystem.api\\controllers\\employercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A1C8584D-E6EC-406B-B8E9-A820AE576A47}|OnlineJobRecruitmentSystem.API\\OnlineJobRecruitmentSystem.API.csproj|solutionrelative:onlinejobrecruitmentsystem.api\\controllers\\employercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A1C8584D-E6EC-406B-B8E9-A820AE576A47}|OnlineJobRecruitmentSystem.API\\OnlineJobRecruitmentSystem.API.csproj|c:\\users\\xanim\\desktop\\final\\onlinejobrecruitmentsystem.api\\controllers\\jobapplicationcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A1C8584D-E6EC-406B-B8E9-A820AE576A47}|OnlineJobRecruitmentSystem.API\\OnlineJobRecruitmentSystem.API.csproj|solutionrelative:onlinejobrecruitmentsystem.api\\controllers\\jobapplicationcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A1C8584D-E6EC-406B-B8E9-A820AE576A47}|OnlineJobRecruitmentSystem.API\\OnlineJobRecruitmentSystem.API.csproj|c:\\users\\xanim\\desktop\\final\\onlinejobrecruitmentsystem.api\\controllers\\jobseekercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A1C8584D-E6EC-406B-B8E9-A820AE576A47}|OnlineJobRecruitmentSystem.API\\OnlineJobRecruitmentSystem.API.csproj|solutionrelative:onlinejobrecruitmentsystem.api\\controllers\\jobseekercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A1C8584D-E6EC-406B-B8E9-A820AE576A47}|OnlineJobRecruitmentSystem.API\\OnlineJobRecruitmentSystem.API.csproj|c:\\users\\xanim\\desktop\\final\\onlinejobrecruitmentsystem.api\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A1C8584D-E6EC-406B-B8E9-A820AE576A47}|OnlineJobRecruitmentSystem.API\\OnlineJobRecruitmentSystem.API.csproj|solutionrelative:onlinejobrecruitmentsystem.api\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -14,17 +53,165 @@
       "DocumentGroups": [
         {
           "DockedHeight": 339,
-          "SelectedChildIndex": -1,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.API\\appsettings.json",
+              "RelativeDocumentMoniker": "OnlineJobRecruitmentSystem.API\\appsettings.json",
+              "ToolTip": "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.API\\appsettings.json*",
+              "RelativeToolTip": "OnlineJobRecruitmentSystem.API\\appsettings.json*",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABcAAACCAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-07-02T14:28:20.443Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ContractPaymentController.cs",
+              "DocumentMoniker": "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.API\\Controllers\\ContractPaymentController.cs",
+              "RelativeDocumentMoniker": "OnlineJobRecruitmentSystem.API\\Controllers\\ContractPaymentController.cs",
+              "ToolTip": "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.API\\Controllers\\ContractPaymentController.cs",
+              "RelativeToolTip": "OnlineJobRecruitmentSystem.API\\Controllers\\ContractPaymentController.cs",
+              "ViewState": "AgIAAJkAAAAAAAAAAAAQwLAAAABDAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-02T14:24:49.319Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "UpdateContractDto.cs",
+              "DocumentMoniker": "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.Application\\DTOs\\ContractDtos\\UpdateContractDto.cs",
+              "RelativeDocumentMoniker": "OnlineJobRecruitmentSystem.Application\\DTOs\\ContractDtos\\UpdateContractDto.cs",
+              "ToolTip": "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.Application\\DTOs\\ContractDtos\\UpdateContractDto.cs",
+              "RelativeToolTip": "OnlineJobRecruitmentSystem.Application\\DTOs\\ContractDtos\\UpdateContractDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-02T14:21:58.89Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ContractStatus.cs",
+              "DocumentMoniker": "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.Domain\\Enums\\ContractStatus.cs",
+              "RelativeDocumentMoniker": "OnlineJobRecruitmentSystem.Domain\\Enums\\ContractStatus.cs",
+              "ToolTip": "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.Domain\\Enums\\ContractStatus.cs",
+              "RelativeToolTip": "OnlineJobRecruitmentSystem.Domain\\Enums\\ContractStatus.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-02T14:21:46.383Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "PaymentType.cs",
+              "DocumentMoniker": "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.Domain\\Enums\\PaymentType.cs",
+              "RelativeDocumentMoniker": "OnlineJobRecruitmentSystem.Domain\\Enums\\PaymentType.cs",
+              "ToolTip": "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.Domain\\Enums\\PaymentType.cs",
+              "RelativeToolTip": "OnlineJobRecruitmentSystem.Domain\\Enums\\PaymentType.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-02T14:21:45.369Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "MessageController.cs",
+              "DocumentMoniker": "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.API\\Controllers\\MessageController.cs",
+              "RelativeDocumentMoniker": "OnlineJobRecruitmentSystem.API\\Controllers\\MessageController.cs",
+              "ToolTip": "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.API\\Controllers\\MessageController.cs",
+              "RelativeToolTip": "OnlineJobRecruitmentSystem.API\\Controllers\\MessageController.cs",
+              "ViewState": "AgIAAA0AAAAAAAAAAAAAABMAAAAaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-02T13:51:38.385Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "JobSeekerController.cs",
+              "DocumentMoniker": "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.API\\Controllers\\JobSeekerController.cs",
+              "RelativeDocumentMoniker": "OnlineJobRecruitmentSystem.API\\Controllers\\JobSeekerController.cs",
+              "ToolTip": "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.API\\Controllers\\JobSeekerController.cs",
+              "RelativeToolTip": "OnlineJobRecruitmentSystem.API\\Controllers\\JobSeekerController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAPQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-02T13:25:02.577Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "EmployerController.cs",
+              "DocumentMoniker": "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.API\\Controllers\\EmployerController.cs",
+              "RelativeDocumentMoniker": "OnlineJobRecruitmentSystem.API\\Controllers\\EmployerController.cs",
+              "ToolTip": "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.API\\Controllers\\EmployerController.cs",
+              "RelativeToolTip": "OnlineJobRecruitmentSystem.API\\Controllers\\EmployerController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYBAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-02T13:22:23.395Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "JobApplicationController.cs",
+              "DocumentMoniker": "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.API\\Controllers\\JobApplicationController.cs",
+              "RelativeDocumentMoniker": "OnlineJobRecruitmentSystem.API\\Controllers\\JobApplicationController.cs",
+              "ToolTip": "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.API\\Controllers\\JobApplicationController.cs",
+              "RelativeToolTip": "OnlineJobRecruitmentSystem.API\\Controllers\\JobApplicationController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-02T13:20:25.064Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "dbo.Users [Data]",
+              "DocumentMoniker": "ViewDataWindow_MSSQL__/_localdb__MSSQLLocalDB/OnlineJobRecruitmentDB/True/SqlTable/dbo.Users.sql",
+              "ToolTip": "dbo.Users [Data]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2026-07-02T13:00:03.248Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "AuthController.cs",
+              "DocumentMoniker": "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.API\\Controllers\\AuthController.cs",
+              "RelativeDocumentMoniker": "OnlineJobRecruitmentSystem.API\\Controllers\\AuthController.cs",
+              "ToolTip": "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.API\\Controllers\\AuthController.cs",
+              "RelativeToolTip": "OnlineJobRecruitmentSystem.API\\Controllers\\AuthController.cs",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAAACYAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-02T12:50:25.014Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{0ad07096-bba9-4900-a651-0598d26f6d24}"
             }
           ]
         },
         {
           "DockedHeight": 61,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": -1,
           "Children": [
             {
               "$type": "Bookmark",
@@ -37,23 +224,6 @@
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{004be353-6879-467c-9d1e-9ac23cdf6d49}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.API\\Program.cs",
-              "RelativeDocumentMoniker": "OnlineJobRecruitmentSystem.API\\Program.cs",
-              "ToolTip": "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.API\\Program.cs",
-              "RelativeToolTip": "OnlineJobRecruitmentSystem.API\\Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAACIAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-01T11:48:20.233Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
             }
           ]
         }

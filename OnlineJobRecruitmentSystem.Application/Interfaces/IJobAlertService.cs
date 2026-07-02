@@ -6,8 +6,9 @@ namespace OnlineJobRecruitmentSystem.Application.Interfaces
     {
         Task<ReturnJobAlertDto> CreateAlertAsync(int userId, CreateJobAlertDto dto);
         Task<List<ReturnJobAlertDto>> GetUserAlertsAsync(int userId);
-        Task UpdateAlertAsync(int alertId, int userId, UpdateJobAlertDto dto);
-        Task DeleteAlertAsync(int alertId, int userId);
+        Task<ReturnJobAlertDto?> GetAlertByIdAsync(int alertId, int userId);
+        Task<bool> UpdateAlertAsync(int alertId, int userId, UpdateJobAlertDto dto);
+        Task<bool> DeleteAlertAsync(int alertId, int userId);
         Task SendJobAlertsAsync(string frequency);
     }
 }
