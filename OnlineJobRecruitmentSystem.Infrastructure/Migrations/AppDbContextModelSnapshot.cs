@@ -680,6 +680,12 @@ namespace OnlineJobRecruitmentSystem.Infrastructure.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
+                    b.Property<string>("TwoFactorCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("TwoFactorCodeExpiry")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasMaxLength(50)

@@ -87,14 +87,19 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
             if (!user.IsEmailVerified)
                 return Unauthorized(ResponseModel<string>.Fail("Please verify your email before logging in."));
 
-            var token = jwtService.GenerateToken(user);
-            var refreshToken = jwtService.GenerateRefreshToken();
+            var code = Random.Shared.Next(100000, 999999).ToString();
 
-            user.RefreshToken = refreshToken;
-            user.RefreshTokenExpiry = DateTime.UtcNow.AddDays(30);
+            user.TwoFactorCode = code;
+            user.TwoFactorCodeExpiry = DateTime.UtcNow.AddMinutes(10);
             await context.SaveChangesAsync();
 
-            return Ok(ResponseModel<object>.Ok(new { token, refreshToken, role = user.Role }, "Login successful."));
+            await emailService.SendEmailAsync(
+                user.Email,
+                "Your verification code",
+                $"<h3>Your login verification code is: <b>{code}</b></h3><p>This code expires in 10 minutes.</p>"
+            );
+
+            return Ok(ResponseModel<string>.Ok(null!, "Verification code sent to your email."));
         }
 
         [HttpPost("forgot-password")]
@@ -179,6 +184,28 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
             }
 
             return Ok(ResponseModel<string>.Ok(null!, "Logged out."));
+        }
+
+        [HttpPost("verify-2fa")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Verify2Fa(Verify2FaDto dto)
+        {
+            var user = await context.Users.FirstOrDefaultAsync(u => u.Email == dto.Email);
+
+            if (user == null || user.TwoFactorCode != dto.Code || user.TwoFactorCodeExpiry == null || user.TwoFactorCodeExpiry <= DateTime.UtcNow)
+                return Unauthorized(ResponseModel<string>.Fail("Invalid or expired verification code."));
+
+            user.TwoFactorCode = null;
+            user.TwoFactorCodeExpiry = null;
+
+            var token = jwtService.GenerateToken(user);
+            var refreshToken = jwtService.GenerateRefreshToken();
+
+            user.RefreshToken = refreshToken;
+            user.RefreshTokenExpiry = DateTime.UtcNow.AddDays(30);
+            await context.SaveChangesAsync();
+
+            return Ok(ResponseModel<object>.Ok(new { token, refreshToken, role = user.Role }, "Login successful."));
         }
     }
 }

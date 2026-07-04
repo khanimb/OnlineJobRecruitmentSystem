@@ -16,6 +16,8 @@ namespace OnlineJobRecruitmentSystem.Domain.Entities
         public DateTime? PremiumExpiryDate { get; set; }
         public string? RefreshToken { get; set; }
         public DateTime? RefreshTokenExpiry { get; set; }
+        public string? TwoFactorCode { get; set; }
+        public DateTime? TwoFactorCodeExpiry { get; set; }
 
         public EmployerProfile? EmployerProfile { get; set; }
         public JobSeekerProfile? JobSeekerProfile { get; set; }

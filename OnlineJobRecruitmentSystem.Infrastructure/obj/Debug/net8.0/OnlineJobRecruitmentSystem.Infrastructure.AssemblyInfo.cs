@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("OnlineJobRecruitmentSystem.Infrastructure")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1c675f6e91039890a65f855579591a34f3742bb5")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d1429c1afa3056d5c71a1a36bdca94a3c5243a10")]
 [assembly: System.Reflection.AssemblyProductAttribute("OnlineJobRecruitmentSystem.Infrastructure")]
 [assembly: System.Reflection.AssemblyTitleAttribute("OnlineJobRecruitmentSystem.Infrastructure")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -1,22 +1,6 @@
 [
   {
     "ContainingType": "OnlineJobRecruitmentSystem.API.Controllers.AccountController",
-    "Method": "UploadCv",
-    "RelativePath": "api/Account/cv",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "file",
-        "Type": "Microsoft.AspNetCore.Http.IFormFile",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "OnlineJobRecruitmentSystem.API.Controllers.AccountController",
     "Method": "DownloadCvAsPdf",
     "RelativePath": "api/Account/cv/download",
     "HttpMethod": "GET",
@@ -264,6 +248,22 @@
       {
         "Name": "dto",
         "Type": "OnlineJobRecruitmentSystem.Application.DTOs.UserDtos.ResetPasswordDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "OnlineJobRecruitmentSystem.API.Controllers.AuthController",
+    "Method": "Verify2Fa",
+    "RelativePath": "api/Auth/verify-2fa",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "OnlineJobRecruitmentSystem.Application.DTOs.UserDtos.Verify2FaDto",
         "IsRequired": true
       }
     ],

@@ -5,6 +5,7 @@ using OnlineJobRecruitmentSystem.Application.DTOs.PortfolioDtos;
 using OnlineJobRecruitmentSystem.Application.Interfaces;
 using OnlineJobRecruitmentSystem.Common;
 using OnlineJobRecruitmentSystem.Infrastructure.Data;
+using OnlineJobRecruitmentSystem.Infrastructure.Extensions;
 using System.Security.Claims;
 
 namespace OnlineJobRecruitmentSystem.API.Controllers
@@ -31,6 +32,12 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
         {
             if (dto.File == null || dto.File.Length == 0)
                 return BadRequest(ResponseModel<string>.Fail("File is required."));
+
+            if (!dto.File.IsValidType(".jpg", ".jpeg", ".png"))
+                return BadRequest(ResponseModel<string>.Fail("Only JPG, PNG files are allowed."));
+
+            if (!dto.File.IsValidSize(5 * 1024 * 1024))
+                return BadRequest(ResponseModel<string>.Fail("File size must not exceed 5 MB."));
 
             var profileId = await GetProfileId();
             if (profileId == 0)
@@ -59,6 +66,15 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromForm] UpdatePortfolioItemDto dto)
         {
+            if (dto.File != null)
+            {
+                if (!dto.File.IsValidType(".jpg", ".jpeg", ".png"))
+                    return BadRequest(ResponseModel<string>.Fail("Only JPG, PNG files are allowed."));
+
+                if (!dto.File.IsValidSize(5 * 1024 * 1024))
+                    return BadRequest(ResponseModel<string>.Fail("File size must not exceed 5 MB."));
+            }
+
             var profileId = await GetProfileId();
             var updated = await portfolioService.UpdateAsync(id, profileId, dto);
             if (!updated)
