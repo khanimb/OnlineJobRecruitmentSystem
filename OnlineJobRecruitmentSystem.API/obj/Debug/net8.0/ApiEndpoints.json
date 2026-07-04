@@ -460,6 +460,74 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "OnlineJobRecruitmentSystem.API.Controllers.CvAnalysisController",
+    "Method": "AnalyzeCv",
+    "RelativePath": "api/CvAnalysis/analyze",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "OnlineJobRecruitmentSystem.Application.DTOs.CvAnalysisDtos.AnalyzeCvDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "OnlineJobRecruitmentSystem.API.Controllers.CvAnalysisController",
+    "Method": "GetHistory",
+    "RelativePath": "api/CvAnalysis/history",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "OnlineJobRecruitmentSystem.API.Controllers.CvAnalysisController",
+    "Method": "GetHistoryDetail",
+    "RelativePath": "api/CvAnalysis/history/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "OnlineJobRecruitmentSystem.API.Controllers.CvAnalysisController",
+    "Method": "DeleteHistory",
+    "RelativePath": "api/CvAnalysis/history/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "OnlineJobRecruitmentSystem.API.Controllers.CvAnalysisController",
+    "Method": "GetRecommendedJobs",
+    "RelativePath": "api/CvAnalysis/recommended-jobs",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "OnlineJobRecruitmentSystem.API.Controllers.EmployerController",
     "Method": "GetApplications",
     "RelativePath": "api/Employer/applications",

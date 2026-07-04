@@ -22,6 +22,7 @@ namespace OnlineJobRecruitmentSystem.Infrastructure.Data
         public DbSet<Contract> Contracts { get; set; }
         public DbSet<ContractPayment> ContractPayments { get; set; }
         public DbSet<Comment> Comments { get; set; }
+        public DbSet<CvAnalysisHistory> CvAnalysisHistories { get; set; }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {

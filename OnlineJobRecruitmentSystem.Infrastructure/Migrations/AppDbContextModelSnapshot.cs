@@ -136,6 +136,42 @@ namespace OnlineJobRecruitmentSystem.Infrastructure.Migrations
                     b.ToTable("ContractPayments");
                 });
 
+            modelBuilder.Entity("OnlineJobRecruitmentSystem.Domain.Entities.CvAnalysisHistory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("JobPostId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("JobSeekerProfileId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("MatchScore")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OverallScore")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ResultJson")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("JobPostId");
+
+                    b.HasIndex("JobSeekerProfileId");
+
+                    b.ToTable("CvAnalysisHistories");
+                });
+
             modelBuilder.Entity("OnlineJobRecruitmentSystem.Domain.Entities.EmployerProfile", b =>
                 {
                     b.Property<int>("Id")
@@ -715,6 +751,24 @@ namespace OnlineJobRecruitmentSystem.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Contract");
+                });
+
+            modelBuilder.Entity("OnlineJobRecruitmentSystem.Domain.Entities.CvAnalysisHistory", b =>
+                {
+                    b.HasOne("OnlineJobRecruitmentSystem.Domain.Entities.JobPost", "JobPost")
+                        .WithMany()
+                        .HasForeignKey("JobPostId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("OnlineJobRecruitmentSystem.Domain.Entities.JobSeekerProfile", "JobSeekerProfile")
+                        .WithMany()
+                        .HasForeignKey("JobSeekerProfileId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("JobPost");
+
+                    b.Navigation("JobSeekerProfile");
                 });
 
             modelBuilder.Entity("OnlineJobRecruitmentSystem.Domain.Entities.EmployerProfile", b =>

@@ -58,6 +58,10 @@
               "target": "Package",
               "version": "[4.2.0, )"
             },
+            "DocumentFormat.OpenXml": {
+              "target": "Package",
+              "version": "[3.5.1, )"
+            },
             "FluentValidation": {
               "target": "Package",
               "version": "[12.1.1, )"
@@ -101,6 +105,10 @@
             "Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore": {
               "target": "Package",
               "version": "[8.0.0, )"
+            },
+            "PdfPig": {
+              "target": "Package",
+              "version": "[0.1.15, )"
             },
             "QuestPDF": {
               "target": "Package",

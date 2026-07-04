@@ -712,6 +712,105 @@
         }
       }
     },
+    "/api/CvAnalysis/analyze": {
+      "post": {
+        "tags": [
+          "CvAnalysis"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AnalyzeCvDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AnalyzeCvDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/AnalyzeCvDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/CvAnalysis/recommended-jobs": {
+      "get": {
+        "tags": [
+          "CvAnalysis"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/CvAnalysis/history": {
+      "get": {
+        "tags": [
+          "CvAnalysis"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/CvAnalysis/history/{id}": {
+      "get": {
+        "tags": [
+          "CvAnalysis"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "CvAnalysis"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Employer/profile": {
       "post": {
         "tags": [
@@ -2000,6 +2099,17 @@
   },
   "components": {
     "schemas": {
+      "AnalyzeCvDto": {
+        "type": "object",
+        "properties": {
+          "jobPostId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "ApplicationStatus": {
         "enum": [
           0,

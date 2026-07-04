@@ -393,3 +393,13 @@ C:\Users\Xanim\Desktop\Final\OnlineJobRecruitmentSystem.API\bin\Debug\net8.0\New
 C:\Users\Xanim\Desktop\Final\OnlineJobRecruitmentSystem.API\bin\Debug\net8.0\System.Net.WebSockets.WebSocketProtocol.dll
 C:\Users\Xanim\Desktop\Final\OnlineJobRecruitmentSystem.API\bin\Debug\net8.0\Stripe.net.dll
 C:\Users\Xanim\Desktop\Final\OnlineJobRecruitmentSystem.API\bin\Debug\net8.0\Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore.dll
+C:\Users\Xanim\Desktop\Final\OnlineJobRecruitmentSystem.API\bin\Debug\net8.0\DocumentFormat.OpenXml.dll
+C:\Users\Xanim\Desktop\Final\OnlineJobRecruitmentSystem.API\bin\Debug\net8.0\DocumentFormat.OpenXml.Framework.dll
+C:\Users\Xanim\Desktop\Final\OnlineJobRecruitmentSystem.API\bin\Debug\net8.0\UglyToad.PdfPig.Core.dll
+C:\Users\Xanim\Desktop\Final\OnlineJobRecruitmentSystem.API\bin\Debug\net8.0\UglyToad.PdfPig.DocumentLayoutAnalysis.dll
+C:\Users\Xanim\Desktop\Final\OnlineJobRecruitmentSystem.API\bin\Debug\net8.0\UglyToad.PdfPig.Fonts.dll
+C:\Users\Xanim\Desktop\Final\OnlineJobRecruitmentSystem.API\bin\Debug\net8.0\UglyToad.PdfPig.Package.dll
+C:\Users\Xanim\Desktop\Final\OnlineJobRecruitmentSystem.API\bin\Debug\net8.0\UglyToad.PdfPig.Tokenization.dll
+C:\Users\Xanim\Desktop\Final\OnlineJobRecruitmentSystem.API\bin\Debug\net8.0\UglyToad.PdfPig.Tokens.dll
+C:\Users\Xanim\Desktop\Final\OnlineJobRecruitmentSystem.API\bin\Debug\net8.0\UglyToad.PdfPig.dll
+C:\Users\Xanim\Desktop\Final\OnlineJobRecruitmentSystem.API\bin\Debug\net8.0\System.IO.Packaging.dll

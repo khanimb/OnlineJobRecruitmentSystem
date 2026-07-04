@@ -69,6 +69,7 @@ namespace OnlineJobRecruitmentSystem.API
             services.AddScoped<IJwtService, JwtService>();
             services.AddScoped<FileManager>();
             services.AddScoped<IEmailService, EmailService>();
+            services.AddHttpClient<IGeminiService, GeminiService>();
             services.AddHostedService<JobExpiryService>();
             services.AddHostedService<JobAlertBackgroundService>();
 

@@ -37,5 +37,10 @@ namespace OnlineJobRecruitmentSystem.Infrastructure.Extensions
             if (File.Exists(filePath))
                 File.Delete(filePath);
         }
+
+        public string GetPhysicalPath(string fileUrl)
+        {
+            return Path.Combine(_env.WebRootPath, fileUrl.TrimStart('/'));
+        }
     }
 }
