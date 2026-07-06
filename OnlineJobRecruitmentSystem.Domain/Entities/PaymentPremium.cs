@@ -1,6 +1,6 @@
 ﻿namespace OnlineJobRecruitmentSystem.Domain.Entities
 {
-    public class Payment : BaseEntity
+    public class PaymentPremium : BaseEntity
     {
         public int EmployerId { get; set; }
         public string StripePaymentId { get; set; }

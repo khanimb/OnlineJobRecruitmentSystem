@@ -42,11 +42,11 @@ namespace OnlineJobRecruitmentSystem.Application.Profiles
                 .ForMember(d => d.FileType, o => o.Ignore());
             CreateMap<PortfolioItem, ReturnPortfolioItemDto>();
 
-            CreateMap<CreatePaymentDto, Payment>()
+            CreateMap<CreatePaymentDto, PaymentPremium>()
                 .ForMember(d => d.StripePaymentId, o => o.Ignore())
                 .ForMember(d => d.Amount, o => o.Ignore())
                 .ForMember(d => d.Status, o => o.Ignore());
-            CreateMap<Payment, ReturnPaymentDto>();
+            CreateMap<PaymentPremium, ReturnPaymentDto>();
 
             CreateMap<JobApplication, ApplicationTrendDto>()
                 .ForMember(d => d.Date, o => o.MapFrom(s => s.CreatedAt.ToString("yyyy-MM-dd")))

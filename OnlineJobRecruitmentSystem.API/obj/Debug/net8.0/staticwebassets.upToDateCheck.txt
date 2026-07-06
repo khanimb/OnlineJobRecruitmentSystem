@@ -1,11 +1,19 @@
 wwwroot\assets\css\style.css
+wwwroot\assets\js\admin - Copy (2).js
+wwwroot\assets\js\admin - Copy (3).js
+wwwroot\assets\js\admin - Copy (4).js
+wwwroot\assets\js\admin - Copy (5).js
+wwwroot\assets\js\admin - Copy (6).js
+wwwroot\assets\js\admin - Copy (7).js
+wwwroot\assets\js\admin - Copy (8).js
+wwwroot\assets\js\admin - Copy.js
 wwwroot\assets\js\admin.js
 wwwroot\assets\js\api.js
 wwwroot\assets\js\auth.js
 wwwroot\assets\js\employer.js
 wwwroot\assets\js\jobs.js
 wwwroot\assets\js\jobseeker.js
-wwwroot\assets\js\payment.js
+wwwroot\assets\js\paymentpremium.js
 wwwroot\assets\pages\admindashboard.html
 wwwroot\assets\pages\employerdashboard.html
 wwwroot\assets\pages\jobdetail.html

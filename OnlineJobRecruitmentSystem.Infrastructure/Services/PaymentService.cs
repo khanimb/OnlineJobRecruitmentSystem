@@ -15,9 +15,9 @@ namespace OnlineJobRecruitmentSystem.Infrastructure.Services
             _context = context;
         }
 
-        public async Task<Payment> CreatePaymentAsync(int employerId, string plan, decimal amount, string stripePaymentId)
+        public async Task<PaymentPremium> CreatePaymentAsync(int employerId, string plan, decimal amount, string stripePaymentId)
         {
-            var payment = new Payment
+            var payment = new PaymentPremium
             {
                 EmployerId = employerId,
                 StripePaymentId = stripePaymentId,

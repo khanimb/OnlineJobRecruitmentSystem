@@ -18,7 +18,7 @@ namespace OnlineJobRecruitmentSystem.Infrastructure.Data
         public DbSet<JobAlert> JobAlerts { get; set; }
         public DbSet<PortfolioItem> PortfolioItems { get; set; }
         public DbSet<Notification> Notifications { get; set; }
-        public DbSet<Payment> Payments { get; set; }
+        public DbSet<PaymentPremium> Payments { get; set; }
         public DbSet<Contract> Contracts { get; set; }
         public DbSet<ContractPayment> ContractPayments { get; set; }
         public DbSet<Comment> Comments { get; set; }

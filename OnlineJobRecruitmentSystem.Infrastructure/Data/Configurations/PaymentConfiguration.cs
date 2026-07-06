@@ -4,9 +4,9 @@ using OnlineJobRecruitmentSystem.Domain.Entities;
 
 namespace OnlineJobRecruitmentSystem.Infrastructure.Data.Configurations
 {
-    public class PaymentConfiguration : IEntityTypeConfiguration<Payment>
+    public class PaymentConfiguration : IEntityTypeConfiguration<PaymentPremium>
     {
-        public void Configure(EntityTypeBuilder<Payment> builder)
+        public void Configure(EntityTypeBuilder<PaymentPremium> builder)
         {
             builder.HasKey(p => p.Id);
 

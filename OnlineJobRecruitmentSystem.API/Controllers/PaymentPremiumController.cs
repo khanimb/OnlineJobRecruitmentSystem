@@ -12,7 +12,7 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [Authorize]
-    public class PaymentController(
+    public class PaymentPremiumController(
         AppDbContext context,
         IPaymentService paymentService,
         IConfiguration configuration) : ControllerBase
