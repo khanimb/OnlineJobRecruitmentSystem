@@ -59,6 +59,24 @@ namespace OnlineJobRecruitmentSystem.Infrastructure.Services
                 .ToListAsync();
         }
 
+        public async Task<List<ReturnReviewDto>> GetReviewsByReviewerAsync(int reviewerId)
+        {
+            return await _context.Reviews
+                .Where(r => r.ReviewerId == reviewerId)
+                .Select(r => new ReturnReviewDto
+                {
+                    Id = r.Id,
+                    ReviewerId = r.ReviewerId,
+                    ReviewerName = r.Reviewer.Email,
+                    RevieweeId = r.RevieweeId,
+                    RevieweeName = r.Reviewee.Email,
+                    Rating = r.Rating,
+                    Comment = r.Comment,
+                    CreatedAt = r.CreatedAt
+                })
+                .ToListAsync();
+        }
+
         public async Task<double> GetAverageRatingAsync(int userId)
         {
             var reviews = await _context.Reviews

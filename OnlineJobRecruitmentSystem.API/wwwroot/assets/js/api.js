@@ -2,18 +2,31 @@
 
 async function apiFetch(endpoint, options = {}) {
     const token = localStorage.getItem('token');
-    const headers = { 'Content-Type': 'application/json' };
+    const isFormData = options.body instanceof FormData;
+
+    const headers = {};
     if (token) headers['Authorization'] = `Bearer ${token}`;
 
-    const response = await fetch(`${BASE_URL}${endpoint}`, {
-        ...options,
-        headers: { ...headers, ...options.headers }
-    });
+    const settings = {
+        url: `${BASE_URL}${endpoint}`,
+        method: options.method || 'GET',
+        data: options.body,
+        headers: { ...headers, ...options.headers },
+        dataType: 'json'
+    };
 
-    if (!response.ok) {
-        const error = await response.json().catch(() => ({}));
-        throw new Error(error.message || 'Something went wrong');
+    if (isFormData) {
+        settings.processData = false;
+        settings.contentType = false;
+    } else {
+        settings.contentType = 'application/json';
+        headers['Content-Type'] = 'application/json';
     }
 
-    return response.json();
+    try {
+        return await $.ajax(settings);
+    } catch (xhr) {
+        const error = xhr.responseJSON || {};
+        throw new Error(error.message || 'Something went wrong');
+    }
 }

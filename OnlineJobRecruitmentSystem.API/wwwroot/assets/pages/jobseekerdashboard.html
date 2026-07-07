@@ -19,6 +19,11 @@
         <a class="nav-item" onclick="showTab('browse',this)"><i class="ti ti-search"></i> Browse Jobs</a>
         <div class="sidebar-section">Account</div>
         <a class="nav-item" onclick="showTab('profile',this)"><i class="ti ti-user-circle"></i> My Profile</a>
+        <a class="nav-item" onclick="showTab('portfolio',this)"><i class="ti ti-photo"></i> Portfolio</a>
+        <a class="nav-item" onclick="showTab('jobalert',this)"><i class="ti ti-bell-ringing"></i> Job Alerts</a>
+        <a class="nav-item" onclick="showTab('contracts',this)"><i class="ti ti-file-text"></i> My Contracts</a>
+        <a class="nav-item" onclick="showTab('reviews',this)"><i class="ti ti-star"></i> Reviews</a>
+        <a class="nav-item" onclick="showTab('premium',this)"><i class="ti ti-crown"></i> Premium</a>
         <div class="sidebar-bottom">
             <div class="sidebar-user">
                 <div class="user-avatar" id="sidebarAvatar">J</div>
@@ -34,11 +39,23 @@
     <div class="dash-main">
         <div class="topbar">
             <div class="topbar-left">
+                <button class="dash-toggle-btn" id="sidebarToggleBtn"><i class="ti ti-menu-2"></i></button>
                 <h1 id="pageTitle">Overview</h1>
                 <p id="pageSubtitle">Here's your job search summary.</p>
             </div>
             <div class="topbar-right">
-                <div class="icon-btn"><i class="ti ti-bell"></i><div class="notif-dot"></div></div>
+                <div class="icon-btn" id="notifBellBtn">
+                    <i class="ti ti-bell"></i>
+                    <div class="notif-dot" id="notifDot" style="display:none"></div>
+                    <div class="notif-dropdown" id="notifDropdown">
+                        <div class="notif-dropdown-header">
+                            <span>Notifications</span>
+                            <a href="#" onclick="markAllRead(); event.stopPropagation();">Mark all read</a>
+                        </div>
+                        <div class="notif-list" id="notifList"></div>
+                        <div class="notif-dropdown-footer"><a href="notifications.html">View all</a></div>
+                    </div>
+                </div>
                 <button class="btn-post" onclick="window.location.href='/assets/pages/jobs.html'"><i class="ti ti-search"></i> Find Jobs</button>
             </div>
         </div>
@@ -164,12 +181,176 @@
                 </div>
             </div>
 
+            <!-- PORTFOLIO TAB -->
+            <div id="tab-portfolio" style="display:none">
+                <div class="dash-card" style="margin-bottom:20px">
+                    <div class="dash-card-header"><div class="dash-card-title" id="portfolioFormTitle">Add Portfolio Item</div></div>
+                    <div style="padding:24px 28px;display:flex;flex-direction:column;gap:16px;max-width:520px">
+                        <div class="form-group">
+                            <label>Title</label>
+                            <input type="text" id="portfolioTitle" placeholder="e.g. E-commerce website redesign" />
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea id="portfolioDescription" placeholder="Briefly describe this project..." style="width:100%;padding:10px 14px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:0.875rem;font-family:Inter,sans-serif;min-height:80px;outline:none;resize:vertical"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Image (JPG/PNG, max 5MB)</label>
+                            <input type="file" id="portfolioFile" accept=".jpg,.jpeg,.png" style="padding:8px" />
+                        </div>
+                        <div style="display:flex;gap:10px">
+                            <button class="btn-primary" id="portfolioSubmitBtn" onclick="submitPortfolioItem()">Add Item</button>
+                            <button class="btn-outline" id="portfolioCancelBtn" onclick="cancelPortfolioEdit()" style="display:none">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="dash-card">
+                    <div class="dash-card-header"><div class="dash-card-title">My Portfolio</div></div>
+                    <div style="padding:20px 24px">
+                        <div class="portfolio-grid" id="portfolioGrid"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- JOB ALERTS TAB -->
+            <div id="tab-jobalert" style="display:none">
+                <div class="dash-card" style="margin-bottom:20px">
+                    <div class="dash-card-header"><div class="dash-card-title" id="alertFormTitle">Create Job Alert</div></div>
+                    <div style="padding:24px 28px;display:flex;flex-direction:column;gap:16px;max-width:520px">
+                        <div class="form-group">
+                            <label>Keyword</label>
+                            <input type="text" id="alertKeyword" placeholder="e.g. Frontend Developer" />
+                        </div>
+                        <div class="form-group">
+                            <label>Location</label>
+                            <input type="text" id="alertLocation" placeholder="e.g. Baku, Remote" />
+                        </div>
+                        <div class="form-group">
+                            <label>Frequency</label>
+                            <select id="alertFrequency">
+                                <option value="daily">Daily</option>
+                                <option value="weekly">Weekly</option>
+                            </select>
+                        </div>
+                        <div style="display:flex;gap:10px">
+                            <button class="btn-primary" id="alertSubmitBtn" onclick="submitJobAlert()">Create Alert</button>
+                            <button class="btn-outline" id="alertCancelBtn" onclick="cancelAlertEdit()" style="display:none">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="dash-card">
+                    <div class="dash-card-header"><div class="dash-card-title">My Job Alerts</div></div>
+                    <div id="alertsList"></div>
+                </div>
+            </div>
+
+            <!-- CONTRACTS TAB -->
+            <div id="tab-contracts" style="display:none">
+                <div class="dash-card">
+                    <div class="dash-card-header"><div class="dash-card-title">My Contracts</div></div>
+                    <div id="contractsList"></div>
+                </div>
+            </div>
+
+            <!-- REVIEW MODAL -->
+            <div class="modal-overlay" id="reviewModalOverlay" onclick="closeReviewModalOutside(event)">
+                <div class="modal">
+                    <div class="modal-header">
+                        <div class="modal-title" id="reviewModalTitle">Leave a Review</div>
+                        <button class="modal-close" onclick="closeReviewModal()"><i class="ti ti-x"></i></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Rating</label>
+                            <div class="star-picker" id="starPicker">
+                                <i class="ti ti-star" data-val="1" onclick="setRating(1)"></i>
+                                <i class="ti ti-star" data-val="2" onclick="setRating(2)"></i>
+                                <i class="ti ti-star" data-val="3" onclick="setRating(3)"></i>
+                                <i class="ti ti-star" data-val="4" onclick="setRating(4)"></i>
+                                <i class="ti ti-star" data-val="5" onclick="setRating(5)"></i>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Comment (optional)</label>
+                            <textarea id="reviewComment" placeholder="Share your experience..." style="width:100%;padding:10px 14px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:0.875rem;font-family:Inter,sans-serif;min-height:80px;outline:none;resize:vertical"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn-cancel" onclick="closeReviewModal()">Cancel</button>
+                        <button class="btn-save" onclick="submitReview()"><i class="ti ti-star"></i> Submit</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- REVIEWS TAB -->
+            <div id="tab-reviews" style="display:none">
+                <div class="dash-card" style="margin-bottom:20px">
+                    <div class="dash-card-header">
+                        <div><div class="dash-card-title">Reviews I've Received</div><div class="dash-card-sub" id="receivedRatingSub">No ratings yet</div></div>
+                    </div>
+                    <div id="receivedReviewsList"></div>
+                </div>
+                <div class="dash-card">
+                    <div class="dash-card-header"><div class="dash-card-title">Reviews I've Written</div></div>
+                    <div id="writtenReviewsList"></div>
+                </div>
+            </div>
+
+            <!-- PREMIUM TAB -->
+            <div id="tab-premium" style="display:none">
+                <div class="premium-status-banner" id="premiumStatusBanner">
+                    <i class="ti ti-crown" style="font-size:1.8rem"></i>
+                    <div>
+                        <div style="font-weight:700" id="premiumStatusTitle">Checking status...</div>
+                        <div style="font-size:0.85rem" id="premiumStatusSub"></div>
+                    </div>
+                </div>
+                <div class="dash-card" style="margin-bottom:20px">
+                    <div class="dash-card-header"><div class="dash-card-title">Choose a plan</div></div>
+                    <div style="padding:24px">
+                        <div class="premium-plans">
+                            <div class="premium-plan-card">
+                                <div class="premium-plan-name">Basic</div>
+                                <div class="premium-plan-price">$9.99</div>
+                                <div class="premium-plan-duration">1 month</div>
+                                <button class="btn-outline" style="width:100%;justify-content:center" onclick="subscribePlan('basic')">Choose Basic</button>
+                            </div>
+                            <div class="premium-plan-card featured">
+                                <div class="premium-plan-badge">Most Popular</div>
+                                <div class="premium-plan-name">Standard</div>
+                                <div class="premium-plan-price">$29.99</div>
+                                <div class="premium-plan-duration">3 months</div>
+                                <button class="btn-primary" style="width:100%;justify-content:center" onclick="subscribePlan('standard')">Choose Standard</button>
+                            </div>
+                            <div class="premium-plan-card">
+                                <div class="premium-plan-name">Premium</div>
+                                <div class="premium-plan-price">$49.99</div>
+                                <div class="premium-plan-duration">6 months</div>
+                                <button class="btn-outline" style="width:100%;justify-content:center" onclick="subscribePlan('premium')">Choose Premium</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dash-card">
+                    <div class="dash-card-header"><div class="dash-card-title">Payment History</div></div>
+                    <div id="premiumHistoryList"></div>
+                </div>
+            </div>
+
         </div>
     </div>
 
     <div class="toast" id="toast"><i class="ti ti-circle-check"></i><span id="toastMsg">Done!</span></div>
 
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@microsoft/signalr@8.0.0/dist/browser/signalr.min.js"></script>
     <script src="../../assets/js/api.js"></script>
+    <script src="../../assets/js/notification.js"></script>
     <script src="../../assets/js/jobseeker.js"></script>
+    <script src="../../assets/js/portfolio.js"></script>
+    <script src="../../assets/js/jobAlert.js"></script>
+    <script src="../../assets/js/contract.js"></script>
+    <script src="../../assets/js/review.js"></script>
+    <script src="../../assets/js/paymentpremium.js"></script>
 </body>
 </html>

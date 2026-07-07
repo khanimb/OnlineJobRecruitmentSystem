@@ -3,154 +3,52 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Admin Dashboard — NexHire</title>
+    <title>NexHire - Messages</title>
     <link rel="stylesheet" href="../../assets/css/style.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
 </head>
 <body>
 
-    <aside class="sidebar">
-        <div class="sidebar-logo">
-            <i class="ti ti-brand-speedtest"></i> NexHire<span>.</span>
+    <nav class="navbar">
+        <div class="logo">
+            <a href="../index.html" style="text-decoration:none;color:inherit;display:flex;align-items:center;gap:8px">
+                <i class="ti ti-brand-speedtest" style="color:#2563EB"></i> NexHire<span class="logo-accent">.</span>
+            </a>
         </div>
-        <div class="sidebar-section">Main</div>
-        <a class="nav-item active" onclick="showTab('overview',this)"><i class="ti ti-layout-dashboard"></i> Overview</a>
-        <a class="nav-item" onclick="showTab('users',this)"><i class="ti ti-users"></i> Users <span class="nav-badge" id="usersBadge">0</span></a>
-        <a class="nav-item" onclick="showTab('jobs',this)"><i class="ti ti-briefcase"></i> Jobs <span class="nav-badge" id="jobsBadge">0</span></a>
-        <a class="nav-item" onclick="showTab('applications',this)"><i class="ti ti-file-text"></i> Applications <span class="nav-badge" id="appsBadge">0</span></a>
-        <a class="nav-item" onclick="showTab('payments',this)"><i class="ti ti-credit-card"></i> Payments</a>
-        <div class="sidebar-bottom">
-            <div class="sidebar-user">
-                <div class="user-avatar" style="background:#fef2f2;color:#ef4444">A</div>
-                <div>
-                    <div class="user-name">Admin</div>
-                    <div class="user-role-label">Administrator</div>
-                </div>
-                <button class="logout-btn" onclick="logout()"><i class="ti ti-logout"></i></button>
-            </div>
+        <div class="nav-links">
+            <a href="../index.html">Home</a>
+            <a href="jobs.html">Find Jobs</a>
         </div>
-    </aside>
-
-    <div class="dash-main">
-        <div class="topbar">
-            <div class="topbar-left">
-                <h1 id="pageTitle">Overview</h1>
-                <p id="pageSubtitle">Platform statistics and management.</p>
-            </div>
-            <div class="topbar-right">
-                <div class="icon-btn"><i class="ti ti-bell"></i><div class="notif-dot"></div></div>
-            </div>
+        <div class="nav-btns">
+            <button class="btn-outline" id="backBtn">Back to dashboard</button>
         </div>
+        <button class="hamburger" onclick="toggleMenu()"><i class="ti ti-menu-2"></i></button>
+    </nav>
 
-        <div class="dash-content">
-
-            <!-- OVERVIEW -->
-            <div id="tab-overview">
-                <div class="stats-row">
-                    <div class="stat-card">
-                        <div class="stat-card-top">
-                            <div class="stat-icon" style="background:#eff6ff;color:#2563EB"><i class="ti ti-users"></i></div>
-                            <span class="stat-change up"><i class="ti ti-arrow-up"></i> Total</span>
-                        </div>
-                        <div class="stat-num-big" id="totalUsers">0</div>
-                        <div class="stat-label">Total Users</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-card-top">
-                            <div class="stat-icon" style="background:#ecfdf5;color:#10b981"><i class="ti ti-briefcase"></i></div>
-                            <span class="stat-change up"><i class="ti ti-arrow-up"></i> Active</span>
-                        </div>
-                        <div class="stat-num-big" id="totalJobs">0</div>
-                        <div class="stat-label">Total Jobs</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-card-top">
-                            <div class="stat-icon" style="background:#fffbeb;color:#f59e0b"><i class="ti ti-file-text"></i></div>
-                            <span class="stat-change neutral">All time</span>
-                        </div>
-                        <div class="stat-num-big" id="totalApps">0</div>
-                        <div class="stat-label">Applications</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-card-top">
-                            <div class="stat-icon" style="background:#f0fdf4;color:#16a34a"><i class="ti ti-currency-dollar"></i></div>
-                            <span class="stat-change up"><i class="ti ti-arrow-up"></i> Revenue</span>
-                        </div>
-                        <div class="stat-num-big" id="totalRevenue">$0</div>
-                        <div class="stat-label">Total Revenue</div>
-                    </div>
-                </div>
-
-                <div class="dash-grid-2">
-                    <div class="dash-card">
-                        <div class="dash-card-header">
-                            <div><div class="dash-card-title">Recent Users</div><div class="dash-card-sub">Latest registrations</div></div>
-                            <button class="dash-card-action" onclick="showTab('users',null)">View all →</button>
-                        </div>
-                        <div id="recentUsersList"></div>
-                    </div>
-                    <div class="dash-card">
-                        <div class="dash-card-header">
-                            <div><div class="dash-card-title">Recent Jobs</div><div class="dash-card-sub">Latest postings</div></div>
-                            <button class="dash-card-action" onclick="showTab('jobs',null)">View all →</button>
-                        </div>
-                        <div id="recentJobsList"></div>
-                    </div>
-                </div>
+    <div class="msg-page">
+        <div class="msg-wrapper">
+            <div class="msg-sidebar">
+                <div class="msg-sidebar-header">Messages</div>
+                <div class="msg-conv-list" id="convList"></div>
             </div>
-
-            <!-- USERS TAB -->
-            <div id="tab-users" style="display:none">
-                <div class="dash-card">
-                    <div class="dash-card-header">
-                        <div><div class="dash-card-title">All Users</div><div class="dash-card-sub" id="usersSubtitle">0 users</div></div>
-                        <input type="text" id="userSearch" placeholder="Search users..." oninput="filterUsers()" style="padding:7px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:13px;font-family:Inter,sans-serif;outline:none" />
-                    </div>
-                    <div id="allUsersList"></div>
-                </div>
+            <div class="msg-main" id="msgMain">
+                <div class="msg-empty" id="msgEmpty">Select a conversation to start messaging</div>
             </div>
-
-            <!-- JOBS TAB -->
-            <div id="tab-jobs" style="display:none">
-                <div class="dash-card">
-                    <div class="dash-card-header">
-                        <div><div class="dash-card-title">All Jobs</div><div class="dash-card-sub" id="jobsSubtitle">0 jobs</div></div>
-                    </div>
-                    <div id="allJobsList"></div>
-                </div>
-            </div>
-
-            <!-- APPLICATIONS TAB -->
-            <div id="tab-applications" style="display:none">
-                <div class="dash-card">
-                    <div class="dash-card-header">
-                        <div><div class="dash-card-title">All Applications</div><div class="dash-card-sub" id="appsSubtitle">0 applications</div></div>
-                    </div>
-                    <div id="allAppsList"></div>
-                </div>
-            </div>
-
-            <!-- PAYMENTS TAB -->
-            <div id="tab-payments" style="display:none">
-                <div class="dash-card">
-                    <div class="dash-card-header">
-                        <div><div class="dash-card-title">Payment History</div><div class="dash-card-sub">All transactions</div></div>
-                    </div>
-                    <div class="empty-state">
-                        <div class="empty-icon"><i class="ti ti-credit-card-off"></i></div>
-                        <div class="empty-title">No payments yet</div>
-                        <div class="empty-sub">Stripe payments will appear here</div>
-                    </div>
-                </div>
-            </div>
-
         </div>
     </div>
 
-    <div class="toast" id="toast"><i class="ti ti-circle-check"></i><span id="toastMsg">Done!</span></div>
+    <div class="toast" id="toast"><i class="ti ti-circle-check"></i><span id="toastMsg"></span></div>
 
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@microsoft/signalr@8.0.0/dist/browser/signalr.min.js"></script>
     <script src="../../assets/js/api.js"></script>
-    <script src="../../assets/js/admin.js"></script>
+    <script src="../../assets/js/message.js"></script>
+    <script>
+        function toggleMenu() {
+            $('.nav-links').toggleClass('open');
+        }
+    </script>
+</body>
 </body>
 </html>

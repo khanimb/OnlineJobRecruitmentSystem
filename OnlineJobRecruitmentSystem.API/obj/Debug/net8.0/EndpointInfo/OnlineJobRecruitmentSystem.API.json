@@ -1700,10 +1700,10 @@
         }
       }
     },
-    "/api/Payment/create-checkout-session": {
+    "/api/PaymentPremium/create-checkout-session": {
       "post": {
         "tags": [
-          "Payment"
+          "PaymentPremium"
         ],
         "requestBody": {
           "content": {
@@ -1731,10 +1731,10 @@
         }
       }
     },
-    "/api/Payment/webhook": {
+    "/api/PaymentPremium/webhook": {
       "post": {
         "tags": [
-          "Payment"
+          "PaymentPremium"
         ],
         "responses": {
           "200": {
@@ -1743,10 +1743,10 @@
         }
       }
     },
-    "/api/Payment": {
+    "/api/PaymentPremium": {
       "get": {
         "tags": [
-          "Payment"
+          "PaymentPremium"
         ],
         "responses": {
           "200": {
@@ -1755,10 +1755,10 @@
         }
       }
     },
-    "/api/Payment/{id}": {
+    "/api/PaymentPremium/{id}": {
       "get": {
         "tags": [
-          "Payment"
+          "PaymentPremium"
         ],
         "parameters": [
           {
@@ -1778,10 +1778,10 @@
         }
       }
     },
-    "/api/Payment/status": {
+    "/api/PaymentPremium/status": {
       "get": {
         "tags": [
-          "Payment"
+          "PaymentPremium"
         ],
         "responses": {
           "200": {

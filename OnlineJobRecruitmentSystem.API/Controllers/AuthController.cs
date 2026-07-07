@@ -121,7 +121,7 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
                 "Reset your password",
                 $"<h3>Password Reset</h3>" +
                 $"<p>Click the link below to reset your password:</p>" +
-                $"<a href='http://localhost:5179/assets/pages/reset-password.html?token={resetToken}'>Reset Password</a>" +
+                $"<a href='http://localhost:5179/assets/pages/resetpassword.html?token={resetToken}'>Reset Password</a>" +
                 $"<p>This link expires in 1 hour.</p>"
             );
 

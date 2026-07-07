@@ -1,24 +1,212 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\Xanim\\Desktop\\Final\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A1C8584D-E6EC-406B-B8E9-A820AE576A47}|OnlineJobRecruitmentSystem.API\\OnlineJobRecruitmentSystem.API.csproj|c:\\users\\xanim\\desktop\\final\\onlinejobrecruitmentsystem.api\\wwwroot\\assets\\pages\\cvanalysis.html||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A1C8584D-E6EC-406B-B8E9-A820AE576A47}|OnlineJobRecruitmentSystem.API\\OnlineJobRecruitmentSystem.API.csproj|solutionrelative:onlinejobrecruitmentsystem.api\\wwwroot\\assets\\pages\\cvanalysis.html||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A1C8584D-E6EC-406B-B8E9-A820AE576A47}|OnlineJobRecruitmentSystem.API\\OnlineJobRecruitmentSystem.API.csproj|c:\\users\\xanim\\desktop\\final\\onlinejobrecruitmentsystem.api\\wwwroot\\assets\\pages\\admindashboard.html||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A1C8584D-E6EC-406B-B8E9-A820AE576A47}|OnlineJobRecruitmentSystem.API\\OnlineJobRecruitmentSystem.API.csproj|solutionrelative:onlinejobrecruitmentsystem.api\\wwwroot\\assets\\pages\\admindashboard.html||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A1C8584D-E6EC-406B-B8E9-A820AE576A47}|OnlineJobRecruitmentSystem.API\\OnlineJobRecruitmentSystem.API.csproj|c:\\users\\xanim\\desktop\\final\\onlinejobrecruitmentsystem.api\\wwwroot\\assets\\css\\style.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{A1C8584D-E6EC-406B-B8E9-A820AE576A47}|OnlineJobRecruitmentSystem.API\\OnlineJobRecruitmentSystem.API.csproj|solutionrelative:onlinejobrecruitmentsystem.api\\wwwroot\\assets\\css\\style.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A1C8584D-E6EC-406B-B8E9-A820AE576A47}|OnlineJobRecruitmentSystem.API\\OnlineJobRecruitmentSystem.API.csproj|c:\\users\\xanim\\desktop\\final\\onlinejobrecruitmentsystem.api\\wwwroot\\assets\\pages\\jobseekerdashboard.html||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A1C8584D-E6EC-406B-B8E9-A820AE576A47}|OnlineJobRecruitmentSystem.API\\OnlineJobRecruitmentSystem.API.csproj|solutionrelative:onlinejobrecruitmentsystem.api\\wwwroot\\assets\\pages\\jobseekerdashboard.html||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A1C8584D-E6EC-406B-B8E9-A820AE576A47}|OnlineJobRecruitmentSystem.API\\OnlineJobRecruitmentSystem.API.csproj|c:\\users\\xanim\\desktop\\final\\onlinejobrecruitmentsystem.api\\wwwroot\\assets\\pages\\employerdashboard.html||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A1C8584D-E6EC-406B-B8E9-A820AE576A47}|OnlineJobRecruitmentSystem.API\\OnlineJobRecruitmentSystem.API.csproj|solutionrelative:onlinejobrecruitmentsystem.api\\wwwroot\\assets\\pages\\employerdashboard.html||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A1C8584D-E6EC-406B-B8E9-A820AE576A47}|OnlineJobRecruitmentSystem.API\\OnlineJobRecruitmentSystem.API.csproj|c:\\users\\xanim\\desktop\\final\\onlinejobrecruitmentsystem.api\\wwwroot\\assets\\pages\\message.html||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A1C8584D-E6EC-406B-B8E9-A820AE576A47}|OnlineJobRecruitmentSystem.API\\OnlineJobRecruitmentSystem.API.csproj|solutionrelative:onlinejobrecruitmentsystem.api\\wwwroot\\assets\\pages\\message.html||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A1C8584D-E6EC-406B-B8E9-A820AE576A47}|OnlineJobRecruitmentSystem.API\\OnlineJobRecruitmentSystem.API.csproj|c:\\users\\xanim\\desktop\\final\\onlinejobrecruitmentsystem.api\\wwwroot\\assets\\pages\\jobdetail.html||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A1C8584D-E6EC-406B-B8E9-A820AE576A47}|OnlineJobRecruitmentSystem.API\\OnlineJobRecruitmentSystem.API.csproj|solutionrelative:onlinejobrecruitmentsystem.api\\wwwroot\\assets\\pages\\jobdetail.html||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A1C8584D-E6EC-406B-B8E9-A820AE576A47}|OnlineJobRecruitmentSystem.API\\OnlineJobRecruitmentSystem.API.csproj|c:\\users\\xanim\\desktop\\final\\onlinejobrecruitmentsystem.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A1C8584D-E6EC-406B-B8E9-A820AE576A47}|OnlineJobRecruitmentSystem.API\\OnlineJobRecruitmentSystem.API.csproj|solutionrelative:onlinejobrecruitmentsystem.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A1C8584D-E6EC-406B-B8E9-A820AE576A47}|OnlineJobRecruitmentSystem.API\\OnlineJobRecruitmentSystem.API.csproj|c:\\users\\xanim\\desktop\\final\\onlinejobrecruitmentsystem.api\\serviceregistration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A1C8584D-E6EC-406B-B8E9-A820AE576A47}|OnlineJobRecruitmentSystem.API\\OnlineJobRecruitmentSystem.API.csproj|solutionrelative:onlinejobrecruitmentsystem.api\\serviceregistration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A1C8584D-E6EC-406B-B8E9-A820AE576A47}|OnlineJobRecruitmentSystem.API\\OnlineJobRecruitmentSystem.API.csproj|c:\\users\\xanim\\desktop\\final\\onlinejobrecruitmentsystem.api\\wwwroot\\assets\\pages\\resetpassword.html||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A1C8584D-E6EC-406B-B8E9-A820AE576A47}|OnlineJobRecruitmentSystem.API\\OnlineJobRecruitmentSystem.API.csproj|solutionrelative:onlinejobrecruitmentsystem.api\\wwwroot\\assets\\pages\\resetpassword.html||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A1C8584D-E6EC-406B-B8E9-A820AE576A47}|OnlineJobRecruitmentSystem.API\\OnlineJobRecruitmentSystem.API.csproj|c:\\users\\xanim\\desktop\\final\\onlinejobrecruitmentsystem.api\\wwwroot\\assets\\pages\\paymentsuccess.html||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A1C8584D-E6EC-406B-B8E9-A820AE576A47}|OnlineJobRecruitmentSystem.API\\OnlineJobRecruitmentSystem.API.csproj|solutionrelative:onlinejobrecruitmentsystem.api\\wwwroot\\assets\\pages\\paymentsuccess.html||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 1,
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
-          "DockedHeight": 339,
-          "SelectedChildIndex": -1,
+          "DockedHeight": 227,
+          "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "style.css",
+              "DocumentMoniker": "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.API\\wwwroot\\assets\\css\\style.css",
+              "RelativeDocumentMoniker": "OnlineJobRecruitmentSystem.API\\wwwroot\\assets\\css\\style.css",
+              "ToolTip": "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.API\\wwwroot\\assets\\css\\style.css*",
+              "RelativeToolTip": "OnlineJobRecruitmentSystem.API\\wwwroot\\assets\\css\\style.css*",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAD0LAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2026-07-06T18:02:22.837Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "message.html",
+              "DocumentMoniker": "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.API\\wwwroot\\assets\\pages\\message.html",
+              "RelativeDocumentMoniker": "OnlineJobRecruitmentSystem.API\\wwwroot\\assets\\pages\\message.html",
+              "ToolTip": "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.API\\wwwroot\\assets\\pages\\message.html*",
+              "RelativeToolTip": "OnlineJobRecruitmentSystem.API\\wwwroot\\assets\\pages\\message.html*",
+              "ViewState": "AgIAABcAAAAAAAAAAAAAAC4AAAAHAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
+              "WhenOpened": "2026-07-06T17:59:18.091Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "jobdetail.html",
+              "DocumentMoniker": "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.API\\wwwroot\\assets\\pages\\jobdetail.html",
+              "RelativeDocumentMoniker": "OnlineJobRecruitmentSystem.API\\wwwroot\\assets\\pages\\jobdetail.html",
+              "ToolTip": "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.API\\wwwroot\\assets\\pages\\jobdetail.html*",
+              "RelativeToolTip": "OnlineJobRecruitmentSystem.API\\wwwroot\\assets\\pages\\jobdetail.html*",
+              "ViewState": "AgIAAEIAAAAAAAAAAAAAALQAAAAHAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
+              "WhenOpened": "2026-07-06T17:58:19.919Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "cvanalysis.html",
+              "DocumentMoniker": "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.API\\wwwroot\\assets\\pages\\cvanalysis.html",
+              "RelativeDocumentMoniker": "OnlineJobRecruitmentSystem.API\\wwwroot\\assets\\pages\\cvanalysis.html",
+              "ToolTip": "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.API\\wwwroot\\assets\\pages\\cvanalysis.html",
+              "RelativeToolTip": "OnlineJobRecruitmentSystem.API\\wwwroot\\assets\\pages\\cvanalysis.html",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
+              "WhenOpened": "2026-07-06T17:57:59.701Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "jobseekerdashboard.html",
+              "DocumentMoniker": "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.API\\wwwroot\\assets\\pages\\jobseekerdashboard.html",
+              "RelativeDocumentMoniker": "OnlineJobRecruitmentSystem.API\\wwwroot\\assets\\pages\\jobseekerdashboard.html",
+              "ToolTip": "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.API\\wwwroot\\assets\\pages\\jobseekerdashboard.html",
+              "RelativeToolTip": "OnlineJobRecruitmentSystem.API\\wwwroot\\assets\\pages\\jobseekerdashboard.html",
+              "ViewState": "AgIAAOAAAAAAAAAAAAAUwAEBAABbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
+              "WhenOpened": "2026-07-06T17:57:43.129Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "employerdashboard.html",
+              "DocumentMoniker": "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.API\\wwwroot\\assets\\pages\\employerdashboard.html",
+              "RelativeDocumentMoniker": "OnlineJobRecruitmentSystem.API\\wwwroot\\assets\\pages\\employerdashboard.html",
+              "ToolTip": "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.API\\wwwroot\\assets\\pages\\employerdashboard.html*",
+              "RelativeToolTip": "OnlineJobRecruitmentSystem.API\\wwwroot\\assets\\pages\\employerdashboard.html*",
+              "ViewState": "AgIAACMBAAAAAAAAAAAUwE4BAAAHAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
+              "WhenOpened": "2026-07-06T17:57:18.346Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "ServiceRegistration.cs",
+              "DocumentMoniker": "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.API\\ServiceRegistration.cs",
+              "RelativeDocumentMoniker": "OnlineJobRecruitmentSystem.API\\ServiceRegistration.cs",
+              "ToolTip": "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.API\\ServiceRegistration.cs",
+              "RelativeToolTip": "OnlineJobRecruitmentSystem.API\\ServiceRegistration.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-06T17:56:42.433Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.API\\Program.cs",
+              "RelativeDocumentMoniker": "OnlineJobRecruitmentSystem.API\\Program.cs",
+              "ToolTip": "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.API\\Program.cs",
+              "RelativeToolTip": "OnlineJobRecruitmentSystem.API\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABsAAAAYAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-06T17:56:32.335Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "resetpassword.html",
+              "DocumentMoniker": "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.API\\wwwroot\\assets\\pages\\resetpassword.html",
+              "RelativeDocumentMoniker": "OnlineJobRecruitmentSystem.API\\wwwroot\\assets\\pages\\resetpassword.html",
+              "ToolTip": "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.API\\wwwroot\\assets\\pages\\resetpassword.html",
+              "RelativeToolTip": "OnlineJobRecruitmentSystem.API\\wwwroot\\assets\\pages\\resetpassword.html",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACIAAAA4AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
+              "WhenOpened": "2026-07-06T17:56:18.429Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "paymentsuccess.html",
+              "DocumentMoniker": "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.API\\wwwroot\\assets\\pages\\paymentsuccess.html",
+              "RelativeDocumentMoniker": "OnlineJobRecruitmentSystem.API\\wwwroot\\assets\\pages\\paymentsuccess.html",
+              "ToolTip": "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.API\\wwwroot\\assets\\pages\\paymentsuccess.html",
+              "RelativeToolTip": "OnlineJobRecruitmentSystem.API\\wwwroot\\assets\\pages\\paymentsuccess.html",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABkAAAAHAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
+              "WhenOpened": "2026-07-06T17:56:14.341Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "admindashboard.html",
+              "DocumentMoniker": "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.API\\wwwroot\\assets\\pages\\admindashboard.html",
+              "RelativeDocumentMoniker": "OnlineJobRecruitmentSystem.API\\wwwroot\\assets\\pages\\admindashboard.html",
+              "ToolTip": "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.API\\wwwroot\\assets\\pages\\admindashboard.html",
+              "RelativeToolTip": "OnlineJobRecruitmentSystem.API\\wwwroot\\assets\\pages\\admindashboard.html",
+              "ViewState": "AgIAAH4AAAAAAAAAAAAUwJ8AAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
+              "WhenOpened": "2026-07-06T17:55:40.033Z",
+              "EditorCaption": ""
             }
           ]
         },
         {
-          "DockedHeight": 61,
+          "DockedHeight": 173,
           "SelectedChildIndex": -1,
           "Children": [
             {

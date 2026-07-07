@@ -1,145 +1,201 @@
-﻿const colors = [
-    { bg: '#eff6ff', color: '#2563EB' }, { bg: '#ecfdf5', color: '#10b981' },
-    { bg: '#fffbeb', color: '#f59e0b' }, { bg: '#f0fdf4', color: '#16a34a' }, { bg: '#fdf4ff', color: '#a855f7' }
-];
+﻿let hasCv = false;
 
-let allUsers = [], allJobs = [], allApps = [];
-
-function getUser() { const u = localStorage.getItem('user'); return u ? JSON.parse(u) : null; }
-function logout() { localStorage.removeItem('token'); localStorage.removeItem('user'); window.location.href = 'login.html'; }
-
-function showTab(tab, el) {
-    ['overview', 'users', 'jobs', 'applications', 'payments'].forEach(t => document.getElementById('tab-' + t).style.display = 'none');
-    document.getElementById('tab-' + tab).style.display = 'block';
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-    if (el) el.classList.add('active');
-    const titles = {
-        overview: ['Overview', 'Platform statistics and management.'],
-        users: ['Users', 'Manage all registered users'],
-        jobs: ['Jobs', 'Manage all job listings'],
-        applications: ['Applications', 'View all applications'],
-        payments: ['Payments', 'Transaction history']
-    };
-    document.getElementById('pageTitle').textContent = titles[tab][0];
-    document.getElementById('pageSubtitle').textContent = titles[tab][1];
-}
+$(function () {
+    const user = JSON.parse(localStorage.getItem('user') || 'null');
+    if (!user || user.role !== 'JobSeeker') {
+        window.location.href = 'login.html';
+        return;
+    }
+    init();
+});
 
 function showToast(msg, ok = true) {
-    const t = document.getElementById('toast');
-    t.querySelector('i').style.color = ok ? '#10b981' : '#ef4444';
-    document.getElementById('toastMsg').textContent = msg;
-    t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 3000);
+    const t = $('#toast');
+    t.find('i').css('color', ok ? '#10b981' : '#ef4444');
+    $('#toastMsg').text(msg);
+    t.addClass('show');
+    setTimeout(() => t.removeClass('show'), 3000);
 }
 
-async function loadUsers() {
-    try { const r = await apiFetch('/Admin/users'); allUsers = r.data || []; } catch { allUsers = []; }
-    renderUsers(allUsers);
-    document.getElementById('totalUsers').textContent = allUsers.length;
-    document.getElementById('usersBadge').textContent = allUsers.length;
-    document.getElementById('usersSubtitle').textContent = allUsers.length + ' users';
+async function init() {
+    try {
+        const r = await apiFetch('/JobSeeker/profile');
+        hasCv = !!(r.data && r.data.cvUrl);
+    } catch {
+        hasCv = false;
+    }
+
+    if (!hasCv) {
+        $('#cvPage').html(`
+            <div class="empty-state">
+                <div class="empty-icon"><i class="ti ti-file-off"></i></div>
+                <div class="empty-title">No CV uploaded yet</div>
+                <div class="empty-sub">Upload your CV in your dashboard to unlock AI-powered analysis.</div>
+                <button class="btn-primary" style="margin-top:14px" onclick="window.location.href='jobseekerdashboard.html'">Go to dashboard</button>
+            </div>
+        `);
+        return;
+    }
+
+    renderLayout();
+    loadJobOptions();
+    loadRecommendedJobs();
+    loadHistory();
 }
 
-async function loadJobs() {
-    try { const r = await apiFetch('/Job'); allJobs = r.data?.data || []; } catch { allJobs = []; }
-    renderJobs(allJobs);
-    document.getElementById('totalJobs').textContent = allJobs.length;
-    document.getElementById('jobsBadge').textContent = allJobs.length;
-    document.getElementById('jobsSubtitle').textContent = allJobs.length + ' jobs';
+function renderLayout() {
+    $('#cvPage').html(`
+        <div class="profile-section">
+            <div class="profile-section-title">Analyze your CV</div>
+            <div class="cv-analyze-row">
+                <div class="form-group">
+                    <label>Compare against a specific job (optional)</label>
+                    <select id="jobSelect">
+                        <option value="">General analysis (no specific job)</option>
+                    </select>
+                </div>
+                <button class="btn-primary" id="analyzeBtn" onclick="analyzeCv()"><i class="ti ti-sparkles"></i> Analyze</button>
+            </div>
+        </div>
+
+        <div class="profile-section" id="resultsCard" style="display:none">
+            <div class="profile-section-title">Analysis result</div>
+            <div class="score-row" id="scoreRow"></div>
+            <div id="strengthsArea"></div>
+            <div id="weaknessesArea"></div>
+            <div id="suggestionsArea"></div>
+            <div id="missingSkillsArea"></div>
+        </div>
+
+        <div class="profile-section">
+            <div class="profile-section-title">Recommended jobs for you</div>
+            <div id="recommendedArea"><span style="color:#94a3b8;font-size:0.85rem">Loading...</span></div>
+        </div>
+
+        <div class="profile-section">
+            <div class="profile-section-title">Analysis history</div>
+            <div id="historyArea"><span style="color:#94a3b8;font-size:0.85rem">Loading...</span></div>
+        </div>
+    `);
 }
 
-async function loadApps() {
-    try { const r = await apiFetch('/Admin/applications'); allApps = r.data || []; } catch { allApps = []; }
-    renderApps(allApps);
-    document.getElementById('totalApps').textContent = allApps.length;
-    document.getElementById('appsBadge').textContent = allApps.length;
-    document.getElementById('appsSubtitle').textContent = allApps.length + ' applications';
+async function loadJobOptions() {
+    try {
+        const r = await apiFetch('/Job');
+        const jobs = (r.data && r.data.data) || r.data || [];
+        $('#jobSelect').append(jobs.map(j => `<option value="${j.id}">${j.title || j.jobTitle}</option>`).join(''));
+    } catch { }
 }
 
-function filterUsers() {
-    const q = document.getElementById('userSearch').value.toLowerCase();
-    const filtered = allUsers.filter(u => (u.email || '').toLowerCase().includes(q) || (u.firstName || '').toLowerCase().includes(q) || (u.username || '').toLowerCase().includes(q));
-    renderUsers(filtered);
+function scoreClass(score) {
+    if (score >= 70) return 'score-good';
+    if (score >= 40) return 'score-mid';
+    return 'score-bad';
 }
 
-function userItemHTML(user, i) {
-    const c = colors[i % colors.length];
-    const name = user.firstName ? `${user.firstName} ${user.lastName || ''}`.trim() : user.username || user.email;
-    const roleColor = user.role === 'Admin' ? '#ef4444' : user.role === 'Employer' ? '#2563EB' : '#10b981';
-    const roleBg = user.role === 'Admin' ? '#fef2f2' : user.role === 'Employer' ? '#eff6ff' : '#ecfdf5';
-    return `<div class="job-item">
-    <div class="job-logo" style="background:${c.bg};color:${c.color}">${name[0].toUpperCase()}</div>
-    <div class="job-info">
-      <div class="job-name">${name}</div>
-      <div class="job-meta"><span><i class="ti ti-mail"></i> ${user.email || ''}</span></div>
-    </div>
-    <span class="app-badge" style="background:${roleBg};color:${roleColor}">${user.role || 'User'}</span>
-    <div class="job-actions">
-      <button class="act-btn danger" onclick="deleteUser(${user.id})" title="Delete"><i class="ti ti-trash"></i></button>
-    </div>
-  </div>`;
+function renderResult(result) {
+    $('#resultsCard').show();
+
+    let scoreHtml = `
+        <div class="score-badge ${scoreClass(result.overallScore)}">
+            <div class="score-num">${result.overallScore}</div>
+            <div class="score-label">OVERALL</div>
+        </div>`;
+    if (result.matchScore !== undefined && result.matchScore !== null) {
+        scoreHtml += `
+        <div class="score-badge ${scoreClass(result.matchScore)}">
+            <div class="score-num">${result.matchScore}</div>
+            <div class="score-label">JOB MATCH</div>
+        </div>`;
+    }
+    $('#scoreRow').html(scoreHtml);
+
+    $('#strengthsArea').html(renderPoints('Strengths', result.strengths, 'strength', 'ti-circle-check'));
+    $('#weaknessesArea').html(renderPoints('Weaknesses', result.weaknesses, 'weakness', 'ti-alert-circle'));
+    $('#suggestionsArea').html(renderPoints('Suggestions', result.suggestions, 'suggestion', 'ti-bulb'));
+
+    if (result.missingSkills && result.missingSkills.length) {
+        $('#missingSkillsArea').html(`
+            <div class="cv-list-title">Missing skills for this job</div>
+            <div class="skills-wrap">${result.missingSkills.map(s => `<span class="tag tag-red">${s}</span>`).join('')}</div>
+        `);
+    } else {
+        $('#missingSkillsArea').html('');
+    }
 }
 
-function renderUsers(users) {
-    const empty = `<div class="empty-state"><div class="empty-icon"><i class="ti ti-user-off"></i></div><div class="empty-title">No users found</div></div>`;
-    if (!users.length) { document.getElementById('recentUsersList').innerHTML = empty; document.getElementById('allUsersList').innerHTML = empty; return; }
-    document.getElementById('recentUsersList').innerHTML = users.slice(0, 5).map(userItemHTML).join('');
-    document.getElementById('allUsersList').innerHTML = users.map(userItemHTML).join('');
+function renderPoints(title, points, cssClass, icon) {
+    if (!points || !points.length) return '';
+    return `<div class="cv-list-title">${title}</div>` +
+        points.map(p => `<div class="cv-point ${cssClass}"><i class="ti ${icon}"></i> ${p}</div>`).join('');
 }
 
-function jobItemHTML(job, i) {
-    const c = colors[i % colors.length];
-    const title = job.title || job.jobTitle || 'Job';
-    return `<div class="job-item">
-    <div class="job-logo" style="background:${c.bg};color:${c.color}">${title[0].toUpperCase()}</div>
-    <div class="job-info">
-      <div class="job-name">${title}</div>
-      <div class="job-meta"><span><i class="ti ti-map-pin"></i> ${job.location || 'Remote'}</span><span><i class="ti ti-clock"></i> ${job.jobType || 'Full-time'}</span></div>
-    </div>
-    <span class="job-status ${job.isActive ? 'status-active' : 'status-expired'}">${job.isActive ? 'Active' : 'Expired'}</span>
-    <div class="job-actions">
-      <button class="act-btn danger" onclick="deleteJob(${job.id})" title="Delete"><i class="ti ti-trash"></i></button>
-    </div>
-  </div>`;
+async function analyzeCv() {
+    const jobPostId = $('#jobSelect').val();
+    const $btn = $('#analyzeBtn');
+    $btn.prop('disabled', true).html('<i class="ti ti-loader-2"></i> Analyzing...');
+
+    try {
+        const body = jobPostId ? { jobPostId: parseInt(jobPostId) } : {};
+        const r = await apiFetch('/CvAnalysis/analyze', { method: 'POST', body: JSON.stringify(body) });
+        renderResult(r.data);
+        loadHistory();
+        showToast('Analysis complete!');
+    } catch (err) {
+        showToast(err.message || 'Analysis failed', false);
+    } finally {
+        $btn.prop('disabled', false).html('<i class="ti ti-sparkles"></i> Analyze');
+    }
 }
 
-function renderJobs(jobs) {
-    const empty = `<div class="empty-state"><div class="empty-icon"><i class="ti ti-briefcase-off"></i></div><div class="empty-title">No jobs found</div></div>`;
-    if (!jobs.length) { document.getElementById('recentJobsList').innerHTML = empty; document.getElementById('allJobsList').innerHTML = empty; return; }
-    document.getElementById('recentJobsList').innerHTML = jobs.slice(0, 5).map(jobItemHTML).join('');
-    document.getElementById('allJobsList').innerHTML = jobs.map(jobItemHTML).join('');
+async function loadRecommendedJobs() {
+    try {
+        const r = await apiFetch('/CvAnalysis/recommended-jobs');
+        const jobs = r.data || [];
+        if (!jobs.length) {
+            $('#recommendedArea').html('<span style="color:#94a3b8;font-size:0.85rem">No recommendations available yet.</span>');
+            return;
+        }
+        $('#recommendedArea').html(jobs.map(j => `
+            <div class="rec-job-item" onclick="window.location.href='jobdetail.html?id=${j.jobPostId}'">
+                <div class="rec-job-info">
+                    <div class="rec-job-title">${j.jobTitle}</div>
+                    <div class="rec-job-company">${j.companyName}</div>
+                    <div class="rec-job-reason">${j.reason || ''}</div>
+                </div>
+                <span class="tag tag-blue">${j.matchScore}% match</span>
+            </div>
+        `).join(''));
+    } catch {
+        $('#recommendedArea').html('<span style="color:#94a3b8;font-size:0.85rem">No recommendations available yet.</span>');
+    }
 }
 
-function renderApps(apps) {
-    const empty = `<div class="empty-state"><div class="empty-icon"><i class="ti ti-file-off"></i></div><div class="empty-title">No applications found</div></div>`;
-    const el = document.getElementById('allAppsList');
-    if (!apps.length) { el.innerHTML = empty; return; }
-    const badgeMap = { Pending: 'badge-review', Accepted: 'badge-hired', Rejected: 'badge-rejected', Reviewing: 'badge-new' };
-    el.innerHTML = apps.map((app, i) => {
-        const c = colors[i % colors.length];
-        const name = app.applicantName || app.userName || 'Applicant';
-        return `<div class="applicant-item">
-      <div class="app-avatar" style="background:${c.bg};color:${c.color}">${name[0].toUpperCase()}</div>
-      <div><div class="app-name">${name}</div><div class="app-role">${app.jobTitle || 'Position'}</div></div>
-      <span class="app-badge ${badgeMap[app.status] || 'badge-new'}">${app.status || 'Pending'}</span>
-    </div>`;
-    }).join('');
+async function loadHistory() {
+    try {
+        const r = await apiFetch('/CvAnalysis/history');
+        const items = r.data || [];
+        if (!items.length) {
+            $('#historyArea').html('<span style="color:#94a3b8;font-size:0.85rem">No past analyses yet.</span>');
+            return;
+        }
+        $('#historyArea').html(items.map(h => `
+            <div class="cv-history-item" onclick="loadHistoryDetail(${h.id})">
+                <span>${h.jobTitle || 'General analysis'}</span>
+                <span class="tag tag-gray">${new Date(h.createdAt).toLocaleDateString()} · Score ${h.overallScore}</span>
+            </div>
+        `).join(''));
+    } catch {
+        $('#historyArea').html('<span style="color:#94a3b8;font-size:0.85rem">No past analyses yet.</span>');
+    }
 }
 
-async function deleteUser(id) {
-    if (!confirm('Delete this user?')) return;
-    try { await apiFetch('/Admin/users/' + id, { method: 'DELETE' }); showToast('User deleted'); await loadUsers(); }
-    catch (err) { showToast(err.message || 'Failed', false); }
+async function loadHistoryDetail(id) {
+    try {
+        const r = await apiFetch('/CvAnalysis/history/' + id);
+        renderResult(r.data);
+        $('html, body').animate({ scrollTop: $('#resultsCard').offset().top - 20 }, 300);
+    } catch (err) {
+        showToast(err.message || 'Could not load analysis', false);
+    }
 }
-
-async function deleteJob(id) {
-    if (!confirm('Delete this job?')) return;
-    try { await apiFetch('/Job/' + id, { method: 'DELETE' }); showToast('Job deleted'); await loadJobs(); }
-    catch (err) { showToast(err.message || 'Failed', false); }
-}
-
-window.addEventListener('DOMContentLoaded', async () => {
-    const user = getUser();
-    if (!user || user.role !== 'Admin') { window.location.href = 'login.html'; return; }
-    await Promise.all([loadUsers(), loadJobs(), loadApps()]);
-});

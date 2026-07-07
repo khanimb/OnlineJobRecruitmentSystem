@@ -18,6 +18,9 @@
         <a class="nav-item active" onclick="showTab('overview',this)"><i class="ti ti-layout-dashboard"></i> Overview</a>
         <a class="nav-item" onclick="showTab('jobs',this)"><i class="ti ti-briefcase"></i> My Jobs <span class="nav-badge" id="jobsBadge">0</span></a>
         <a class="nav-item" onclick="showTab('applicants',this)"><i class="ti ti-users"></i> Applicants <span class="nav-badge" id="appsBadge">0</span></a>
+        <a class="nav-item" onclick="showTab('contracts',this)"><i class="ti ti-file-text"></i> Contracts</a>
+        <a class="nav-item" onclick="showTab('reviews',this)"><i class="ti ti-star"></i> Reviews</a>
+        <a class="nav-item" onclick="showTab('premium',this)"><i class="ti ti-crown"></i> Premium</a>
         <div class="sidebar-section">Account</div>
         <a class="nav-item" onclick="showTab('profile',this)"><i class="ti ti-user-circle"></i> Company Profile</a>
         <a class="nav-item" href="jobs.html"><i class="ti ti-world"></i> Browse Jobs</a>
@@ -36,11 +39,23 @@
     <div class="dash-main">
         <div class="topbar">
             <div class="topbar-left">
+                <button class="dash-toggle-btn" id="sidebarToggleBtn"><i class="ti ti-menu-2"></i></button>
                 <h1 id="pageTitle">Overview</h1>
                 <p id="pageSubtitle">Welcome back! Here's what's happening.</p>
             </div>
             <div class="topbar-right">
-                <div class="icon-btn"><i class="ti ti-bell"></i><div class="notif-dot"></div></div>
+                <div class="icon-btn" id="notifBellBtn">
+                    <i class="ti ti-bell"></i>
+                    <div class="notif-dot" id="notifDot" style="display:none"></div>
+                    <div class="notif-dropdown" id="notifDropdown">
+                        <div class="notif-dropdown-header">
+                            <span>Notifications</span>
+                            <a href="#" onclick="markAllRead(); event.stopPropagation();">Mark all read</a>
+                        </div>
+                        <div class="notif-list" id="notifList"></div>
+                        <div class="notif-dropdown-footer"><a href="notifications.html">View all</a></div>
+                    </div>
+                </div>
                 <button class="btn-post" onclick="openModal()"><i class="ti ti-plus"></i> Post a Job</button>
             </div>
         </div>
@@ -135,6 +150,78 @@
                 </div>
             </div>
 
+            <!-- CONTRACTS TAB -->
+            <div id="tab-contracts" style="display:none">
+                <div class="dash-card">
+                    <div class="dash-card-header">
+                        <div><div class="dash-card-title">Contracts</div><div class="dash-card-sub">Manage contracts with hired candidates</div></div>
+                    </div>
+                    <div id="contractsList"></div>
+                </div>
+            </div>
+
+            <!-- CONTRACT MODAL -->
+            <div class="modal-overlay" id="contractModalOverlay" onclick="closeContractModalOutside(event)">
+                <div class="modal">
+                    <div class="modal-header">
+                        <div class="modal-title">Create Contract</div>
+                        <button class="modal-close" onclick="closeContractModal()"><i class="ti ti-x"></i></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group"><label>Candidate</label><input type="text" id="contractCandidateName" disabled /></div>
+                        <div class="form-group"><label>Amount ($)</label><input type="number" id="contractAmount" placeholder="e.g. 2000" /></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn-cancel" onclick="closeContractModal()">Cancel</button>
+                        <button class="btn-save" onclick="createContract()"><i class="ti ti-file-text"></i> Create Contract</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- REVIEWS TAB -->
+            <div id="tab-reviews" style="display:none">
+                <div class="dash-card" style="margin-bottom:20px">
+                    <div class="dash-card-header">
+                        <div><div class="dash-card-title">Reviews I've Received</div><div class="dash-card-sub" id="receivedRatingSub">No ratings yet</div></div>
+                    </div>
+                    <div id="receivedReviewsList"></div>
+                </div>
+                <div class="dash-card">
+                    <div class="dash-card-header"><div class="dash-card-title">Reviews I've Written</div></div>
+                    <div id="writtenReviewsList"></div>
+                </div>
+            </div>
+
+            <!-- REVIEW MODAL -->
+            <div class="modal-overlay" id="reviewModalOverlay" onclick="closeReviewModalOutside(event)">
+                <div class="modal">
+                    <div class="modal-header">
+                        <div class="modal-title" id="reviewModalTitle">Leave a Review</div>
+                        <button class="modal-close" onclick="closeReviewModal()"><i class="ti ti-x"></i></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Rating</label>
+                            <div class="star-picker" id="starPicker">
+                                <i class="ti ti-star" data-val="1" onclick="setRating(1)"></i>
+                                <i class="ti ti-star" data-val="2" onclick="setRating(2)"></i>
+                                <i class="ti ti-star" data-val="3" onclick="setRating(3)"></i>
+                                <i class="ti ti-star" data-val="4" onclick="setRating(4)"></i>
+                                <i class="ti ti-star" data-val="5" onclick="setRating(5)"></i>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Comment (optional)</label>
+                            <textarea id="reviewComment" placeholder="Share your experience..." style="width:100%;padding:10px 14px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:0.875rem;font-family:Inter,sans-serif;min-height:80px;outline:none;resize:vertical"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn-cancel" onclick="closeReviewModal()">Cancel</button>
+                        <button class="btn-save" onclick="submitReview()"><i class="ti ti-star"></i> Submit</button>
+                    </div>
+                </div>
+            </div>
+
             <!-- PROFILE TAB -->
             <div id="tab-profile" style="display:none">
                 <div class="dash-card" style="max-width:640px">
@@ -191,9 +278,59 @@
                 </div>
             </div>
 
-            <div class="toast" id="toast"><i class="ti ti-circle-check"></i><span id="toastMsg">Done!</span></div>
+            <!-- PREMIUM TAB -->
+            <div id="tab-premium" style="display:none">
+                <div class="premium-status-banner" id="premiumStatusBanner">
+                    <i class="ti ti-crown" style="font-size:1.8rem"></i>
+                    <div>
+                        <div style="font-weight:700" id="premiumStatusTitle">Checking status...</div>
+                        <div style="font-size:0.85rem" id="premiumStatusSub"></div>
+                    </div>
+                </div>
+                <div class="dash-card" style="margin-bottom:20px">
+                    <div class="dash-card-header"><div class="dash-card-title">Choose a plan</div></div>
+                    <div style="padding:24px">
+                        <div class="premium-plans">
+                            <div class="premium-plan-card">
+                                <div class="premium-plan-name">Basic</div>
+                                <div class="premium-plan-price">$9.99</div>
+                                <div class="premium-plan-duration">1 month</div>
+                                <button class="btn-outline" style="width:100%;justify-content:center" onclick="subscribePlan('basic')">Choose Basic</button>
+                            </div>
+                            <div class="premium-plan-card featured">
+                                <div class="premium-plan-badge">Most Popular</div>
+                                <div class="premium-plan-name">Standard</div>
+                                <div class="premium-plan-price">$29.99</div>
+                                <div class="premium-plan-duration">3 months</div>
+                                <button class="btn-primary" style="width:100%;justify-content:center" onclick="subscribePlan('standard')">Choose Standard</button>
+                            </div>
+                            <div class="premium-plan-card">
+                                <div class="premium-plan-name">Premium</div>
+                                <div class="premium-plan-price">$49.99</div>
+                                <div class="premium-plan-duration">6 months</div>
+                                <button class="btn-outline" style="width:100%;justify-content:center" onclick="subscribePlan('premium')">Choose Premium</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dash-card">
+                    <div class="dash-card-header"><div class="dash-card-title">Payment History</div></div>
+                    <div id="premiumHistoryList"></div>
+                </div>
+            </div>
 
-            <script src="../../assets/js/api.js"></script>
-            <script src="../../assets/js/employer.js"></script>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"><i class="ti ti-circle-check"></i><span id="toastMsg">Done!</span></div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@microsoft/signalr@8.0.0/dist/browser/signalr.min.js"></script>
+    <script src="../../assets/js/api.js"></script>
+    <script src="../../assets/js/notification.js"></script>
+    <script src="../../assets/js/employer.js"></script>
+    <script src="../../assets/js/contract.js"></script>
+    <script src="../../assets/js/review.js"></script>
+    <script src="../../assets/js/paymentpremium.js"></script>
 </body>
 </html>

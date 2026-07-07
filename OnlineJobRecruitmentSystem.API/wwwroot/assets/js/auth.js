@@ -21,20 +21,20 @@ function updateNavbar() {
     const user = getUser();
     if (!user) return;
 
-    const navBtns = document.querySelector('.nav-btns');
-    if (!navBtns) return;
+    const navBtns = $('.nav-btns');
+    if (!navBtns.length) return;
 
     if (user.role === 'Employer') {
-        navBtns.innerHTML = `
+        navBtns.html(`
       <a href="/assets/pages/employerdashboard.html" class="btn-outline">Dashboard</a>
       <button class="btn-primary" onclick="logout()">Logout</button>
-    `;
+    `);
     } else if (user.role === 'JobSeeker') {
-        navBtns.innerHTML = `
+        navBtns.html(`
       <a href="/assets/pages/jobseekerdashboard.html" class="btn-outline">Dashboard</a>
       <button class="btn-primary" onclick="logout()">Logout</button>
-    `;
+    `);
     }
 }
 
-document.addEventListener('DOMContentLoaded', updateNavbar);
+$(updateNavbar);

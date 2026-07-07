@@ -1,0 +1,99 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NexHire - Notifications</title>
+    <link rel="stylesheet" href="../../assets/css/style.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">
+            <a href="../index.html" style="text-decoration:none;color:inherit;display:flex;align-items:center;gap:8px">
+                <i class="ti ti-brand-speedtest" style="color:#2563EB"></i> NexHire<span class="logo-accent">.</span>
+            </a>
+        </div>
+        <div class="nav-links">
+            <a href="../index.html">Home</a>
+            <a href="jobs.html">Find Jobs</a>
+        </div>
+        <div class="nav-btns">
+            <button class="btn-outline" onclick="history.back()"><i class="ti ti-arrow-left"></i> Back</button>
+        </div>
+        <button class="hamburger" onclick="toggleMenu()"><i class="ti ti-menu-2"></i></button>
+    </nav>
+
+    <div class="notif-page">
+        <div class="notif-page-header">
+            <h2 style="font-size:1.3rem;font-weight:700;color:#0f172a">Notifications</h2>
+            <button class="btn-outline" onclick="markAllReadPage()">Mark all as read</button>
+        </div>
+        <div class="profile-section" style="padding:0" id="notifFullList">
+            <div style="padding:20px;color:#94a3b8;font-size:0.85rem">Loading...</div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="../../assets/js/api.js"></script>
+    <script>
+        function toggleMenu() {
+            $('.nav-links').toggleClass('open');
+        }
+
+        $(function () {
+            if (!localStorage.getItem('token')) { window.location.href = 'login.html'; return; }
+            loadFullNotifications();
+        });
+
+        function notifIcon(type) {
+            const map = { contract: 'ti-file-text', payment: 'ti-credit-card', review: 'ti-star', application: 'ti-briefcase', message: 'ti-message' };
+            return map[type] || 'ti-bell';
+        }
+
+        function timeAgo(dateStr) {
+            const diff = (Date.now() - new Date(dateStr)) / 1000;
+            if (diff < 60) return 'just now';
+            if (diff < 3600) return Math.floor(diff / 60) + 'm ago';
+            if (diff < 86400) return Math.floor(diff / 3600) + 'h ago';
+            return Math.floor(diff / 86400) + 'd ago';
+        }
+
+        async function loadFullNotifications() {
+            try {
+                const r = await apiFetch('/Notification');
+                renderFullList(r.data || []);
+            } catch {
+                $('#notifFullList').html('<div style="padding:20px;color:#94a3b8;font-size:0.85rem">Could not load notifications.</div>');
+            }
+        }
+
+        function renderFullList(items) {
+            if (!items.length) {
+                $('#notifFullList').html('<div style="padding:20px;color:#94a3b8;font-size:0.85rem">No notifications yet.</div>');
+                return;
+            }
+            $('#notifFullList').html(items.map(n => `
+                        <div class="notif-full-item ${n.isRead ? '' : 'unread'}" onclick="notifClickPage(${n.id})">
+                            <div class="notif-icon"><i class="ti ${notifIcon(n.type)}"></i></div>
+                            <div>
+                                <div class="notif-item-title">${n.title}</div>
+                                <div class="notif-item-msg">${n.message}</div>
+                                <div class="notif-item-time">${timeAgo(n.createdAt)}</div>
+                            </div>
+                        </div>
+                    `).join(''));
+        }
+
+        async function notifClickPage(id) {
+            try { await apiFetch('/Notification/' + id, { method: 'PUT' }); loadFullNotifications(); } catch { }
+        }
+
+        async function markAllReadPage() {
+            try { await apiFetch('/Notification/read-all', { method: 'PUT' }); loadFullNotifications(); } catch { }
+        }
+    </script>
+</body>
+</html>

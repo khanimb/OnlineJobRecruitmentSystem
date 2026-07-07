@@ -25,6 +25,7 @@
             <button class="btn-outline" onclick="window.location.href='login.html'">Sign in</button>
             <button class="btn-primary" onclick="window.location.href='register.html'">Get started</button>
         </div>
+        <button class="hamburger" onclick="toggleMenu()"><i class="ti ti-menu-2"></i></button>
     </nav>
 
     <div class="auth-wrapper">
@@ -54,7 +55,7 @@
                 <label class="remember">
                     <input type="checkbox" /> Remember me
                 </label>
-                <a href="#" class="forgot">Forgot password?</a>
+                <a href="forgotpassword.html" class="forgot">Forgot password?</a>
             </div>
 
             <button class="btn-submit" onclick="login()">Sign in</button>
@@ -65,9 +66,14 @@
         </div>
     </div>
 
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="../../assets/js/api.js"></script>
     <!-- <script src="../../assets/js/auth.js"></script> -->
     <script>
+        function toggleMenu() {
+            $('.nav-links').toggleClass('open');
+        }
+
         function togglePassword() {
             const input = document.getElementById('password');
             const icon = document.querySelector('.input-icon .ti');
@@ -94,22 +100,13 @@
             }
 
             try {
-                const result = await apiFetch('/Auth/login', {
+                await apiFetch('/Auth/login', {
                     method: 'POST',
                     body: JSON.stringify({ email, password })
                 });
 
-                const data = result.data;
-                localStorage.setItem('token', data.token);
-                localStorage.setItem('user', JSON.stringify(data));
-
-                if (data.role === 'Employer') {
-                    window.location.href = 'employerdashboard.html';
-                } else if (data.role === 'JobSeeker') {
-                    window.location.href = 'jobseekerdashboard.html';
-                } else if (data.role === 'Admin') {
-                    window.location.href = 'admindashboard.html';
-                }
+                sessionStorage.setItem('pendingEmail', email);
+                window.location.href = 'verify2fa.html';
             } catch (err) {
                 errorMsg.textContent = err.message || 'Login failed. Please try again.';
                 errorMsg.style.display = 'block';

@@ -166,9 +166,11 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
                 a.CoverLetter,
                 a.Notes,
                 a.AppliedAt,
+                a.JobPostId,
                 JobTitle = a.JobPost!.Title,
                 JobSeeker = new
                 {
+                    a.JobSeekerProfile!.Id,
                     a.JobSeekerProfile!.UserId,
                     a.JobSeekerProfile!.FullName,
                     a.JobSeekerProfile.Skills,

@@ -11,18 +11,16 @@ async function loadJobs() {
 }
 
 function applyFilters() {
-    const keyword = (document.getElementById('searchInput').value || '').toLowerCase();
-    const location = (document.getElementById('locationInput').value || '').toLowerCase();
-    const salary = parseInt(document.getElementById('salaryFilter').value) || 0;
-    const sort = document.getElementById('sortSelect').value;
+    const keyword = ($('#searchInput').val() || '').toLowerCase();
+    const location = ($('#locationInput').val() || '').toLowerCase();
+    const salary = parseInt($('#salaryFilter').val()) || 0;
+    const sort = $('#sortSelect').val();
 
-    const checkedTypes = [...document.querySelectorAll('.filter-check input[type=checkbox]:checked')]
-        .filter(c => ['Full-time', 'Part-time', 'Remote', 'Contract', 'Internship'].includes(c.value))
-        .map(c => c.value);
+    const checkedTypes = $('.filter-check input[type=checkbox]:checked').map(function () { return $(this).val(); }).get()
+        .filter(v => ['Full-time', 'Part-time', 'Remote', 'Contract', 'Internship'].includes(v));
 
-    const checkedCats = [...document.querySelectorAll('.filter-check input[type=checkbox]:checked')]
-        .filter(c => ['Technology', 'Finance', 'Healthcare', 'Education', 'Marketing', 'Design'].includes(c.value))
-        .map(c => c.value);
+    const checkedCats = $('.filter-check input[type=checkbox]:checked').map(function () { return $(this).val(); }).get()
+        .filter(v => ['Technology', 'Finance', 'Healthcare', 'Education', 'Marketing', 'Design'].includes(v));
 
     let filtered = allJobs.filter(job => {
         const title = (job.title || job.jobTitle || '').toLowerCase();
@@ -41,15 +39,15 @@ function applyFilters() {
 
     if (sort === 'salary') filtered.sort((a, b) => (b.salaryMin || 0) - (a.salaryMin || 0));
 
-    document.getElementById('jobsCount').textContent = `${filtered.length} job${filtered.length !== 1 ? 's' : ''} found`;
+    $('#jobsCount').text(`${filtered.length} job${filtered.length !== 1 ? 's' : ''} found`);
     renderJobs(filtered);
 }
 
 function resetFilters() {
-    document.getElementById('searchInput').value = '';
-    document.getElementById('locationInput').value = '';
-    document.getElementById('salaryFilter').value = '';
-    document.querySelectorAll('.filter-check input').forEach(c => c.checked = false);
+    $('#searchInput').val('');
+    $('#locationInput').val('');
+    $('#salaryFilter').val('');
+    $('.filter-check input').prop('checked', false);
     applyFilters();
 }
 
@@ -59,12 +57,11 @@ const colors = [
 ];
 
 function renderJobs(jobs) {
-    const el = document.getElementById('jobsList');
     if (!jobs.length) {
-        el.innerHTML = `<div class="empty-state"><div class="empty-icon"><i class="ti ti-briefcase-off"></i></div><div class="empty-title">No jobs found</div><div class="empty-sub">Try adjusting your filters</div></div>`;
+        $('#jobsList').html(`<div class="empty-state"><div class="empty-icon"><i class="ti ti-briefcase-off"></i></div><div class="empty-title">No jobs found</div><div class="empty-sub">Try adjusting your filters</div></div>`);
         return;
     }
-    el.innerHTML = jobs.map((job, i) => {
+    const html = jobs.map((job, i) => {
         const c = colors[i % colors.length];
         const title = job.title || job.jobTitle || 'Job';
         const company = job.companyName || 'Company';
@@ -87,14 +84,17 @@ function renderJobs(jobs) {
       </div>
     </div>`;
     }).join('');
+    $('#jobsList').html(html);
 }
 
-window.addEventListener('DOMContentLoaded', () => {
+$(function () {
     const params = new URLSearchParams(window.location.search);
-    if (params.get('keyword')) document.getElementById('searchInput').value = params.get('keyword');
-    if (params.get('location')) document.getElementById('locationInput').value = params.get('location');
+    if (params.get('keyword')) $('#searchInput').val(params.get('keyword'));
+    if (params.get('location')) $('#locationInput').val(params.get('location'));
     if (params.get('category')) {
-        document.querySelectorAll('.filter-check input').forEach(c => { if (c.value === params.get('category')) c.checked = true; });
+        $('.filter-check input').each(function () {
+            if ($(this).val() === params.get('category')) $(this).prop('checked', true);
+        });
     }
     loadJobs();
 });

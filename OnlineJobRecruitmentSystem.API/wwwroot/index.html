@@ -16,9 +16,9 @@
             <i class="ti ti-brand-speedtest"></i> NexHire<span class="logo-accent">.</span>
         </div>
         <div class="nav-links">
-            <a href="#">Find Jobs</a>
+            <a href="assets/pages/jobs.html">Find Jobs</a>
             <a href="#">Companies</a>
-            <a href="#">Pricing</a>
+            <a href="#" onclick="goToPricing(); return false;">Pricing</a>
             <a href="#">About</a>
             <a href="#">Contact</a>
         </div>
@@ -238,23 +238,29 @@
         </div>
     </footer>
 
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="assets/js/api.js"></script>
     <script src="assets/js/auth.js"></script>
     <script>
-  function toggleMenu() {
-    document.querySelector('.nav-links').classList.toggle('open');
-  }
-  function searchJobs() {
-    const keyword = document.getElementById('searchKeyword').value;
-    const location = document.getElementById('searchLocation').value;
-    window.location.href = `assets/pages/jobs.html?keyword=${keyword}&location=${location}`;
-  }
-  function quickSearch(term) {
-    window.location.href = `assets/pages/jobs.html?keyword=${term}`;
-  }
-  function filterCategory(category) {
-    window.location.href = `assets/pages/jobs.html?category=${category}`;
-  }
+        function toggleMenu() {
+            $('.nav-links').toggleClass('open');
+        }
+        function searchJobs() {
+            const keyword = $('#searchKeyword').val();
+            const location = $('#searchLocation').val();
+            window.location.href = `assets/pages/jobs.html?keyword=${keyword}&location=${location}`;
+        }
+        function quickSearch(term) {
+            window.location.href = `assets/pages/jobs.html?keyword=${term}`;
+        }
+        function filterCategory(category) {
+            window.location.href = `assets/pages/jobs.html?category=${category}`;
+        }
+        function goToPricing() {
+            const user = getUser();
+            if (!user) { window.location.href = 'assets/pages/login.html'; return; }
+            window.location.href = (user.role === 'Employer' ? 'assets/pages/employerdashboard.html' : 'assets/pages/jobseekerdashboard.html') + '#premium';
+        }
     </script>
 </body>
 </html>

@@ -24,6 +24,7 @@
             <button class="btn-outline" onclick="window.location.href='login.html'">Sign in</button>
             <button class="btn-primary" onclick="window.location.href='register.html'">Get started</button>
         </div>
+        <button class="hamburger" onclick="toggleMenu()"><i class="ti ti-menu-2"></i></button>
     </nav>
 
     <div class="jobs-page">
@@ -91,8 +92,15 @@
         </div>
     </div>
 
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="../../assets/js/api.js"></script>
     <script src="../../assets/js/auth.js"></script>
     <script src="../../assets/js/jobs.js"></script>
+    <script>
+        function toggleMenu() {
+            $('.nav-links').toggleClass('open');
+        }
+    </script>
+</body>
 </body>
 </html>

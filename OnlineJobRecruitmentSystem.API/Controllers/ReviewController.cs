@@ -39,7 +39,7 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
         [HttpGet("my")]
         public async Task<IActionResult> GetMyReviews()
         {
-            var reviews = await reviewService.GetReviewsForUserAsync(GetUserId());
+            var reviews = await reviewService.GetReviewsByReviewerAsync(GetUserId());
             return Ok(ResponseModel<List<ReturnReviewDto>>.Ok(reviews));
         }
 

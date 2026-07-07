@@ -1094,9 +1094,9 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "OnlineJobRecruitmentSystem.API.Controllers.PaymentController",
+    "ContainingType": "OnlineJobRecruitmentSystem.API.Controllers.PaymentPremiumController",
     "Method": "GetPayments",
-    "RelativePath": "api/Payment",
+    "RelativePath": "api/PaymentPremium",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -1104,9 +1104,9 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "OnlineJobRecruitmentSystem.API.Controllers.PaymentController",
+    "ContainingType": "OnlineJobRecruitmentSystem.API.Controllers.PaymentPremiumController",
     "Method": "GetPayment",
-    "RelativePath": "api/Payment/{id}",
+    "RelativePath": "api/PaymentPremium/{id}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -1120,9 +1120,9 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "OnlineJobRecruitmentSystem.API.Controllers.PaymentController",
+    "ContainingType": "OnlineJobRecruitmentSystem.API.Controllers.PaymentPremiumController",
     "Method": "CreateCheckoutSession",
-    "RelativePath": "api/Payment/create-checkout-session",
+    "RelativePath": "api/PaymentPremium/create-checkout-session",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -1136,9 +1136,9 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "OnlineJobRecruitmentSystem.API.Controllers.PaymentController",
+    "ContainingType": "OnlineJobRecruitmentSystem.API.Controllers.PaymentPremiumController",
     "Method": "GetPremiumStatus",
-    "RelativePath": "api/Payment/status",
+    "RelativePath": "api/PaymentPremium/status",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -1146,9 +1146,9 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "OnlineJobRecruitmentSystem.API.Controllers.PaymentController",
+    "ContainingType": "OnlineJobRecruitmentSystem.API.Controllers.PaymentPremiumController",
     "Method": "Webhook",
-    "RelativePath": "api/Payment/webhook",
+    "RelativePath": "api/PaymentPremium/webhook",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,

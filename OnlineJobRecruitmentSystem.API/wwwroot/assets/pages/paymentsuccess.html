@@ -1,0 +1,27 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NexHire - Payment Successful</title>
+    <link rel="stylesheet" href="../../assets/css/style.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+    <div class="auth-wrapper">
+        <div class="auth-card" style="text-align:center">
+            <div style="width:70px;height:70px;border-radius:50%;background:#f0fdf4;color:#16a34a;display:flex;align-items:center;justify-content:center;font-size:2rem;margin:0 auto 20px"><i class="ti ti-check"></i></div>
+            <div class="auth-title">Payment successful!</div>
+            <div class="auth-sub">Thank you — your payment has been processed successfully.</div>
+            <button class="btn-submit" id="backBtn" style="margin-top:20px">Back to dashboard</button>
+        </div>
+    </div>
+    <script>
+        const user = JSON.parse(localStorage.getItem('user') || 'null');
+        document.getElementById('backBtn').onclick = function () {
+            window.location.href = user && user.role === 'Employer' ? 'employerdashboard.html' : 'jobseekerdashboard.html';
+        };
+    </script>
+</body>
+</html>

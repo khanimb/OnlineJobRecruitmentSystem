@@ -1,80 +1,24 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\Xanim\\Desktop\\Final\\",
-  "Documents": [
-    {
-      "AbsoluteMoniker": "D:0:0:{A1C8584D-E6EC-406B-B8E9-A820AE576A47}|OnlineJobRecruitmentSystem.API\\OnlineJobRecruitmentSystem.API.csproj|c:\\users\\xanim\\desktop\\final\\onlinejobrecruitmentsystem.api\\wwwroot\\assets\\js\\paymentpremium.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
-      "RelativeMoniker": "D:0:0:{A1C8584D-E6EC-406B-B8E9-A820AE576A47}|OnlineJobRecruitmentSystem.API\\OnlineJobRecruitmentSystem.API.csproj|solutionrelative:onlinejobrecruitmentsystem.api\\wwwroot\\assets\\js\\paymentpremium.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0BD850B8-2CDA-4FF2-A3E2-83BE33815A84}|OnlineJobRecruitmentSystem.Domain\\OnlineJobRecruitmentSystem.Domain.csproj|c:\\users\\xanim\\desktop\\final\\onlinejobrecruitmentsystem.domain\\entities\\employerprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0BD850B8-2CDA-4FF2-A3E2-83BE33815A84}|OnlineJobRecruitmentSystem.Domain\\OnlineJobRecruitmentSystem.Domain.csproj|solutionrelative:onlinejobrecruitmentsystem.domain\\entities\\employerprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0BD850B8-2CDA-4FF2-A3E2-83BE33815A84}|OnlineJobRecruitmentSystem.Domain\\OnlineJobRecruitmentSystem.Domain.csproj|c:\\users\\xanim\\desktop\\final\\onlinejobrecruitmentsystem.domain\\entities\\jobseekerprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0BD850B8-2CDA-4FF2-A3E2-83BE33815A84}|OnlineJobRecruitmentSystem.Domain\\OnlineJobRecruitmentSystem.Domain.csproj|solutionrelative:onlinejobrecruitmentsystem.domain\\entities\\jobseekerprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    }
-  ],
+  "Documents": [],
   "DocumentGroupContainers": [
     {
       "Orientation": 1,
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
-          "DockedHeight": 339,
-          "SelectedChildIndex": 1,
+          "DockedHeight": 227,
+          "SelectedChildIndex": -1,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "paymentpremium.js",
-              "DocumentMoniker": "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.API\\wwwroot\\assets\\js\\paymentpremium.js",
-              "RelativeDocumentMoniker": "OnlineJobRecruitmentSystem.API\\wwwroot\\assets\\js\\paymentpremium.js",
-              "ToolTip": "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.API\\wwwroot\\assets\\js\\paymentpremium.js",
-              "RelativeToolTip": "OnlineJobRecruitmentSystem.API\\wwwroot\\assets\\js\\paymentpremium.js",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2026-07-06T13:19:21.062Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "EmployerProfile.cs",
-              "DocumentMoniker": "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.Domain\\Entities\\EmployerProfile.cs",
-              "RelativeDocumentMoniker": "OnlineJobRecruitmentSystem.Domain\\Entities\\EmployerProfile.cs",
-              "ToolTip": "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.Domain\\Entities\\EmployerProfile.cs",
-              "RelativeToolTip": "OnlineJobRecruitmentSystem.Domain\\Entities\\EmployerProfile.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-06T13:16:15.488Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "JobSeekerProfile.cs",
-              "DocumentMoniker": "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.Domain\\Entities\\JobSeekerProfile.cs",
-              "RelativeDocumentMoniker": "OnlineJobRecruitmentSystem.Domain\\Entities\\JobSeekerProfile.cs",
-              "ToolTip": "C:\\Users\\Xanim\\Desktop\\Final\\OnlineJobRecruitmentSystem.Domain\\Entities\\JobSeekerProfile.cs",
-              "RelativeToolTip": "OnlineJobRecruitmentSystem.Domain\\Entities\\JobSeekerProfile.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-06T13:16:13.152Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
             }
           ]
         },
         {
-          "DockedHeight": 61,
+          "DockedHeight": 173,
           "SelectedChildIndex": -1,
           "Children": [
             {

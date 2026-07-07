@@ -25,6 +25,7 @@
             <button class="btn-outline" onclick="window.location.href='login.html'">Sign in</button>
             <button class="btn-primary" onclick="window.location.href='register.html'">Get started</button>
         </div>
+        <button class="hamburger" onclick="toggleMenu()"><i class="ti ti-menu-2"></i></button>
     </nav>
 
     <div class="auth-wrapper">
@@ -91,65 +92,70 @@
         </div>
     </div>
 
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="../../assets/js/api.js"></script>
     <script src="../../assets/js/auth.js"></script>
     <script>
-  let selectedRole = 'JobSeeker';
+        function toggleMenu() {
+            $('.nav-links').toggleClass('open');
+        }
 
-  function selectRole(role) {
-    selectedRole = role;
-    document.getElementById('roleJobSeeker').classList.remove('active');
-    document.getElementById('roleEmployer').classList.remove('active');
-    document.getElementById('role' + role).classList.add('active');
-  }
+        let selectedRole = 'JobSeeker';
 
-  function togglePassword() {
-    const input = document.getElementById('password');
-    const icon = document.querySelector('.input-icon .ti');
-    if (input.type === 'password') {
-      input.type = 'text';
-      icon.classList.replace('ti-eye', 'ti-eye-off');
-    } else {
-      input.type = 'password';
-      icon.classList.replace('ti-eye-off', 'ti-eye');
-    }
-  }
+        function selectRole(role) {
+            selectedRole = role;
+            document.getElementById('roleJobSeeker').classList.remove('active');
+            document.getElementById('roleEmployer').classList.remove('active');
+            document.getElementById('role' + role).classList.add('active');
+        }
 
-  async function register() {
-    const firstName = document.getElementById('firstName').value;
-    const lastName = document.getElementById('lastName').value;
-    const username = document.getElementById('username').value;
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-    const errorMsg = document.getElementById('errorMsg');
-    const successMsg = document.getElementById('successMsg');
+        function togglePassword() {
+            const input = document.getElementById('password');
+            const icon = document.querySelector('.input-icon .ti');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.replace('ti-eye', 'ti-eye-off');
+            } else {
+                input.type = 'password';
+                icon.classList.replace('ti-eye-off', 'ti-eye');
+            }
+        }
 
-    errorMsg.style.display = 'none';
-    successMsg.style.display = 'none';
+        async function register() {
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorMsg = document.getElementById('errorMsg');
+            const successMsg = document.getElementById('successMsg');
 
-    if (!firstName || !lastName || !username || !email || !password) {
-      errorMsg.textContent = 'Please fill in all fields.';
-      errorMsg.style.display = 'block';
-      return;
-    }
+            errorMsg.style.display = 'none';
+            successMsg.style.display = 'none';
 
-    try {
-        await apiFetch('/Auth/register', {
-        method: 'POST',
-        body: JSON.stringify({ firstName, lastName, username, email, password, role: selectedRole })
-      });
+            if (!firstName || !lastName || !username || !email || !password) {
+                errorMsg.textContent = 'Please fill in all fields.';
+                errorMsg.style.display = 'block';
+                return;
+            }
 
-      successMsg.textContent = 'Account created! Redirecting to login...';
-      successMsg.style.display = 'block';
-      
-      setTimeout(() => {
-        window.location.href = 'login.html';
-      }, 1500);
-    } catch (err) {
-      errorMsg.textContent = err.message || 'Registration failed. Please try again.';
-      errorMsg.style.display = 'block';
-    }
-  }
+            try {
+                await apiFetch('/Auth/register', {
+                    method: 'POST',
+                    body: JSON.stringify({ firstName, lastName, username, email, password, role: selectedRole })
+                });
+
+                successMsg.textContent = 'Account created! Redirecting to login...';
+                successMsg.style.display = 'block';
+
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 1500);
+            } catch (err) {
+                errorMsg.textContent = err.message || 'Registration failed. Please try again.';
+                errorMsg.style.display = 'block';
+            }
+        }
     </script>
 </body>
 </html>

@@ -8,47 +8,53 @@ function getUser() { const u = localStorage.getItem('user'); return u ? JSON.par
 function logout() { localStorage.removeItem('token'); localStorage.removeItem('user'); window.location.href = 'login.html'; }
 
 function showTab(tab, el) {
-    ['overview', 'applications', 'saved', 'browse', 'profile'].forEach(t => {
-        const e = document.getElementById('tab-' + t);
-        if (e) e.style.display = 'none';
+    ['overview', 'applications', 'saved', 'browse', 'profile', 'portfolio', 'jobalert', 'contracts', 'reviews', 'premium'].forEach(t => {
+        $('#tab-' + t).hide();
     });
-    document.getElementById('tab-' + tab).style.display = 'block';
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-    if (el) el.classList.add('active');
+    $('#tab-' + tab).show();
+    $('.nav-item').removeClass('active');
+    if (el) $(el).addClass('active');
     const titles = {
         overview: ['Overview', "Here's your job search summary."],
         applications: ['My Applications', 'Track your application status'],
         saved: ['Saved Jobs', 'Jobs you bookmarked'],
         browse: ['Browse Jobs', 'Find your next opportunity'],
-        profile: ['My Profile', 'Update your personal information']
+        profile: ['My Profile', 'Update your personal information'],
+        portfolio: ['Portfolio', 'Showcase your work to employers'],
+        jobalert: ['Job Alerts', 'Get notified about matching jobs'],
+        contracts: ['My Contracts', 'Contracts with employers'],
+        reviews: ['Reviews', 'Feedback from employers and your own reviews'],
+        premium: ['Premium', 'Unlock premium features']
     };
-    document.getElementById('pageTitle').textContent = titles[tab][0];
-    document.getElementById('pageSubtitle').textContent = titles[tab][1];
+    $('#pageTitle').text(titles[tab][0]);
+    $('#pageSubtitle').text(titles[tab][1]);
     if (tab === 'saved') loadSaved();
     if (tab === 'profile') loadProfile();
     if (tab === 'browse') loadBrowseJobs();
+    if (tab === 'portfolio') loadPortfolio();
+    if (tab === 'jobalert') loadJobAlerts();
+    if (tab === 'contracts') loadContracts();
+    if (tab === 'reviews') loadReviews();
+    if (tab === 'premium') loadPremium();
 }
 
 function showToast(msg, ok = true) {
-    const t = document.getElementById('toast');
-    t.querySelector('i').style.color = ok ? '#10b981' : '#ef4444';
-    document.getElementById('toastMsg').textContent = msg;
-    t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 3000);
+    const t = $('#toast');
+    t.find('i').css('color', ok ? '#10b981' : '#ef4444');
+    $('#toastMsg').text(msg);
+    t.addClass('show');
+    setTimeout(() => t.removeClass('show'), 3000);
 }
 
 // ── APPLICATIONS ──
 async function loadApplications() {
-    try {
-        const r = await apiFetch('/Application/mine');
-        myApplications = r.data || [];
-    } catch { myApplications = []; }
+    try { const r = await apiFetch('/JobApplication/mine'); myApplications = r.data || []; } catch { myApplications = []; }
     renderApplications();
-    document.getElementById('totalApplications').textContent = myApplications.length;
-    document.getElementById('appsBadge').textContent = myApplications.length;
-    document.getElementById('appsSubtitle').textContent = myApplications.length + ' applications';
-    document.getElementById('pendingCount').textContent = myApplications.filter(a => a.status === 'Applied').length;
-    document.getElementById('acceptedCount').textContent = myApplications.filter(a => a.status === 'Shortlisted').length;
+    $('#totalApplications').text(myApplications.length);
+    $('#appsBadge').text(myApplications.length);
+    $('#appsSubtitle').text(myApplications.length + ' applications');
+    $('#pendingCount').text(myApplications.filter(a => a.status === 'Applied').length);
+    $('#acceptedCount').text(myApplications.filter(a => a.status === 'Shortlisted').length);
 }
 
 function appItemHTML(app, i) {
@@ -69,30 +75,27 @@ function appItemHTML(app, i) {
 function renderApplications() {
     const empty = `<div class="empty-state"><div class="empty-icon"><i class="ti ti-file-off"></i></div><div class="empty-title">No applications yet</div><div class="empty-sub">Start applying to jobs!</div></div>`;
     if (!myApplications.length) {
-        document.getElementById('recentApplicationsList').innerHTML = empty;
-        document.getElementById('allApplicationsList').innerHTML = empty;
+        $('#recentApplicationsList').html(empty);
+        $('#allApplicationsList').html(empty);
         return;
     }
-    document.getElementById('recentApplicationsList').innerHTML = myApplications.slice(0, 3).map(appItemHTML).join('');
-    document.getElementById('allApplicationsList').innerHTML = myApplications.map(appItemHTML).join('');
+    $('#recentApplicationsList').html(myApplications.slice(0, 3).map(appItemHTML).join(''));
+    $('#allApplicationsList').html(myApplications.map(appItemHTML).join(''));
 }
 
 // ── SAVED ──
 async function loadSaved() {
-    try {
-        const r = await apiFetch('/JobSeeker/saved');
-        mySaved = r.data || [];
-    } catch { mySaved = []; }
+    try { const r = await apiFetch('/JobSeeker/saved'); mySaved = r.data || []; } catch { mySaved = []; }
     renderSaved();
 }
 
 function renderSaved() {
     const empty = `<div class="empty-state"><div class="empty-icon"><i class="ti ti-bookmark-off"></i></div><div class="empty-title">No saved jobs</div><div class="empty-sub">Bookmark jobs to see them here</div></div>`;
-    document.getElementById('savedCount').textContent = mySaved.length;
-    document.getElementById('savedBadge').textContent = mySaved.length;
+    $('#savedCount').text(mySaved.length);
+    $('#savedBadge').text(mySaved.length);
     if (!mySaved.length) {
-        document.getElementById('recentSavedList').innerHTML = empty;
-        document.getElementById('allSavedList').innerHTML = empty;
+        $('#recentSavedList').html(empty);
+        $('#allSavedList').html(empty);
         return;
     }
     const html = mySaved.map((s, i) => {
@@ -109,7 +112,7 @@ function renderSaved() {
             </div>
         </div>`;
     }).join('');
-    document.getElementById('recentSavedList').innerHTML = mySaved.slice(0, 3).map((s, i) => {
+    $('#recentSavedList').html(mySaved.slice(0, 3).map((s, i) => {
         const c = colors[i % colors.length];
         return `<div class="job-item">
             <div class="job-logo" style="background:${c.bg};color:${c.color}">${s.job.companyName[0].toUpperCase()}</div>
@@ -119,8 +122,8 @@ function renderSaved() {
             </div>
             <span class="tag tag-gray">${s.job.jobType}</span>
         </div>`;
-    }).join('');
-    document.getElementById('allSavedList').innerHTML = html;
+    }).join(''));
+    $('#allSavedList').html(html);
 }
 
 async function unsaveJob(jobId) {
@@ -133,13 +136,12 @@ async function unsaveJob(jobId) {
 
 // ── BROWSE ──
 async function loadBrowseJobs() {
-    const el = document.getElementById('browseJobsList');
-    el.innerHTML = '<div style="padding:20px;color:#888">Loading...</div>';
+    $('#browseJobsList').html('<div style="padding:20px;color:#888">Loading...</div>');
     try {
         const r = await apiFetch('/Job');
-        const jobs = r.data || [];
-        if (!jobs.length) { el.innerHTML = '<div class="empty-state"><p>No jobs available</p></div>'; return; }
-        el.innerHTML = jobs.map((j, i) => {
+        const jobs = r.data.data || [];
+        if (!jobs.length) { $('#browseJobsList').html('<div class="empty-state"><p>No jobs available</p></div>'); return; }
+        $('#browseJobsList').html(jobs.map((j, i) => {
             const c = colors[i % colors.length];
             return `<div class="job-item">
                 <div class="job-logo" style="background:${c.bg};color:${c.color}">${(j.companyName || j.title)[0].toUpperCase()}</div>
@@ -152,8 +154,8 @@ async function loadBrowseJobs() {
                     <button class="btn-primary" onclick="window.location.href='/assets/pages/jobdetail.html?id=${j.id}'">Apply</button>
                 </div>
             </div>`;
-        }).join('');
-    } catch (e) { el.innerHTML = '<div class="empty-state"><p>Error loading jobs</p></div>'; }
+        }).join(''));
+    } catch (e) { $('#browseJobsList').html('<div class="empty-state"><p>Error loading jobs</p></div>'); }
 }
 
 async function saveJob(jobId) {
@@ -168,24 +170,22 @@ async function loadProfile() {
     try {
         const r = await apiFetch('/JobSeeker/profile');
         const p = r.data;
-        document.getElementById('profileFullName').value = p.fullName || '';
-        document.getElementById('profilePhone').value = p.phone || '';
-        document.getElementById('profileSkills').value = p.skills || '';
-        document.getElementById('profileExperience').value = p.workExperience || '';
+        $('#profileFullName').val(p.fullName || '');
+        $('#profilePhone').val(p.phone || '');
+        $('#profileSkills').val(p.skills || '');
+        $('#profileExperience').val(p.workExperience || '');
         if (p.cvUrl) {
-            const cvLink = document.getElementById('cvLink');
-            cvLink.href = 'http://localhost:5076' + p.cvUrl;
-            cvLink.style.display = 'inline-flex';
+            $('#cvLink').attr('href', 'http://localhost:5179' + p.cvUrl).css('display', 'inline-flex');
         }
     } catch { }
 }
 
 async function saveProfile() {
     const dto = {
-        fullName: document.getElementById('profileFullName').value,
-        phone: document.getElementById('profilePhone').value,
-        skills: document.getElementById('profileSkills').value,
-        workExperience: document.getElementById('profileExperience').value
+        fullName: $('#profileFullName').val(),
+        phone: $('#profilePhone').val(),
+        skills: $('#profileSkills').val(),
+        workExperience: $('#profileExperience').val()
     };
     try {
         let exists = false;
@@ -196,18 +196,18 @@ async function saveProfile() {
             await apiFetch('/JobSeeker/profile', { method: 'POST', body: JSON.stringify(dto) });
         }
         showToast('Profile saved!');
-        document.getElementById('sidebarName').textContent = dto.fullName;
+        $('#sidebarName').text(dto.fullName);
     } catch (e) { showToast(e.message, false); }
 }
 
 async function uploadCv() {
-    const file = document.getElementById('cvFile').files[0];
+    const file = $('#cvFile')[0].files[0];
     if (!file) { showToast('Please select a file', false); return; }
     const formData = new FormData();
     formData.append('file', file);
     const token = localStorage.getItem('token');
     try {
-        const res = await fetch('http://localhost:5076/api/JobSeeker/upload-cv', {
+        const res = await fetch('http://localhost:5179/api/JobSeeker/upload-cv', {
             method: 'POST',
             headers: { 'Authorization': `Bearer ${token}` },
             body: formData
@@ -215,20 +215,22 @@ async function uploadCv() {
         const result = await res.json();
         if (result.success) {
             showToast('CV uploaded successfully!');
-            const cvLink = document.getElementById('cvLink');
-            cvLink.href = 'http://localhost:5076' + result.data;
-            cvLink.style.display = 'inline-flex';
+            $('#cvLink').attr('href', 'http://localhost:5179' + result.data).css('display', 'inline-flex');
         } else { showToast(result.message, false); }
     } catch { showToast('Upload failed', false); }
 }
 
 // ── INIT ──
-window.addEventListener('DOMContentLoaded', async () => {
+$(function () {
+    $('#sidebarToggleBtn').on('click', function () { $('.sidebar').toggleClass('open'); });
     const user = getUser();
     if (!user || user.role !== 'JobSeeker') { window.location.href = 'login.html'; return; }
     const name = user.firstName || user.username || user.email || 'Job Seeker';
-    document.getElementById('sidebarName').textContent = name;
-    document.getElementById('sidebarAvatar').textContent = name[0].toUpperCase();
-    await loadApplications();
-    await loadSaved();
+    $('#sidebarName').text(name);
+    $('#sidebarAvatar').text(name[0].toUpperCase());
+    Promise.all([loadApplications(), loadSaved()]).then(() => {
+        if (location.hash === '#premium') {
+            showTab('premium', $('.nav-item[onclick*="premium"]').get(0));
+        }
+    });
 });
