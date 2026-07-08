@@ -38,6 +38,17 @@ async function apiFetch(endpoint, options = {}) {
     }
 }
 
+function escapeHtml(str) {
+    return String(str ?? '').replace(/[&<>"']/g, m => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[m]));
+}
+
+function safeInitial(str) {
+    const m = String(str ?? '').match(/[a-zA-Z0-9]/);
+    return m ? m[0].toUpperCase() : '?';
+}
+
 function showToast(msg, ok = true) {
     const t = $('#toast');
     t.find('i').css('color', ok ? '#10b981' : '#ef4444');

@@ -16,7 +16,7 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
         AppDbContext context,
         IValidator<CreateJobDto> createValidator,
         IValidator<UpdateJobDto> updateValidator
-    ) : ControllerBase
+    ) : BaseApiController
     {
         [HttpGet]
         public async Task<IActionResult> GetJobs(
@@ -109,14 +109,14 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Employer")]
+        [Authorize(Roles = OnlineJobRecruitmentSystem.Domain.Common.Roles.Employer)]
         public async Task<IActionResult> CreateJob(CreateJobDto dto)
         {
             var result = await createValidator.ValidateAsync(dto);
             if (!result.IsValid)
                 return BadRequest(ResponseModel<string>.Fail(result.Errors[0].ErrorMessage));
 
-            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            var userId = CurrentUserId;
             var employer = await context.EmployerProfiles
                 .FirstOrDefaultAsync(e => e.UserId == userId);
 
@@ -144,19 +144,22 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
         }
 
         [HttpPut("{id}")]
-        [Authorize(Roles = "Employer")]
+        [Authorize(Roles = OnlineJobRecruitmentSystem.Domain.Common.Roles.Employer)]
         public async Task<IActionResult> UpdateJob(int id, UpdateJobDto dto)
         {
             var result = await updateValidator.ValidateAsync(dto);
             if (!result.IsValid)
                 return BadRequest(ResponseModel<string>.Fail(result.Errors[0].ErrorMessage));
 
-            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            var userId = CurrentUserId;
             var employer = await context.EmployerProfiles
                 .FirstOrDefaultAsync(e => e.UserId == userId);
 
+            if (employer == null)
+                return NotFound(ResponseModel<string>.Fail("Employer profile not found."));
+
             var job = await context.JobPosts
-                .FirstOrDefaultAsync(j => j.Id == id && j.EmployerProfileId == employer!.Id);
+                .FirstOrDefaultAsync(j => j.Id == id && j.EmployerProfileId == employer.Id);
 
             if (job == null)
                 return NotFound(ResponseModel<string>.Fail("Job not found."));
@@ -178,15 +181,18 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize(Roles = "Employer")]
+        [Authorize(Roles = OnlineJobRecruitmentSystem.Domain.Common.Roles.Employer)]
         public async Task<IActionResult> DeleteJob(int id)
         {
-            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            var userId = CurrentUserId;
             var employer = await context.EmployerProfiles
                 .FirstOrDefaultAsync(e => e.UserId == userId);
 
+            if (employer == null)
+                return NotFound(ResponseModel<string>.Fail("Employer profile not found."));
+
             var job = await context.JobPosts
-                .FirstOrDefaultAsync(j => j.Id == id && j.EmployerProfileId == employer!.Id);
+                .FirstOrDefaultAsync(j => j.Id == id && j.EmployerProfileId == employer.Id);
 
             if (job == null)
                 return NotFound(ResponseModel<string>.Fail("Job not found."));

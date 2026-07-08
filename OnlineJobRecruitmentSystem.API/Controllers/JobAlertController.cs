@@ -14,9 +14,9 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
     public class JobAlertController(
         IJobAlertService jobAlertService,
         IValidator<CreateJobAlertDto> createValidator,
-        IValidator<UpdateJobAlertDto> updateValidator) : ControllerBase
+        IValidator<UpdateJobAlertDto> updateValidator) : BaseApiController
     {
-        private int GetUserId() => int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+        
 
         [HttpPost]
         public async Task<IActionResult> CreateAlert(CreateJobAlertDto dto)
@@ -25,21 +25,21 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
             if (!result.IsValid)
                 return BadRequest(ResponseModel<string>.Fail(result.Errors[0].ErrorMessage));
 
-            await jobAlertService.CreateAlertAsync(GetUserId(), dto);
+            await jobAlertService.CreateAlertAsync(CurrentUserId, dto);
             return Ok(ResponseModel<string>.Ok(null!, "Job alert created."));
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAlerts()
         {
-            var alerts = await jobAlertService.GetUserAlertsAsync(GetUserId());
+            var alerts = await jobAlertService.GetUserAlertsAsync(CurrentUserId);
             return Ok(ResponseModel<List<ReturnJobAlertDto>>.Ok(alerts));
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAlert(int id)
         {
-            var alert = await jobAlertService.GetAlertByIdAsync(id, GetUserId());
+            var alert = await jobAlertService.GetAlertByIdAsync(id, CurrentUserId);
             if (alert == null)
                 return NotFound(ResponseModel<string>.Fail("Alert not found."));
 
@@ -53,7 +53,7 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
             if (!result.IsValid)
                 return BadRequest(ResponseModel<string>.Fail(result.Errors[0].ErrorMessage));
 
-            var updated = await jobAlertService.UpdateAlertAsync(id, GetUserId(), dto);
+            var updated = await jobAlertService.UpdateAlertAsync(id, CurrentUserId, dto);
             if (!updated)
                 return NotFound(ResponseModel<string>.Fail("Alert not found."));
 
@@ -63,7 +63,7 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAlert(int id)
         {
-            var deleted = await jobAlertService.DeleteAlertAsync(id, GetUserId());
+            var deleted = await jobAlertService.DeleteAlertAsync(id, CurrentUserId);
             if (!deleted)
                 return NotFound(ResponseModel<string>.Fail("Alert not found."));
 

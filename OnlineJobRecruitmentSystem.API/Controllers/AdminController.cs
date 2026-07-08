@@ -8,8 +8,8 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "Admin")]
-    public class AdminController(AppDbContext context) : ControllerBase
+    [Authorize(Roles = OnlineJobRecruitmentSystem.Domain.Common.Roles.Admin)]
+    public class AdminController(AppDbContext context) : BaseApiController
     {
         [HttpGet("users")]
         public async Task<IActionResult> GetUsers()
@@ -199,6 +199,32 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
                 .ToListAsync();
 
             return Ok(ResponseModel<object>.Ok(contracts));
+        }
+
+        [HttpPut("users/{id}/role")]
+        public async Task<IActionResult> UpdateUserRole(int id, [FromBody] string role)
+        {
+            var user = await context.Users.FindAsync(id);
+            if (user == null)
+                return NotFound(ResponseModel<string>.Fail("User not found."));
+
+            user.Role = role;
+            await context.SaveChangesAsync();
+
+            return Ok(ResponseModel<string>.Ok(null!, "User role updated."));
+        }
+
+        [HttpPut("jobs/{id}/status")]
+        public async Task<IActionResult> UpdateJobStatus(int id, [FromBody] bool isActive)
+        {
+            var job = await context.JobPosts.FindAsync(id);
+            if (job == null)
+                return NotFound(ResponseModel<string>.Fail("Job not found."));
+
+            job.IsActive = isActive;
+            await context.SaveChangesAsync();
+
+            return Ok(ResponseModel<string>.Ok(null!, "Job status updated."));
         }
     }
 }

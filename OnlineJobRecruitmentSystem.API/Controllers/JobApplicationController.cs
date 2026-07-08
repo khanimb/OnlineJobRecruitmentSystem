@@ -17,19 +17,19 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
     public class JobApplicationController(
         AppDbContext context,
         IValidator<CreateJobApplicationDto> createValidator
-    ) : ControllerBase
+    ) : BaseApiController
     {
-        private int GetUserId() => int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+        
 
         [HttpPost("{jobId}")]
-        [Authorize(Roles = "JobSeeker")]
+        [Authorize(Roles = OnlineJobRecruitmentSystem.Domain.Common.Roles.JobSeeker)]
         public async Task<IActionResult> Apply(int jobId, CreateJobApplicationDto dto)
         {
             var result = await createValidator.ValidateAsync(dto);
             if (!result.IsValid)
                 return BadRequest(ResponseModel<string>.Fail(result.Errors[0].ErrorMessage));
 
-            var userId = GetUserId();
+            var userId = CurrentUserId;
 
             var profile = await context.JobSeekerProfiles.FirstOrDefaultAsync(j => j.UserId == userId);
             if (profile == null)
@@ -56,10 +56,10 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
         }
 
         [HttpGet("mine")]
-        [Authorize(Roles = "JobSeeker")]
+        [Authorize(Roles = OnlineJobRecruitmentSystem.Domain.Common.Roles.JobSeeker)]
         public async Task<IActionResult> GetMyApplications()
         {
-            var userId = GetUserId();
+            var userId = CurrentUserId;
 
             var profile = await context.JobSeekerProfiles.FirstOrDefaultAsync(j => j.UserId == userId);
             if (profile == null)

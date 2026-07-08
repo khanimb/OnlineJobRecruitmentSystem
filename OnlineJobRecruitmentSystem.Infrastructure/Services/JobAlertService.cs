@@ -92,14 +92,20 @@ namespace OnlineJobRecruitmentSystem.Infrastructure.Services
                 .Where(a => a.IsActive && a.Frequency == frequency)
                 .ToListAsync();
 
+            if (!alerts.Any()) return;
+
+            var activeJobs = await _context.JobPosts
+                .Where(j => j.IsActive)
+                .ToListAsync();
+
             foreach (var alert in alerts)
             {
-                var jobs = await _context.JobPosts
-                    .Where(j => j.IsActive &&
+                var jobs = activeJobs
+                    .Where(j =>
                         (string.IsNullOrEmpty(alert.Keyword) || j.Title.Contains(alert.Keyword)) &&
                         (string.IsNullOrEmpty(alert.Location) || j.Location.Contains(alert.Location)))
                     .Take(5)
-                    .ToListAsync();
+                    .ToList();
 
                 if (jobs.Any())
                 {

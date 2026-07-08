@@ -13,14 +13,14 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [Authorize]
-    public class AccountController(AppDbContext context, IWebHostEnvironment env) : ControllerBase
+    public class AccountController(AppDbContext context, IWebHostEnvironment env) : BaseApiController
     {
-        private int GetUserId() => int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+        
 
         [HttpGet("profile")]
         public async Task<IActionResult> GetProfile()
         {
-            var userId = GetUserId();
+            var userId = CurrentUserId;
 
             var user = await context.Users
                 .Include(u => u.EmployerProfile)
@@ -51,10 +51,10 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
         }
 
         [HttpGet("cv/download")]
-        [Authorize(Roles = "JobSeeker")]
+        [Authorize(Roles = OnlineJobRecruitmentSystem.Domain.Common.Roles.JobSeeker)]
         public async Task<IActionResult> DownloadCvAsPdf()
         {
-            var userId = GetUserId();
+            var userId = CurrentUserId;
 
             var profile = await context.JobSeekerProfiles
                 .Include(j => j.User)

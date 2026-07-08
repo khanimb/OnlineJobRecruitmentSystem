@@ -4,8 +4,9 @@ async function loadJobs() {
     try {
         const r = await apiFetch('/Job');
         allJobs = r.data || [];
-    } catch {
+    } catch (e) {
         allJobs = [];
+        showToast('Failed to load jobs. Please try again.', false);
     }
     applyFilters();
 }
@@ -51,11 +52,6 @@ function resetFilters() {
     applyFilters();
 }
 
-const colors = [
-    { bg: '#eff6ff', color: '#2563EB' }, { bg: '#ecfdf5', color: '#10b981' },
-    { bg: '#fffbeb', color: '#f59e0b' }, { bg: '#f0fdf4', color: '#16a34a' }, { bg: '#fdf4ff', color: '#a855f7' }
-];
-
 function renderJobs(jobs) {
     if (!jobs.length) {
         $('#jobsList').html(`<div class="empty-state"><div class="empty-icon"><i class="ti ti-briefcase-off"></i></div><div class="empty-title">No jobs found</div><div class="empty-sub">Try adjusting your filters</div></div>`);
@@ -63,13 +59,13 @@ function renderJobs(jobs) {
     }
     const html = jobs.map((job, i) => {
         const c = colors[i % colors.length];
-        const title = job.title || job.jobTitle || 'Job';
-        const company = job.companyName || 'Company';
-        const loc = job.location || 'Remote';
-        const type = job.jobType || 'Full-time';
+        const title = escapeHtml(job.title || job.jobTitle || 'Job');
+        const company = escapeHtml(job.companyName || 'Company');
+        const loc = escapeHtml(job.location || 'Remote');
+        const type = escapeHtml(job.jobType || 'Full-time');
         const sal = job.salaryMin ? `$${job.salaryMin.toLocaleString()} / mo` : 'Negotiable';
         return `<div class="job-card-list" onclick="window.location.href='jobdetail.html?id=${job.id}'">
-      <div class="job-logo" style="background:${c.bg};color:${c.color};width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.1rem;flex-shrink:0">${company[0].toUpperCase()}</div>
+      <div class="job-logo" style="background:${c.bg};color:${c.color};width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.1rem;flex-shrink:0">${safeInitial(job.companyName)}</div>
       <div class="job-info" style="flex:1;min-width:0">
         <div class="job-name" style="font-size:1rem;font-weight:600;color:#0f172a">${title}</div>
         <div class="job-meta" style="font-size:0.8rem;color:#94a3b8;margin-top:4px;display:flex;gap:14px;flex-wrap:wrap">

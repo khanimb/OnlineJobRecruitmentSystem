@@ -1,4 +1,4 @@
-﻿function getUserId() {
+﻿function CurrentUserId {
     const token = localStorage.getItem('token');
     if (!token) return null;
     try {
@@ -30,7 +30,7 @@ function renderComments(comments) {
                 <div style="font-weight:600;">${c.username}</div>
                 <div class="comment-text" style="color:#374151; margin:4px 0;">${c.text}</div>
                 <div style="font-size:12px; color:#9ca3af;">${new Date(c.createdAt).toLocaleString()}</div>
-                ${getUserId() === c.userId ? `
+                ${CurrentUserId === c.userId ? `
                     <button onclick="editComment(${c.id})" style="font-size:12px; color:#2563eb; background:none; border:none; cursor:pointer; margin-right:8px;">Edit</button>
                     <button onclick="deleteComment(${c.id})" style="font-size:12px; color:#ef4444; background:none; border:none; cursor:pointer;">Delete</button>
                 ` : ''}

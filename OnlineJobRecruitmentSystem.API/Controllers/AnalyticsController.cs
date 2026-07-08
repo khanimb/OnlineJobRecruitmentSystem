@@ -11,17 +11,17 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "Employer")]
+    [Authorize(Roles = OnlineJobRecruitmentSystem.Domain.Common.Roles.Employer)]
     public class AnalyticsController(
         AppDbContext context,
-        IAnalyticsService analyticsService) : ControllerBase
+        IAnalyticsService analyticsService) : BaseApiController
     {
-        private int GetUserId() => int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+        
 
         [HttpGet]
         public async Task<IActionResult> GetStats()
         {
-            var userId = GetUserId();
+            var userId = CurrentUserId;
 
             var employer = await context.EmployerProfiles
                 .FirstOrDefaultAsync(e => e.UserId == userId);

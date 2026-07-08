@@ -52,7 +52,9 @@ function renderContracts() {
             </div>
             <span class="tag ${statusTag[c.status] || 'tag-gray'}">${c.status}</span>
             <div style="display:flex;gap:8px;margin-left:10px">
-                ${isEmployer && c.status === 'Active' ? `<button class="btn-primary" onclick="payContract(${c.id})"><i class="ti ti-credit-card"></i> Pay</button><button class="btn-outline" onclick="updateContractStatus(${c.id}, 'Completed')">Mark Done</button>` : ''}
+                ${isEmployer && c.status === 'Active' ? `<button class="btn-outline" onclick="updateContractStatus(${c.id}, 'Completed')">Mark Done</button>` : ''}
+                ${isEmployer && c.status === 'Completed' && !c.isPaid ? `<button class="btn-primary" onclick="payContract(${c.id})"><i class="ti ti-credit-card"></i> Pay</button>` : ''}
+                ${isEmployer && c.status === 'Completed' && c.isPaid ? `<span class="tag tag-teal">Paid</span>` : ''}
                 ${c.status === 'Completed' ? `<button class="btn-outline" onclick="openReviewModal(${reviewTargetId})"><i class="ti ti-star"></i> Leave Review</button>` : ''}
             </div>
         </div>`;

@@ -12,16 +12,16 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "JobSeeker")]
+    [Authorize(Roles = OnlineJobRecruitmentSystem.Domain.Common.Roles.JobSeeker)]
     public class PortfolioController(
         AppDbContext context,
-        IPortfolioService portfolioService) : ControllerBase
+        IPortfolioService portfolioService) : BaseApiController
     {
-        private int GetUserId() => int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+        
 
         private async Task<int> GetProfileId()
         {
-            var userId = GetUserId();
+            var userId = CurrentUserId;
             var profile = await context.JobSeekerProfiles
                 .FirstOrDefaultAsync(p => p.UserId == userId);
             return profile?.Id ?? 0;

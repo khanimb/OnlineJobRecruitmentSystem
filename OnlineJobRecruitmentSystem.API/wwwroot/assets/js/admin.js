@@ -1,9 +1,4 @@
-﻿const colors = [
-    { bg: '#eff6ff', color: '#2563EB' }, { bg: '#ecfdf5', color: '#10b981' },
-    { bg: '#fffbeb', color: '#f59e0b' }, { bg: '#f0fdf4', color: '#16a34a' }, { bg: '#fdf4ff', color: '#a855f7' }
-];
-
-let allUsers = [], allJobs = [], allApps = [];
+﻿let allUsers = [], allJobs = [], allApps = [];
 
 function showTab(tab, el) {
     ['overview', 'users', 'jobs', 'applications', 'payments'].forEach(t => $('#tab-' + t).hide());
@@ -53,16 +48,19 @@ function filterUsers() {
 
 function userItemHTML(user, i) {
     const c = colors[i % colors.length];
-    const name = user.firstName ? `${user.firstName} ${user.lastName || ''}`.trim() : user.username || user.email;
-    const roleColor = user.role === 'Admin' ? '#ef4444' : user.role === 'Employer' ? '#2563EB' : '#10b981';
-    const roleBg = user.role === 'Admin' ? '#fef2f2' : user.role === 'Employer' ? '#eff6ff' : '#ecfdf5';
+    const rawName = user.firstName ? `${user.firstName} ${user.lastName || ''}`.trim() : user.username || user.email;
+    const name = escapeHtml(rawName);
     return `<div class="job-item">
-    <div class="job-logo" style="background:${c.bg};color:${c.color}">${name[0].toUpperCase()}</div>
+    <div class="job-logo" style="background:${c.bg};color:${c.color}">${safeInitial(rawName)}</div>
     <div class="job-info">
       <div class="job-name">${name}</div>
-      <div class="job-meta"><span><i class="ti ti-mail"></i> ${user.email || ''}</span></div>
+      <div class="job-meta"><span><i class="ti ti-mail"></i> ${escapeHtml(user.email || '')}</span></div>
     </div>
-    <span class="app-badge" style="background:${roleBg};color:${roleColor}">${user.role || 'User'}</span>
+    <select onchange="updateUserRole(${user.id}, this.value)" style="border:1px solid #e2e8f0;border-radius:6px;padding:4px 8px;font-size:0.75rem;font-family:'Inter',sans-serif;">
+      <option value="JobSeeker" ${user.role === 'JobSeeker' ? 'selected' : ''}>JobSeeker</option>
+      <option value="Employer" ${user.role === 'Employer' ? 'selected' : ''}>Employer</option>
+      <option value="Admin" ${user.role === 'Admin' ? 'selected' : ''}>Admin</option>
+    </select>
     <div class="job-actions">
       <button class="act-btn danger" onclick="deleteUser(${user.id})" title="Delete"><i class="ti ti-trash"></i></button>
     </div>
@@ -78,15 +76,17 @@ function renderUsers(users) {
 
 function jobItemHTML(job, i) {
     const c = colors[i % colors.length];
-    const title = job.title || job.jobTitle || 'Job';
+    const rawTitle = job.title || job.jobTitle || 'Job';
+    const title = escapeHtml(rawTitle);
     return `<div class="job-item">
-    <div class="job-logo" style="background:${c.bg};color:${c.color}">${title[0].toUpperCase()}</div>
+    <div class="job-logo" style="background:${c.bg};color:${c.color}">${safeInitial(rawTitle)}</div>
     <div class="job-info">
       <div class="job-name">${title}</div>
-      <div class="job-meta"><span><i class="ti ti-map-pin"></i> ${job.location || 'Remote'}</span><span><i class="ti ti-clock"></i> ${job.jobType || 'Full-time'}</span></div>
+      <div class="job-meta"><span><i class="ti ti-map-pin"></i> ${escapeHtml(job.location || 'Remote')}</span><span><i class="ti ti-clock"></i> ${escapeHtml(job.jobType || 'Full-time')}</span></div>
     </div>
-    <span class="job-status ${job.isActive ? 'status-active' : 'status-expired'}">${job.isActive ? 'Active' : 'Expired'}</span>
+        <span class="job-status ${job.isActive ? 'status-active' : 'status-expired'}">${job.isActive ? 'Active' : 'Expired'}</span>
     <div class="job-actions">
+      <button class="act-btn" onclick="toggleJobStatus(${job.id}, ${job.isActive})" title="${job.isActive ? 'Deactivate' : 'Activate'}"><i class="ti ${job.isActive ? 'ti-eye-off' : 'ti-eye'}"></i></button>
       <button class="act-btn danger" onclick="deleteJob(${job.id})" title="Delete"><i class="ti ti-trash"></i></button>
     </div>
   </div>`;
@@ -105,10 +105,10 @@ function renderApps(apps) {
     const badgeMap = { Pending: 'badge-review', Accepted: 'badge-hired', Rejected: 'badge-rejected', Reviewing: 'badge-new' };
     $('#allAppsList').html(apps.map((app, i) => {
         const c = colors[i % colors.length];
-        const name = app.applicantName || app.userName || 'Applicant';
+        const rawName = app.applicantName || app.userName || 'Applicant';
         return `<div class="applicant-item">
-      <div class="app-avatar" style="background:${c.bg};color:${c.color}">${name[0].toUpperCase()}</div>
-      <div><div class="app-name">${name}</div><div class="app-role">${app.jobTitle || 'Position'}</div></div>
+      <div class="app-avatar" style="background:${c.bg};color:${c.color}">${safeInitial(rawName)}</div>
+      <div><div class="app-name">${escapeHtml(rawName)}</div><div class="app-role">${escapeHtml(app.jobTitle || 'Position')}</div></div>
       <span class="app-badge ${badgeMap[app.status] || 'badge-new'}">${app.status || 'Pending'}</span>
     </div>`;
     }).join(''));
@@ -123,6 +123,16 @@ async function deleteUser(id) {
 async function deleteJob(id) {
     if (!confirm('Delete this job?')) return;
     try { await apiFetch('/Job/' + id, { method: 'DELETE' }); showToast('Job deleted'); await loadJobs(); }
+    catch (err) { showToast(err.message || 'Failed', false); }
+}
+
+async function updateUserRole(id, role) {
+    try { await apiFetch(`/Admin/users/${id}/role`, { method: 'PUT', body: JSON.stringify(role) }); showToast('User role updated'); await loadUsers(); }
+    catch (err) { showToast(err.message || 'Failed', false); }
+}
+
+async function toggleJobStatus(id, currentlyActive) {
+    try { await apiFetch(`/Admin/jobs/${id}/status`, { method: 'PUT', body: JSON.stringify(!currentlyActive) }); showToast('Job status updated'); await loadJobs(); }
     catch (err) { showToast(err.message || 'Failed', false); }
 }
 

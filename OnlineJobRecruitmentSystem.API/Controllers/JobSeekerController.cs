@@ -13,15 +13,15 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "JobSeeker")]
+    [Authorize(Roles = OnlineJobRecruitmentSystem.Domain.Common.Roles.JobSeeker)]
     public class JobSeekerController(
         AppDbContext context,
         IValidator<CreateJobSeekerDto> createValidator,
         IValidator<UpdateJobSeekerDto> updateValidator,
         FileManager fileManager 
-    ) : ControllerBase
+    ) : BaseApiController
     {
-        private int GetUserId() => int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+        
 
         [HttpPost("profile")]
         public async Task<IActionResult> CreateProfile(CreateJobSeekerDto dto)
@@ -30,7 +30,7 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
             if (!result.IsValid)
                 return BadRequest(ResponseModel<string>.Fail(result.Errors[0].ErrorMessage));
 
-            var userId = GetUserId();
+            var userId = CurrentUserId;
 
             if (await context.JobSeekerProfiles.AnyAsync(j => j.UserId == userId))
                 return BadRequest(ResponseModel<string>.Fail("Job seeker profile already exists."));
@@ -62,7 +62,7 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
         [HttpGet("profile")]
         public async Task<IActionResult> GetProfile()
         {
-            var userId = GetUserId();
+            var userId = CurrentUserId;
 
             var profile = await context.JobSeekerProfiles.FirstOrDefaultAsync(j => j.UserId == userId);
             if (profile == null)
@@ -87,7 +87,7 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
             if (!result.IsValid)
                 return BadRequest(ResponseModel<string>.Fail(result.Errors[0].ErrorMessage));
 
-            var userId = GetUserId();
+            var userId = CurrentUserId;
 
             var profile = await context.JobSeekerProfiles.FirstOrDefaultAsync(j => j.UserId == userId);
             if (profile == null)
@@ -124,7 +124,7 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
             if (!file.IsValidSize(5 * 1024 * 1024))
                 return BadRequest(ResponseModel<string>.Fail("File size must not exceed 5 MB."));
 
-            var userId = GetUserId();
+            var userId = CurrentUserId;
 
             var profile = await context.JobSeekerProfiles.FirstOrDefaultAsync(j => j.UserId == userId);
             if (profile == null)
@@ -163,7 +163,7 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
         [HttpGet("saved")]
         public async Task<IActionResult> GetSavedJobs()
         {
-            var userId = GetUserId();
+            var userId = CurrentUserId;
 
             var profile = await context.JobSeekerProfiles.FirstOrDefaultAsync(j => j.UserId == userId);
             if (profile == null)
@@ -196,7 +196,7 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
         [HttpPost("saved/{jobId}")]
         public async Task<IActionResult> SaveJob(int jobId)
         {
-            var userId = GetUserId();
+            var userId = CurrentUserId;
 
             var profile = await context.JobSeekerProfiles.FirstOrDefaultAsync(j => j.UserId == userId);
             if (profile == null)
@@ -223,7 +223,7 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
         [HttpDelete("saved/{jobId}")]
         public async Task<IActionResult> RemoveSavedJob(int jobId)
         {
-            var userId = GetUserId();
+            var userId = CurrentUserId;
 
             var profile = await context.JobSeekerProfiles.FirstOrDefaultAsync(j => j.UserId == userId);
             if (profile == null)

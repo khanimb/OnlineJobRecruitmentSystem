@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
+using System.Security.Claims;
 
 namespace OnlineJobRecruitmentSystem.API.Hubs
 {
@@ -8,7 +9,7 @@ namespace OnlineJobRecruitmentSystem.API.Hubs
     {
         public override async Task OnConnectedAsync()
         {
-            var userId = Context.User?.FindFirst("userId")?.Value;
+            var userId = Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userId != null)
                 await Groups.AddToGroupAsync(Context.ConnectionId, $"user_{userId}");
 
@@ -17,7 +18,7 @@ namespace OnlineJobRecruitmentSystem.API.Hubs
 
         public override async Task OnDisconnectedAsync(Exception? exception)
         {
-            var userId = Context.User?.FindFirst("userId")?.Value;
+            var userId = Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userId != null)
                 await Groups.RemoveFromGroupAsync(Context.ConnectionId, $"user_{userId}");
 

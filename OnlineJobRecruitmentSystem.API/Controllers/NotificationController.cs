@@ -10,21 +10,21 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [Authorize]
-    public class NotificationController(INotificationService notificationService) : ControllerBase
+    public class NotificationController(INotificationService notificationService) : BaseApiController
     {
-        private int GetUserId() => int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+        
 
         [HttpGet]
         public async Task<IActionResult> GetNotifications()
         {
-            var notifications = await notificationService.GetUserNotificationsAsync(GetUserId());
+            var notifications = await notificationService.GetUserNotificationsAsync(CurrentUserId);
             return Ok(ResponseModel<List<ReturnNotificationDto>>.Ok(notifications));
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> MarkAsRead(int id)
         {
-            var marked = await notificationService.MarkAsReadAsync(id, GetUserId());
+            var marked = await notificationService.MarkAsReadAsync(id, CurrentUserId);
             if (!marked)
                 return NotFound(ResponseModel<string>.Fail("Notification not found."));
 
@@ -34,7 +34,7 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
         [HttpPut("read-all")]
         public async Task<IActionResult> MarkAllAsRead()
         {
-            await notificationService.MarkAllAsReadAsync(GetUserId());
+            await notificationService.MarkAllAsReadAsync(CurrentUserId);
             return Ok(ResponseModel<string>.Ok(null!, "All marked as read."));
         }
     }

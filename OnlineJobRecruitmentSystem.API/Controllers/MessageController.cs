@@ -17,14 +17,14 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
         IMessageService messageService,
         IHubContext<ChatHub> chatHub,
         INotificationService notificationService
-        ) : ControllerBase
+        ) : BaseApiController
     {
-        private int GetUserId() => int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+        
 
         [HttpPost]
         public async Task<IActionResult> SendMessage(SendMessageDto dto)
         {
-            var senderId = GetUserId();
+            var senderId = CurrentUserId;
             var message = await messageService.SaveMessageAsync(senderId, dto);
 
             await chatHub.Clients.User(dto.ReceiverId.ToString())
@@ -50,21 +50,21 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
         [HttpGet("conversation/{otherUserId}")]
         public async Task<IActionResult> GetConversation(int otherUserId)
         {
-            var messages = await messageService.GetConversationAsync(GetUserId(), otherUserId);
+            var messages = await messageService.GetConversationAsync(CurrentUserId, otherUserId);
             return Ok(ResponseModel<List<ReturnMessageDto>>.Ok(messages));
         }
 
         [HttpGet("inbox")]
         public async Task<IActionResult> GetInbox()
         {
-            var messages = await messageService.GetInboxAsync(GetUserId());
+            var messages = await messageService.GetInboxAsync(CurrentUserId);
             return Ok(ResponseModel<List<ReturnMessageDto>>.Ok(messages));
         }
 
         [HttpGet("unread-count")]
         public async Task<IActionResult> GetUnreadCount()
         {
-            var count = await messageService.GetUnreadCountAsync(GetUserId());
+            var count = await messageService.GetUnreadCountAsync(CurrentUserId);
             return Ok(ResponseModel<int>.Ok(count));
         }
     }

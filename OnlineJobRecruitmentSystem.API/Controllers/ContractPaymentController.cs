@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using OnlineJobRecruitmentSystem.API.Hubs;
 using OnlineJobRecruitmentSystem.Application.DTOs.ContractPaymentDtos;
 using OnlineJobRecruitmentSystem.Application.DTOs.NotificationDtos;
@@ -20,15 +21,16 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
     public class ContractPaymentController(
         AppDbContext context,
         IHubContext<NotificationHub> notificationHub,
-        IConfiguration configuration) : ControllerBase
+        IConfiguration configuration,
+        ILogger<ContractPaymentController> logger) : BaseApiController
     {
-        private int GetUserId() => int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+        
 
         [HttpPost("{contractId}")]
-        [Authorize(Roles = "Employer")]
+        [Authorize(Roles = OnlineJobRecruitmentSystem.Domain.Common.Roles.Employer)]
         public async Task<IActionResult> CreatePayment(int contractId)
         {
-            var userId = GetUserId();
+            var userId = CurrentUserId;
             var employer = await context.EmployerProfiles
                 .FirstOrDefaultAsync(e => e.UserId == userId);
 
@@ -44,6 +46,12 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
 
             if (contract.Status != ContractStatus.Completed)
                 return BadRequest(ResponseModel<string>.Fail("Contract must be completed before payment."));
+
+            var alreadyPaid = await context.ContractPayments
+                .AnyAsync(cp => cp.ContractId == contractId && cp.Status == ContractPaymentStatus.Completed);
+
+            if (alreadyPaid)
+                return BadRequest(ResponseModel<string>.Fail("This contract has already been paid."));
 
             var platformFee = contract.Amount * 0.10m;
             var jobSeekerAmount = contract.Amount - platformFee;
@@ -68,8 +76,8 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
                     }
                 },
                 Mode = "payment",
-                SuccessUrl = $"http://localhost:5179/assets/pages/payment-success.html?session_id={{CHECKOUT_SESSION_ID}}",
-                CancelUrl = $"http://localhost:5179/assets/pages/payment-cancel.html",
+                SuccessUrl = $"{configuration["App:BaseUrl"]}/assets/pages/paymentsuccess.html?session_id={{CHECKOUT_SESSION_ID}}",
+                CancelUrl = $"{configuration["App:BaseUrl"]}/assets/pages/paymentcancel.html",
                 Metadata = new Dictionary<string, string>
                 {
                     { "contractId", contract.Id.ToString() },
@@ -104,6 +112,19 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
         [HttpGet("{contractId}")]
         public async Task<IActionResult> GetPayments(int contractId)
         {
+            var userId = CurrentUserId;
+
+            var contract = await context.Contracts
+                .Include(c => c.EmployerProfile)
+                .Include(c => c.JobSeekerProfile)
+                .FirstOrDefaultAsync(c => c.Id == contractId);
+
+            if (contract == null)
+                return NotFound(ResponseModel<string>.Fail("Contract not found."));
+
+            if (contract.EmployerProfile.UserId != userId && contract.JobSeekerProfile.UserId != userId)
+                return Forbid();
+
             var payments = await context.ContractPayments
                 .Where(cp => cp.ContractId == contractId)
                 .Select(cp => new ReturnContractPaymentDto
@@ -185,9 +206,10 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
 
                 return Ok();
             }
-            catch (Stripe.StripeException)
+            catch (Stripe.StripeException ex)
             {
-                return BadRequest();
+                logger.LogError(ex, "Stripe payment failed");
+                return BadRequest(ResponseModel<string>.Fail("Payment processing failed."));
             }
         }
     }

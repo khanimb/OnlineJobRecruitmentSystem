@@ -14,9 +14,9 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
     public class ReviewController(
         IReviewService reviewService,
         IValidator<CreateReviewDto> createValidator,
-        IValidator<UpdateReviewDto> updateValidator) : ControllerBase
+        IValidator<UpdateReviewDto> updateValidator) : BaseApiController
     {
-        private int GetUserId() => int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+        
 
         [HttpPost]
         public async Task<IActionResult> CreateReview(CreateReviewDto dto)
@@ -25,7 +25,10 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
             if (!result.IsValid)
                 return BadRequest(ResponseModel<string>.Fail(result.Errors[0].ErrorMessage));
 
-            await reviewService.CreateReviewAsync(GetUserId(), dto);
+            var created = await reviewService.CreateReviewAsync(CurrentUserId, dto);
+            if (created == null)
+                return BadRequest(ResponseModel<string>.Fail("Invalid review target."));
+
             return Ok(ResponseModel<string>.Ok(null!, "Review created."));
         }
 
@@ -39,7 +42,7 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
         [HttpGet("my")]
         public async Task<IActionResult> GetMyReviews()
         {
-            var reviews = await reviewService.GetReviewsByReviewerAsync(GetUserId());
+            var reviews = await reviewService.GetReviewsByReviewerAsync(CurrentUserId);
             return Ok(ResponseModel<List<ReturnReviewDto>>.Ok(reviews));
         }
 
@@ -57,7 +60,7 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
             if (!result.IsValid)
                 return BadRequest(ResponseModel<string>.Fail(result.Errors[0].ErrorMessage));
 
-            var updated = await reviewService.UpdateReviewAsync(id, GetUserId(), dto);
+            var updated = await reviewService.UpdateReviewAsync(id, CurrentUserId, dto);
             if (!updated)
                 return NotFound(ResponseModel<string>.Fail("Review not found."));
 
@@ -67,7 +70,7 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteReview(int id)
         {
-            var deleted = await reviewService.DeleteReviewAsync(id, GetUserId());
+            var deleted = await reviewService.DeleteReviewAsync(id, CurrentUserId);
             if (!deleted)
                 return NotFound(ResponseModel<string>.Fail("Review not found."));
 

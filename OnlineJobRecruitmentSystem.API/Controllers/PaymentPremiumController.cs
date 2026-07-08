@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using OnlineJobRecruitmentSystem.Application.DTOs.PaymentDtos;
 using OnlineJobRecruitmentSystem.Application.Interfaces;
 using OnlineJobRecruitmentSystem.Common;
@@ -15,9 +16,10 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
     public class PaymentPremiumController(
         AppDbContext context,
         IPaymentService paymentService,
-        IConfiguration configuration) : ControllerBase
+        IConfiguration configuration,
+        ILogger<PaymentPremiumController> logger) : BaseApiController
     {
-        private int GetUserId() => int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+        
 
         [HttpPost("create-checkout-session")]
         public async Task<IActionResult> CreateCheckoutSession(CreatePaymentDto dto)
@@ -32,7 +34,7 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
             if (!plans.TryGetValue(dto.Plan ?? "", out var plan))
                 return BadRequest(ResponseModel<string>.Fail("Invalid plan selected."));
 
-            var userId = GetUserId();
+            var userId = CurrentUserId;
 
             var options = new SessionCreateOptions
             {
@@ -54,8 +56,8 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
                     }
                 },
                 Mode = "payment",
-                SuccessUrl = $"http://localhost:5179/assets/pages/payment-success.html?session_id={{CHECKOUT_SESSION_ID}}",
-                CancelUrl = $"http://localhost:5179/assets/pages/payment-cancel.html",
+                SuccessUrl = $"{configuration["App:BaseUrl"]}/assets/pages/paymentsuccess.html?session_id={{CHECKOUT_SESSION_ID}}",
+                CancelUrl = $"{configuration["App:BaseUrl"]}/assets/pages/paymentcancel.html",
                 Metadata = new Dictionary<string, string>
                 {
                     { "userId", userId.ToString() },
@@ -105,23 +107,24 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
 
                 return Ok();
             }
-            catch (Stripe.StripeException)
+            catch (Stripe.StripeException ex)
             {
-                return BadRequest();
+                logger.LogError(ex, "Stripe payment failed");
+                return BadRequest(ResponseModel<string>.Fail("Payment processing failed."));
             }
         }
 
         [HttpGet]
         public async Task<IActionResult> GetPayments()
         {
-            var payments = await paymentService.GetUserPaymentsAsync(GetUserId());
+            var payments = await paymentService.GetUserPaymentsAsync(CurrentUserId);
             return Ok(ResponseModel<List<ReturnPaymentDto>>.Ok(payments));
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetPayment(int id)
         {
-            var payment = await paymentService.GetPaymentByIdAsync(id, GetUserId());
+            var payment = await paymentService.GetPaymentByIdAsync(id, CurrentUserId);
             if (payment == null)
                 return NotFound(ResponseModel<string>.Fail("Payment not found."));
 
@@ -131,7 +134,7 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
         [HttpGet("status")]
         public async Task<IActionResult> GetPremiumStatus()
         {
-            var userId = GetUserId();
+            var userId = CurrentUserId;
             var user = await context.Users.FindAsync(userId);
 
             if (user == null)

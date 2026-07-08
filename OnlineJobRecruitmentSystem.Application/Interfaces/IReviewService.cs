@@ -4,7 +4,7 @@ namespace OnlineJobRecruitmentSystem.Application.Interfaces
 {
     public interface IReviewService
     {
-        Task<ReturnReviewDto> CreateReviewAsync(int reviewerId, CreateReviewDto dto);
+        Task<ReturnReviewDto?> CreateReviewAsync(int reviewerId, CreateReviewDto dto);
         Task<List<ReturnReviewDto>> GetReviewsForUserAsync(int userId);
         Task<List<ReturnReviewDto>> GetReviewsByReviewerAsync(int reviewerId);
         Task<double> GetAverageRatingAsync(int userId);

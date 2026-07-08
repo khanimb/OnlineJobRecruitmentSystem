@@ -14,6 +14,7 @@ namespace OnlineJobRecruitmentSystem.Application.DTOs.ContractDtos
         public string? EmployerName { get; set; }
         public decimal Amount { get; set; }
         public ContractStatus Status { get; set; }
+        public bool IsPaid { get; set; }
         public PaymentType PaymentType { get; set; }
         public DateTime? CompletedAt { get; set; }
         public DateTime CreatedAt { get; set; }

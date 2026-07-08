@@ -1,8 +1,4 @@
-﻿const colors = [
-    { bg: '#eff6ff', color: '#2563EB' }, { bg: '#ecfdf5', color: '#10b981' },
-    { bg: '#fffbeb', color: '#f59e0b' }, { bg: '#f0fdf4', color: '#16a34a' }, { bg: '#fdf4ff', color: '#a855f7' }
-];
-let myApplications = [], mySaved = [];
+﻿let myApplications = [], mySaved = [];
 
 
 function showTab(tab, el) {
@@ -49,14 +45,14 @@ async function loadApplications() {
 
 function appItemHTML(app, i) {
     const c = colors[i % colors.length];
-    const title = app.jobTitle || 'Position';
-    const company = app.companyName || 'Company';
+    const rawTitle = app.jobTitle || 'Position';
+    const rawCompany = app.companyName || 'Company';
     const badgeMap = { Applied: 'badge-new', Reviewed: 'badge-review', Shortlisted: 'badge-hired', Rejected: 'badge-rejected' };
     return `<div class="job-item">
-        <div class="job-logo" style="background:${c.bg};color:${c.color}">${company[0].toUpperCase()}</div>
+        <div class="job-logo" style="background:${c.bg};color:${c.color}">${safeInitial(rawCompany)}</div>
         <div class="job-info">
-            <div class="job-name">${title}</div>
-            <div class="job-meta"><span><i class="ti ti-building"></i> ${company}</span><span><i class="ti ti-calendar"></i> ${app.appliedAt ? new Date(app.appliedAt).toLocaleDateString() : 'Recently'}</span></div>
+            <div class="job-name">${escapeHtml(rawTitle)}</div>
+            <div class="job-meta"><span><i class="ti ti-building"></i> ${escapeHtml(rawCompany)}</span><span><i class="ti ti-calendar"></i> ${app.appliedAt ? new Date(app.appliedAt).toLocaleDateString() : 'Recently'}</span></div>
         </div>
         <span class="app-badge ${badgeMap[app.status] || 'badge-new'}">${app.status || 'Applied'}</span>
     </div>`;
@@ -91,10 +87,10 @@ function renderSaved() {
     const html = mySaved.map((s, i) => {
         const c = colors[i % colors.length];
         return `<div class="job-item">
-            <div class="job-logo" style="background:${c.bg};color:${c.color}">${s.job.companyName[0].toUpperCase()}</div>
+            <div class="job-logo" style="background:${c.bg};color:${c.color}">${safeInitial(s.job.companyName)}</div>
             <div class="job-info">
-                <div class="job-name">${s.job.title}</div>
-                <div class="job-meta"><span><i class="ti ti-building"></i> ${s.job.companyName}</span><span><i class="ti ti-map-pin"></i> ${s.job.location}</span></div>
+                <div class="job-name">${escapeHtml(s.job.title)}</div>
+                <div class="job-meta"><span><i class="ti ti-building"></i> ${escapeHtml(s.job.companyName)}</span><span><i class="ti ti-map-pin"></i> ${escapeHtml(s.job.location)}</span></div>
             </div>
             <div style="display:flex;gap:8px;align-items:center">
                 <button class="btn-outline" onclick="window.location.href='/assets/pages/jobdetail.html?id=${s.job.id}'">View</button>
@@ -105,10 +101,10 @@ function renderSaved() {
     $('#recentSavedList').html(mySaved.slice(0, 3).map((s, i) => {
         const c = colors[i % colors.length];
         return `<div class="job-item">
-            <div class="job-logo" style="background:${c.bg};color:${c.color}">${s.job.companyName[0].toUpperCase()}</div>
+            <div class="job-logo" style="background:${c.bg};color:${c.color}">${safeInitial(s.job.companyName)}</div>
             <div class="job-info">
-                <div class="job-name">${s.job.title}</div>
-                <div class="job-meta"><span><i class="ti ti-building"></i> ${s.job.companyName}</span></div>
+                <div class="job-name">${escapeHtml(s.job.title)}</div>
+                <div class="job-meta"><span><i class="ti ti-building"></i> ${escapeHtml(s.job.companyName)}</span></div>
             </div>
             <span class="tag tag-gray">${s.job.jobType}</span>
         </div>`;
@@ -134,10 +130,10 @@ async function loadBrowseJobs() {
         $('#browseJobsList').html(jobs.map((j, i) => {
             const c = colors[i % colors.length];
             return `<div class="job-item">
-                <div class="job-logo" style="background:${c.bg};color:${c.color}">${(j.companyName || j.title)[0].toUpperCase()}</div>
+                <div class="job-logo" style="background:${c.bg};color:${c.color}">${safeInitial(j.companyName || j.title)}</div>
                 <div class="job-info">
-                    <div class="job-name">${j.title}</div>
-                    <div class="job-meta"><span><i class="ti ti-map-pin"></i> ${j.location}</span><span><i class="ti ti-briefcase"></i> ${j.jobType}</span></div>
+                    <div class="job-name">${escapeHtml(j.title)}</div>
+                    <div class="job-meta"><span><i class="ti ti-map-pin"></i> ${escapeHtml(j.location)}</span><span><i class="ti ti-briefcase"></i> ${escapeHtml(j.jobType)}</span></div>
                 </div>
                 <div style="display:flex;gap:8px;align-items:center">
                     <button class="btn-outline" onclick="saveJob(${j.id})"><i class="ti ti-bookmark"></i></button>

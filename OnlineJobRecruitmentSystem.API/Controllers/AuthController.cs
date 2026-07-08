@@ -16,7 +16,7 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
     public class AuthController(
         AppDbContext context,
         IJwtService jwtService,
-        IEmailService emailService) : ControllerBase
+        IEmailService emailService) : BaseApiController
     {
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterDto dto)
@@ -173,7 +173,7 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
         [Authorize]
         public async Task<IActionResult> Logout()
         {
-            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            var userId = CurrentUserId;
             var user = await context.Users.FindAsync(userId);
 
             if (user != null)

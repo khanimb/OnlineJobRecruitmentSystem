@@ -16,9 +16,9 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
     public class CommentController(
         AppDbContext context,
         IValidator<CreateCommentDto> createValidator,
-        IValidator<UpdateCommentDto> updateValidator) : ControllerBase
+        IValidator<UpdateCommentDto> updateValidator) : BaseApiController
     {
-        private int GetUserId() => int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+        
 
         [HttpPost]
         public async Task<IActionResult> CreateComment(CreateCommentDto dto)
@@ -34,7 +34,7 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
             var comment = new Comment
             {
                 JobPostId = dto.JobPostId,
-                UserId = GetUserId(),
+                UserId = CurrentUserId,
                 Text = dto.Text
             };
 
@@ -71,7 +71,7 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
             if (!result.IsValid)
                 return BadRequest(ResponseModel<string>.Fail(result.Errors[0].ErrorMessage));
 
-            var userId = GetUserId();
+            var userId = CurrentUserId;
             var comment = await context.Comments
                 .FirstOrDefaultAsync(c => c.Id == id && c.UserId == userId);
 
@@ -87,7 +87,7 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteComment(int id)
         {
-            var userId = GetUserId();
+            var userId = CurrentUserId;
             var comment = await context.Comments
                 .FirstOrDefaultAsync(c => c.Id == id && c.UserId == userId);
 

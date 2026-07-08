@@ -1,8 +1,4 @@
-﻿const colors = [
-    { bg: '#eff6ff', color: '#2563EB' }, { bg: '#ecfdf5', color: '#10b981' },
-    { bg: '#fffbeb', color: '#f59e0b' }, { bg: '#f0fdf4', color: '#16a34a' }, { bg: '#fdf4ff', color: '#a855f7' }
-];
-let myJobs = [], myApplicants = [];
+﻿let myJobs = [], myApplicants = [];
 
 function showTab(tab, el) {
     ['overview', 'jobs', 'applicants', 'contracts', 'reviews', 'premium', 'profile'].forEach(t => {
@@ -36,7 +32,7 @@ function closeModalOutside(e) { if (e.target.id === 'modalOverlay') closeModal()
 
 // ── JOBS ──
 async function loadJobs() {
-    try { const r = await apiFetch('/Job/my-jobs'); myJobs = r.data || []; } catch { myJobs = []; }
+    try { const r = await apiFetch('/Job/my-jobs'); myJobs = r.data || []; } catch (e) { myJobs = []; showToast('Failed to load jobs.', false); }
     renderJobs();
     $('#totalJobs').text(myJobs.length);
     $('#jobsBadge').text(myJobs.length);
@@ -45,12 +41,12 @@ async function loadJobs() {
 
 function jobItemHTML(job, i) {
     const c = colors[i % colors.length];
-    const letter = (job.title || 'J')[0].toUpperCase();
+    const letter = safeInitial(job.title || 'J');
     return `<div class="job-item">
         <div class="job-logo" style="background:${c.bg};color:${c.color}">${letter}</div>
         <div class="job-info">
-            <div class="job-name">${job.title || 'Job'}</div>
-            <div class="job-meta"><span><i class="ti ti-map-pin"></i> ${job.location || 'Remote'}</span><span><i class="ti ti-clock"></i> ${job.jobType || 'Full-time'}</span></div>
+            <div class="job-name">${escapeHtml(job.title || 'Job')}</div>
+            <div class="job-meta"><span><i class="ti ti-map-pin"></i> ${escapeHtml(job.location || 'Remote')}</span><span><i class="ti ti-clock"></i> ${escapeHtml(job.jobType || 'Full-time')}</span></div>
         </div>
         <span class="job-status status-active">Active</span>
         <div class="job-actions">
@@ -72,7 +68,7 @@ function renderJobs() {
 
 // ── APPLICANTS ──
 async function loadApplicants() {
-    try { const r = await apiFetch('/Employer/applications'); myApplicants = r.data || []; } catch { myApplicants = []; }
+    try { const r = await apiFetch('/Employer/applications'); myApplicants = r.data || []; } catch (e) { myApplicants = []; showToast('Failed to load applicants.', false); }
     renderApplicants();
     $('#totalApps').text(myApplicants.length);
     $('#appsBadge').text(myApplicants.length);
@@ -89,20 +85,20 @@ function renderApplicants() {
     const badgeMap = { Applied: 'badge-new', Reviewed: 'badge-review', Shortlisted: 'badge-hired', Rejected: 'badge-rejected' };
     const html = myApplicants.map((app, i) => {
         const c = colors[i % colors.length];
-        const name = app.jobSeeker?.fullName || 'Applicant';
+        const rawName = app.jobSeeker?.fullName || 'Applicant';
         const cvUrl = app.jobSeeker?.cvUrl;
         const userId = app.jobSeeker?.userId || '';
         return `<div class="applicant-item">
-    <div class="app-avatar" style="background:${c.bg};color:${c.color}">${name[0].toUpperCase()}</div>
+    <div class="app-avatar" style="background:${c.bg};color:${c.color}">${safeInitial(rawName)}</div>
     <div style="flex:1">
-        <div class="app-name">${name}</div>
-        <div class="app-role">${app.jobTitle || 'Position'} · ${new Date(app.appliedAt).toLocaleDateString()}</div>
-        ${app.jobSeeker?.skills ? `<div style="font-size:0.75rem;color:#64748b;margin-top:2px">${app.jobSeeker.skills}</div>` : ''}
+        <div class="app-name">${escapeHtml(rawName)}</div>
+        <div class="app-role">${escapeHtml(app.jobTitle || 'Position')} · ${new Date(app.appliedAt).toLocaleDateString()}</div>
+        ${app.jobSeeker?.skills ? `<div style="font-size:0.75rem;color:#64748b;margin-top:2px">${escapeHtml(app.jobSeeker.skills)}</div>` : ''}
     </div>
     <a href="/assets/pages/viewprofile.html?id=${userId}" class="act-btn" title="View Profile"><i class="ti ti-user"></i></a>
     ${cvUrl ? `<a href="${FILE_BASE_URL}${cvUrl}" target="_blank" class="act-btn" title="View CV"><i class="ti ti-file-text"></i></a>` : ''}
     <span class="app-badge ${badgeMap[app.status] || 'badge-new'}">${app.status || 'Applied'}</span>
-    ${app.status === 'Shortlisted' ? `<button class="btn-outline" onclick="openContractModal(${app.jobPostId}, ${app.jobSeeker?.id}, '${name.replace(/'/g, "\\'")}')"><i class="ti ti-file-text"></i> Contract</button>` : ''}
+    ${app.status === 'Shortlisted' ? `<button class="btn-outline" onclick="openContractModal(${app.jobPostId}, ${app.jobSeeker?.id}, '${rawName.replace(/'/g, "\\'")}')"><i class="ti ti-file-text"></i> Contract</button>` : ''}
     <select class="status-select" onchange="updateStatus(${app.id}, this.value)">
         <option value="">Change status</option>
         <option value="Reviewed">Reviewed</option>
@@ -185,11 +181,18 @@ async function saveProfile() {
 }
 
 // ── CHART ──
-function renderChart() {
-    const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], values = [3, 7, 5, 9, 6, 4, 8], max = Math.max(...values);
+async function renderChart() {
     const el = $('#chartArea');
-    if (el.length) el.html(days.map((d, i) =>
-        `<div class="bar-wrap"><div class="bar ${i === 6 ? 'active' : ''}" style="height:${(values[i] / max) * 130}px"></div><span class="bar-label">${d}</span></div>`).join(''));
+    if (!el.length) return;
+    try {
+        const r = await apiFetch('/Analytics');
+        const trend = r.data.applicationTrend || [];
+        const last7 = trend.slice(-7);
+        const max = Math.max(...last7.map(t => t.count), 1);
+        el.html(last7.map((t, i) =>
+            `<div class="bar-wrap"><div class="bar ${i === last7.length - 1 ? 'active' : ''}" style="height:${(t.count / max) * 130}px"></div><span class="bar-label">${new Date(t.date).toLocaleDateString('en', { weekday: 'short' })}</span></div>`
+        ).join(''));
+    } catch { el.html(''); }
 }
 
 // ── INIT ──

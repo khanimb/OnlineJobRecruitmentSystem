@@ -21,19 +21,19 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
         AppDbContext context,
         IHubContext<NotificationHub> notificationHub,
         IValidator<CreateContractDto> createValidator,
-        IValidator<UpdateContractDto> updateValidator) : ControllerBase
+        IValidator<UpdateContractDto> updateValidator) : BaseApiController
     {
-        private int GetUserId() => int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+        
 
         [HttpPost]
-        [Authorize(Roles = "Employer")]
+        [Authorize(Roles = OnlineJobRecruitmentSystem.Domain.Common.Roles.Employer)]
         public async Task<IActionResult> CreateContract(CreateContractDto dto)
         {
             var result = await createValidator.ValidateAsync(dto);
             if (!result.IsValid)
                 return BadRequest(ResponseModel<string>.Fail(result.Errors[0].ErrorMessage));
 
-            var userId = GetUserId();
+            var userId = CurrentUserId;
 
             var employer = await context.EmployerProfiles
                 .FirstOrDefaultAsync(e => e.UserId == userId);
@@ -107,7 +107,7 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetMyContracts()
         {
-            var userId = GetUserId();
+            var userId = CurrentUserId;
             var role = User.FindFirst(ClaimTypes.Role)?.Value;
 
             List<ReturnContractDto> contracts;
@@ -169,19 +169,34 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
                     .ToListAsync();
             }
 
+            var contractIds = contracts.Select(c => c.Id).ToList();
+            var paidContractIds = await context.ContractPayments
+                .Where(cp => contractIds.Contains(cp.ContractId) && cp.Status == ContractPaymentStatus.Completed)
+                .Select(cp => cp.ContractId)
+                .ToListAsync();
+
+            foreach (var c in contracts)
+                c.IsPaid = paidContractIds.Contains(c.Id);
+
             return Ok(ResponseModel<List<ReturnContractDto>>.Ok(contracts));
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetContract(int id)
         {
+            var userId = CurrentUserId;
+
             var contract = await context.Contracts
                 .Include(c => c.JobPost)
                 .Include(c => c.JobSeekerProfile)
+                .Include(c => c.EmployerProfile)
                 .FirstOrDefaultAsync(c => c.Id == id);
 
             if (contract == null)
                 return NotFound(ResponseModel<string>.Fail("Contract not found."));
+
+            if (contract.EmployerProfile.UserId != userId && contract.JobSeekerProfile.UserId != userId)
+                return Forbid();
 
             return Ok(ResponseModel<ReturnContractDto>.Ok(new ReturnContractDto
             {
@@ -199,19 +214,22 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
         }
 
         [HttpPut("{id}")]
-        [Authorize(Roles = "Employer")]
+        [Authorize(Roles = OnlineJobRecruitmentSystem.Domain.Common.Roles.Employer)]
         public async Task<IActionResult> UpdateContract(int id, UpdateContractDto dto)
         {
             var result = await updateValidator.ValidateAsync(dto);
             if (!result.IsValid)
                 return BadRequest(ResponseModel<string>.Fail(result.Errors[0].ErrorMessage));
 
-            var userId = GetUserId();
+            var userId = CurrentUserId;
             var employer = await context.EmployerProfiles
                 .FirstOrDefaultAsync(e => e.UserId == userId);
 
+            if (employer == null)
+                return NotFound(ResponseModel<string>.Fail("Employer profile not found."));
+
             var contract = await context.Contracts
-                .FirstOrDefaultAsync(c => c.Id == id && c.EmployerProfileId == employer!.Id);
+                .FirstOrDefaultAsync(c => c.Id == id && c.EmployerProfileId == employer.Id);
 
             if (contract == null)
                 return NotFound(ResponseModel<string>.Fail("Contract not found."));

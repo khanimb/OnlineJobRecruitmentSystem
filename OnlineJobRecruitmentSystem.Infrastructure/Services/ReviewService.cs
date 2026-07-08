@@ -15,8 +15,15 @@ namespace OnlineJobRecruitmentSystem.Infrastructure.Services
             _context = context;
         }
 
-        public async Task<ReturnReviewDto> CreateReviewAsync(int reviewerId, CreateReviewDto dto)
+        public async Task<ReturnReviewDto?> CreateReviewAsync(int reviewerId, CreateReviewDto dto)
         {
+            if (reviewerId == dto.RevieweeId)
+                return null;
+
+            var revieweeExists = await _context.Users.AnyAsync(u => u.Id == dto.RevieweeId);
+            if (!revieweeExists)
+                return null;
+
             var review = new Review
             {
                 ReviewerId = reviewerId,
@@ -79,11 +86,9 @@ namespace OnlineJobRecruitmentSystem.Infrastructure.Services
 
         public async Task<double> GetAverageRatingAsync(int userId)
         {
-            var reviews = await _context.Reviews
-                .Where(r => r.RevieweeId == userId)
-                .ToListAsync();
+            var query = _context.Reviews.Where(r => r.RevieweeId == userId);
 
-            return reviews.Any() ? reviews.Average(r => r.Rating) : 0;
+            return await query.AnyAsync() ? await query.AverageAsync(r => r.Rating) : 0;
         }
 
         public async Task<bool> UpdateReviewAsync(int reviewId, int reviewerId, UpdateReviewDto dto)

@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
-using OnlineJobRecruitmentSystem.Infrastructure.Data;
-using OnlineJobRecruitmentSystem.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using OnlineJobRecruitmentSystem.Application.DTOs.MessageDtos;
+using OnlineJobRecruitmentSystem.Application.Interfaces;
+using OnlineJobRecruitmentSystem.Domain.Entities;
+using OnlineJobRecruitmentSystem.Infrastructure.Data;
+using System.Security.Claims;
 
 namespace OnlineJobRecruitmentSystem.API.Hubs
 {
@@ -10,29 +13,26 @@ namespace OnlineJobRecruitmentSystem.API.Hubs
     public class ChatHub : Hub
     {
         private readonly AppDbContext _context;
+        private readonly IMessageService _messageService;
 
-        public ChatHub(AppDbContext context)
+        public ChatHub(AppDbContext context, IMessageService messageService)
         {
             _context = context;
+            _messageService = messageService;
         }
 
         public async Task SendMessage(int receiverId, string content)
         {
-            var senderIdClaim = Context.User?.FindFirst("userId")?.Value;
+            var senderIdClaim = Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (senderIdClaim == null) return;
 
             int senderId = int.Parse(senderIdClaim);
 
-            var message = new Message
+            var message = await _messageService.SaveMessageAsync(senderId, new SendMessageDto
             {
-                SenderId = senderId,
                 ReceiverId = receiverId,
-                Content = content,
-                IsRead = false
-            };
-
-            _context.Messages.Add(message);
-            await _context.SaveChangesAsync();
+                Content = content
+            });
 
             await Clients.User(receiverId.ToString()).SendAsync("ReceiveMessage", new
             {
@@ -53,7 +53,7 @@ namespace OnlineJobRecruitmentSystem.API.Hubs
 
         public async Task MarkAsRead(int senderId)
         {
-            var receiverIdClaim = Context.User?.FindFirst("userId")?.Value;
+            var receiverIdClaim = Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (receiverIdClaim == null) return;
 
             int receiverId = int.Parse(receiverIdClaim);

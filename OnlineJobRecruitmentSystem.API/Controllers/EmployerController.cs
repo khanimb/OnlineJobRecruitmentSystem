@@ -17,7 +17,7 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "Employer")]
+    [Authorize(Roles = OnlineJobRecruitmentSystem.Domain.Common.Roles.Employer)]
     public class EmployerController(
         AppDbContext context,
         IValidator<CreateEmployerDto> createValidator,
@@ -26,9 +26,9 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
         FileManager fileManager,
         IEmailService emailService,
         INotificationService notificationService
-    ) : ControllerBase
+    ) : BaseApiController
     {
-        private int GetUserId() => int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+        
 
         [HttpPost("profile")]
         public async Task<IActionResult> CreateProfile(CreateEmployerDto dto)
@@ -37,7 +37,7 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
             if (!result.IsValid)
                 return BadRequest(ResponseModel<string>.Fail(result.Errors[0].ErrorMessage));
 
-            var userId = GetUserId();
+            var userId = CurrentUserId;
 
             if (await context.EmployerProfiles.AnyAsync(e => e.UserId == userId))
                 return BadRequest(ResponseModel<string>.Fail("Employer profile already exists."));
@@ -67,7 +67,7 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
         [HttpGet("profile")]
         public async Task<IActionResult> GetProfile()
         {
-            var userId = GetUserId();
+            var userId = CurrentUserId;
 
             var profile = await context.EmployerProfiles.FirstOrDefaultAsync(e => e.UserId == userId);
             if (profile == null)
@@ -91,7 +91,7 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
             if (!result.IsValid)
                 return BadRequest(ResponseModel<string>.Fail(result.Errors[0].ErrorMessage));
 
-            var userId = GetUserId();
+            var userId = CurrentUserId;
 
             var profile = await context.EmployerProfiles.FirstOrDefaultAsync(e => e.UserId == userId);
             if (profile == null)
@@ -126,7 +126,7 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
             if (!file.IsValidSize(2 * 1024 * 1024))
                 return BadRequest(ResponseModel<string>.Fail("File size must not exceed 2 MB."));
 
-            var userId = GetUserId();
+            var userId = CurrentUserId;
 
             var profile = await context.EmployerProfiles.FirstOrDefaultAsync(e => e.UserId == userId);
             if (profile == null)
@@ -144,7 +144,7 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
         [HttpGet("applications")]
         public async Task<IActionResult> GetApplications([FromQuery] string? status)
         {
-            var userId = GetUserId();
+            var userId = CurrentUserId;
 
             var employer = await context.EmployerProfiles.FirstOrDefaultAsync(e => e.UserId == userId);
             if (employer == null)
@@ -184,7 +184,7 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
         [HttpGet("applications/{jobId}")]
         public async Task<IActionResult> GetApplicationsByJob(int jobId)
         {
-            var userId = GetUserId();
+            var userId = CurrentUserId;
 
             var employer = await context.EmployerProfiles.FirstOrDefaultAsync(e => e.UserId == userId);
             if (employer == null)
@@ -222,7 +222,7 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
             if (!result.IsValid)
                 return BadRequest(ResponseModel<string>.Fail(result.Errors[0].ErrorMessage));
 
-            var userId = GetUserId();
+            var userId = CurrentUserId;
 
             var employer = await context.EmployerProfiles.FirstOrDefaultAsync(e => e.UserId == userId);
             if (employer == null)
@@ -271,7 +271,7 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
         [HttpGet("dashboard")]
         public async Task<IActionResult> GetDashboard()
         {
-            var userId = GetUserId();
+            var userId = CurrentUserId;
 
             var employer = await context.EmployerProfiles.FirstOrDefaultAsync(e => e.UserId == userId);
             if (employer == null)

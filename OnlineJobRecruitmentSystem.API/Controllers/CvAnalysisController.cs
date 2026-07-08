@@ -15,13 +15,13 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "JobSeeker")]
+    [Authorize(Roles = OnlineJobRecruitmentSystem.Domain.Common.Roles.JobSeeker)]
     public class CvAnalysisController(
         AppDbContext context,
         IGeminiService geminiService,
-        FileManager fileManager) : ControllerBase
+        FileManager fileManager) : BaseApiController
     {
-        private int GetUserId() => int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+        
 
         private static readonly JsonSerializerOptions JsonOptions = new()
         {
@@ -31,7 +31,7 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
         [HttpPost("analyze")]
         public async Task<IActionResult> AnalyzeCv(AnalyzeCvDto dto)
         {
-            var userId = GetUserId();
+            var userId = CurrentUserId;
             var profile = await context.JobSeekerProfiles.FirstOrDefaultAsync(j => j.UserId == userId);
             if (profile == null)
                 return NotFound(ResponseModel<string>.Fail("Job seeker profile not found."));
@@ -79,7 +79,7 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
         [HttpGet("recommended-jobs")]
         public async Task<IActionResult> GetRecommendedJobs()
         {
-            var userId = GetUserId();
+            var userId = CurrentUserId;
             var profile = await context.JobSeekerProfiles.FirstOrDefaultAsync(j => j.UserId == userId);
             if (profile == null)
                 return NotFound(ResponseModel<string>.Fail("Job seeker profile not found."));
@@ -174,7 +174,7 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
         [HttpGet("history")]
         public async Task<IActionResult> GetHistory()
         {
-            var userId = GetUserId();
+            var userId = CurrentUserId;
             var profile = await context.JobSeekerProfiles.FirstOrDefaultAsync(j => j.UserId == userId);
             if (profile == null)
                 return NotFound(ResponseModel<string>.Fail("Job seeker profile not found."));
@@ -200,7 +200,7 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
         [HttpGet("history/{id}")]
         public async Task<IActionResult> GetHistoryDetail(int id)
         {
-            var userId = GetUserId();
+            var userId = CurrentUserId;
             var profile = await context.JobSeekerProfiles.FirstOrDefaultAsync(j => j.UserId == userId);
             if (profile == null)
                 return NotFound(ResponseModel<string>.Fail("Job seeker profile not found."));
@@ -218,7 +218,7 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
         [HttpDelete("history/{id}")]
         public async Task<IActionResult> DeleteHistory(int id)
         {
-            var userId = GetUserId();
+            var userId = CurrentUserId;
             var profile = await context.JobSeekerProfiles.FirstOrDefaultAsync(j => j.UserId == userId);
             if (profile == null)
                 return NotFound(ResponseModel<string>.Fail("Job seeker profile not found."));

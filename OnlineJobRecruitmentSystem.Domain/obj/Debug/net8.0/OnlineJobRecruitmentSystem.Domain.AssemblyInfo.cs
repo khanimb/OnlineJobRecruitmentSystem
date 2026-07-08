@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("OnlineJobRecruitmentSystem.Domain")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2fd6e06ee2f2b919613f8533e5b439a673f857c2")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d4e77d24e3a0234d6f6e1755b127211af3acd1ef")]
 [assembly: System.Reflection.AssemblyProductAttribute("OnlineJobRecruitmentSystem.Domain")]
 [assembly: System.Reflection.AssemblyTitleAttribute("OnlineJobRecruitmentSystem.Domain")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
