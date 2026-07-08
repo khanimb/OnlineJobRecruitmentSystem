@@ -5,9 +5,6 @@
 
 let allUsers = [], allJobs = [], allApps = [];
 
-function getUser() { const u = localStorage.getItem('user'); return u ? JSON.parse(u) : null; }
-function logout() { localStorage.removeItem('token'); localStorage.removeItem('user'); window.location.href = 'login.html'; }
-
 function showTab(tab, el) {
     ['overview', 'users', 'jobs', 'applications', 'payments'].forEach(t => $('#tab-' + t).hide());
     $('#tab-' + tab).show();
@@ -22,14 +19,6 @@ function showTab(tab, el) {
     };
     $('#pageTitle').text(titles[tab][0]);
     $('#pageSubtitle').text(titles[tab][1]);
-}
-
-function showToast(msg, ok = true) {
-    const t = $('#toast');
-    t.find('i').css('color', ok ? '#10b981' : '#ef4444');
-    $('#toastMsg').text(msg);
-    t.addClass('show');
-    setTimeout(() => t.removeClass('show'), 3000);
 }
 
 async function loadUsers() {

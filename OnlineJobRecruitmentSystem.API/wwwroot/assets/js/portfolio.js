@@ -14,7 +14,7 @@ function renderPortfolio() {
     }
     $('#portfolioGrid').html(myPortfolio.map(p => `
         <div class="portfolio-item">
-            <img src="http://localhost:5179${p.fileUrl}" alt="${p.title || ''}" />
+            <img src="${FILE_BASE_URL}${p.fileUrl}" alt="${p.title || ''}" />
             <div class="portfolio-item-body">
                 <div class="portfolio-item-title">${p.title || 'Untitled'}</div>
                 <div class="portfolio-item-desc">${p.description || ''}</div>

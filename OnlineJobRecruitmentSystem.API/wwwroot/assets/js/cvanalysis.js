@@ -9,14 +9,6 @@ $(function () {
     init();
 });
 
-function showToast(msg, ok = true) {
-    const t = $('#toast');
-    t.find('i').css('color', ok ? '#10b981' : '#ef4444');
-    $('#toastMsg').text(msg);
-    t.addClass('show');
-    setTimeout(() => t.removeClass('show'), 3000);
-}
-
 async function init() {
     try {
         const r = await apiFetch('/JobSeeker/profile');

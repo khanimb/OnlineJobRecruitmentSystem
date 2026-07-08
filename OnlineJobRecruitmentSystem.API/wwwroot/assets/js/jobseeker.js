@@ -4,8 +4,6 @@
 ];
 let myApplications = [], mySaved = [];
 
-function getUser() { const u = localStorage.getItem('user'); return u ? JSON.parse(u) : null; }
-function logout() { localStorage.removeItem('token'); localStorage.removeItem('user'); window.location.href = 'login.html'; }
 
 function showTab(tab, el) {
     ['overview', 'applications', 'saved', 'browse', 'profile', 'portfolio', 'jobalert', 'contracts', 'reviews', 'premium'].forEach(t => {
@@ -36,14 +34,6 @@ function showTab(tab, el) {
     if (tab === 'contracts') loadContracts();
     if (tab === 'reviews') loadReviews();
     if (tab === 'premium') loadPremium();
-}
-
-function showToast(msg, ok = true) {
-    const t = $('#toast');
-    t.find('i').css('color', ok ? '#10b981' : '#ef4444');
-    $('#toastMsg').text(msg);
-    t.addClass('show');
-    setTimeout(() => t.removeClass('show'), 3000);
 }
 
 // ── APPLICATIONS ──
@@ -175,7 +165,7 @@ async function loadProfile() {
         $('#profileSkills').val(p.skills || '');
         $('#profileExperience').val(p.workExperience || '');
         if (p.cvUrl) {
-            $('#cvLink').attr('href', 'http://localhost:5179' + p.cvUrl).css('display', 'inline-flex');
+            $('#cvLink').attr('href', FILE_BASE_URL + p.cvUrl).css('display', 'inline-flex');
         }
     } catch { }
 }
@@ -205,19 +195,13 @@ async function uploadCv() {
     if (!file) { showToast('Please select a file', false); return; }
     const formData = new FormData();
     formData.append('file', file);
-    const token = localStorage.getItem('token');
     try {
-        const res = await fetch('http://localhost:5179/api/JobSeeker/upload-cv', {
-            method: 'POST',
-            headers: { 'Authorization': `Bearer ${token}` },
-            body: formData
-        });
-        const result = await res.json();
-        if (result.success) {
-            showToast('CV uploaded successfully!');
-            $('#cvLink').attr('href', 'http://localhost:5179' + result.data).css('display', 'inline-flex');
-        } else { showToast(result.message, false); }
-    } catch { showToast('Upload failed', false); }
+        const result = await apiFetch('/JobSeeker/upload-cv', { method: 'POST', body: formData });
+        showToast('CV uploaded successfully!');
+        $('#cvLink').attr('href', FILE_BASE_URL + result.data).css('display', 'inline-flex');
+    } catch (e) {
+        showToast(e.message || 'Upload failed', false);
+    }
 }
 
 // ── INIT ──

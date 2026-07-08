@@ -32,6 +32,7 @@
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="../../assets/js/api.js"></script>
+    <script src="../../assets/js/auth.js"></script>
     <script>
         function toggleMenu() {
             $('.nav-links').toggleClass('open');
@@ -50,14 +51,6 @@
             }
             loadProfile();
         });
-
-        function showToast(msg, ok = true) {
-            const t = $('#toast');
-            t.find('i').css('color', ok ? '#10b981' : '#ef4444');
-            $('#toastMsg').text(msg);
-            t.addClass('show');
-            setTimeout(() => t.removeClass('show'), 3000);
-        }
 
         async function loadProfile() {
             let profile;
@@ -82,35 +75,35 @@
             const canMessage = currentUser && String(currentUser.id) !== String(targetUserId);
 
             $('#profilePage').html(`
-                        <div class="profile-header">
-                            <div class="profile-avatar">${(profile.fullName || '?')[0].toUpperCase()}</div>
-                            <div>
-                                <div class="profile-name">${profile.fullName || 'Unnamed'}</div>
-                                <div class="profile-sub"><i class="ti ti-phone"></i> ${profile.phone || 'No phone provided'}</div>
-                                <div class="profile-rating" id="ratingArea"></div>
+                            <div class="profile-header">
+                                <div class="profile-avatar">${(profile.fullName || '?')[0].toUpperCase()}</div>
+                                <div>
+                                    <div class="profile-name">${profile.fullName || 'Unnamed'}</div>
+                                    <div class="profile-sub"><i class="ti ti-phone"></i> ${profile.phone || 'No phone provided'}</div>
+                                    <div class="profile-rating" id="ratingArea"></div>
+                                </div>
+                                <div class="profile-header-actions">
+                                    ${profile.cvUrl ? `<a class="btn-outline" href="${FILE_BASE_URL}${profile.cvUrl}" target="_blank"><i class="ti ti-file-text"></i> View CV</a>` : ''}
+                                    ${canMessage ? `<button class="btn-primary" onclick="messageUser('${profile.fullName || 'User'}')"><i class="ti ti-message"></i> Message</button>` : ''}
+                                </div>
                             </div>
-                            <div class="profile-header-actions">
-                                ${profile.cvUrl ? `<a class="btn-outline" href="http://localhost:5179${profile.cvUrl}" target="_blank"><i class="ti ti-file-text"></i> View CV</a>` : ''}
-                                ${canMessage ? `<button class="btn-primary" onclick="messageUser('${profile.fullName || 'User'}')"><i class="ti ti-message"></i> Message</button>` : ''}
+                            <div class="profile-section">
+                                <div class="profile-section-title">Skills</div>
+                                <div class="skills-wrap" id="skillsArea"></div>
                             </div>
-                        </div>
-                        <div class="profile-section">
-                            <div class="profile-section-title">Skills</div>
-                            <div class="skills-wrap" id="skillsArea"></div>
-                        </div>
-                        <div class="profile-section">
-                            <div class="profile-section-title">Work experience</div>
-                            <div id="experienceArea" style="color:#475569;font-size:0.9rem;line-height:1.6"></div>
-                        </div>
-                        <div class="profile-section">
-                            <div class="profile-section-title">Portfolio</div>
-                            <div class="portfolio-grid" id="portfolioArea"></div>
-                        </div>
-                        <div class="profile-section">
-                            <div class="profile-section-title">Reviews</div>
-                            <div id="reviewsArea"></div>
-                        </div>
-                    `);
+                            <div class="profile-section">
+                                <div class="profile-section-title">Work experience</div>
+                                <div id="experienceArea" style="color:#475569;font-size:0.9rem;line-height:1.6"></div>
+                            </div>
+                            <div class="profile-section">
+                                <div class="profile-section-title">Portfolio</div>
+                                <div class="portfolio-grid" id="portfolioArea"></div>
+                            </div>
+                            <div class="profile-section">
+                                <div class="profile-section-title">Reviews</div>
+                                <div id="reviewsArea"></div>
+                            </div>
+                        `);
         }
 
         function messageUser(name) {
@@ -150,14 +143,14 @@
                     return;
                 }
                 $('#portfolioArea').html(items.map(p => `
-                            <div class="portfolio-item">
-                                <img src="http://localhost:5179${p.fileUrl}" alt="${p.title || ''}" />
-                                <div class="portfolio-item-body">
-                                    <div class="portfolio-item-title">${p.title || 'Untitled'}</div>
-                                    <div class="portfolio-item-desc">${p.description || ''}</div>
+                                <div class="portfolio-item">
+                                    <img src="${FILE_BASE_URL}${p.fileUrl}" alt="${p.title || ''}" />
+                                    <div class="portfolio-item-body">
+                                        <div class="portfolio-item-title">${p.title || 'Untitled'}</div>
+                                        <div class="portfolio-item-desc">${p.description || ''}</div>
+                                    </div>
                                 </div>
-                            </div>
-                        `).join(''));
+                            `).join(''));
             } catch {
                 $('#portfolioArea').html('<span style="color:#94a3b8;font-size:0.85rem">No portfolio items yet.</span>');
             }
@@ -172,15 +165,15 @@
                     return;
                 }
                 $('#reviewsArea').html(reviews.map(rv => `
-                            <div class="review-item">
-                                <div class="review-top">
-                                    <div class="review-name">${rv.reviewerName}</div>
-                                    <div class="review-stars">${starString(rv.rating)}</div>
+                                <div class="review-item">
+                                    <div class="review-top">
+                                        <div class="review-name">${rv.reviewerName}</div>
+                                        <div class="review-stars">${starString(rv.rating)}</div>
+                                    </div>
+                                    ${rv.comment ? `<div class="review-comment">${rv.comment}</div>` : ''}
+                                    <div class="review-date">${new Date(rv.createdAt).toLocaleDateString()}</div>
                                 </div>
-                                ${rv.comment ? `<div class="review-comment">${rv.comment}</div>` : ''}
-                                <div class="review-date">${new Date(rv.createdAt).toLocaleDateString()}</div>
-                            </div>
-                        `).join(''));
+                            `).join(''));
             } catch {
                 $('#reviewsArea').html('<span style="color:#94a3b8;font-size:0.85rem">No reviews yet.</span>');
             }

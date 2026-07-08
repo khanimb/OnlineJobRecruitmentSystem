@@ -38,6 +38,7 @@
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="../../assets/js/api.js"></script>
+    <script src="../../assets/js/auth.js"></script>
     <script>
         function toggleMenu() {
             $('.nav-links').toggleClass('open');
@@ -76,15 +77,15 @@
                 return;
             }
             $('#notifFullList').html(items.map(n => `
-                        <div class="notif-full-item ${n.isRead ? '' : 'unread'}" onclick="notifClickPage(${n.id})">
-                            <div class="notif-icon"><i class="ti ${notifIcon(n.type)}"></i></div>
-                            <div>
-                                <div class="notif-item-title">${n.title}</div>
-                                <div class="notif-item-msg">${n.message}</div>
-                                <div class="notif-item-time">${timeAgo(n.createdAt)}</div>
+                            <div class="notif-full-item ${n.isRead ? '' : 'unread'}" onclick="notifClickPage(${n.id})">
+                                <div class="notif-icon"><i class="ti ${notifIcon(n.type)}"></i></div>
+                                <div>
+                                    <div class="notif-item-title">${n.title}</div>
+                                    <div class="notif-item-msg">${n.message}</div>
+                                    <div class="notif-item-time">${timeAgo(n.createdAt)}</div>
+                                </div>
                             </div>
-                        </div>
-                    `).join(''));
+                        `).join(''));
         }
 
         async function notifClickPage(id) {

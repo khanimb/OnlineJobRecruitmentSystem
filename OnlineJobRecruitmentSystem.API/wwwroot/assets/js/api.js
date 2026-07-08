@@ -1,4 +1,5 @@
 ﻿const BASE_URL = 'http://localhost:5179/api';
+const FILE_BASE_URL = 'http://localhost:5179';
 
 async function apiFetch(endpoint, options = {}) {
     const token = localStorage.getItem('token');
@@ -26,7 +27,21 @@ async function apiFetch(endpoint, options = {}) {
     try {
         return await $.ajax(settings);
     } catch (xhr) {
+        if (xhr.status === 401 && token) {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = '/assets/pages/login.html';
+            return;
+        }
         const error = xhr.responseJSON || {};
         throw new Error(error.message || 'Something went wrong');
     }
+}
+
+function showToast(msg, ok = true) {
+    const t = $('#toast');
+    t.find('i').css('color', ok ? '#10b981' : '#ef4444');
+    $('#toastMsg').text(msg);
+    t.addClass('show');
+    setTimeout(() => t.removeClass('show'), 3000);
 }

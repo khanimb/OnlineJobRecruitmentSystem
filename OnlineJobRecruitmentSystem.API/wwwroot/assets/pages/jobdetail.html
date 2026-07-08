@@ -77,14 +77,6 @@
 
         let currentJob = null;
 
-        function showToast(msg, ok = true) {
-            const t = $('#toast');
-            t.find('i').css('color', ok ? '#10b981' : '#ef4444');
-            $('#toastMsg').text(msg);
-            t.addClass('show');
-            setTimeout(() => t.removeClass('show'), 3000);
-        }
-
         async function loadJob() {
             const id = new URLSearchParams(window.location.search).get('id');
             if (!id) { $('#jobContent').html(`<div class="empty-state"><div class="empty-icon"><i class="ti ti-alert-circle"></i></div><div class="empty-title">Job not found</div></div>`); return; }

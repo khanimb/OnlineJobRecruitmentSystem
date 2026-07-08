@@ -1,4 +1,4 @@
-﻿const NOTIF_HUB_BASE = 'http://localhost:5179';
+﻿const NOTIF_HUB_BASE = FILE_BASE_URL;
 let notifConnection = null;
 
 $(function () {
