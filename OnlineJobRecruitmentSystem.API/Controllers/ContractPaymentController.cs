@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using OnlineJobRecruitmentSystem.API.Hubs;
 using OnlineJobRecruitmentSystem.Application.DTOs.ContractPaymentDtos;
 using OnlineJobRecruitmentSystem.Application.DTOs.NotificationDtos;
@@ -11,7 +10,6 @@ using OnlineJobRecruitmentSystem.Domain.Entities;
 using OnlineJobRecruitmentSystem.Domain.Enums;
 using OnlineJobRecruitmentSystem.Infrastructure.Data;
 using Stripe.Checkout;
-using System.Security.Claims;
 
 namespace OnlineJobRecruitmentSystem.API.Controllers
 {

@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using OnlineJobRecruitmentSystem.Application.DTOs.ReviewDtos;
 using OnlineJobRecruitmentSystem.Application.Interfaces;
 using OnlineJobRecruitmentSystem.Common;
-using System.Security.Claims;
 
 namespace OnlineJobRecruitmentSystem.API.Controllers
 {

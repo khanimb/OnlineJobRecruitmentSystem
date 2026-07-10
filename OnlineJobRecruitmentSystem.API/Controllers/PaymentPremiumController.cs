@@ -1,12 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using OnlineJobRecruitmentSystem.Application.DTOs.PaymentDtos;
 using OnlineJobRecruitmentSystem.Application.Interfaces;
 using OnlineJobRecruitmentSystem.Common;
 using OnlineJobRecruitmentSystem.Infrastructure.Data;
 using Stripe.Checkout;
-using System.Security.Claims;
 
 namespace OnlineJobRecruitmentSystem.API.Controllers
 {

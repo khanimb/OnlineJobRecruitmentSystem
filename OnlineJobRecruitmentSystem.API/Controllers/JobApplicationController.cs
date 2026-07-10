@@ -7,7 +7,6 @@ using OnlineJobRecruitmentSystem.Common;
 using OnlineJobRecruitmentSystem.Domain.Entities;
 using OnlineJobRecruitmentSystem.Domain.Enums;
 using OnlineJobRecruitmentSystem.Infrastructure.Data;
-using System.Security.Claims;
 
 namespace OnlineJobRecruitmentSystem.API.Controllers
 {

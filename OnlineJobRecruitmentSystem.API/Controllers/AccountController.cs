@@ -6,7 +6,6 @@ using OnlineJobRecruitmentSystem.Common;
 using OnlineJobRecruitmentSystem.Infrastructure.Data;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
-using System.Security.Claims;
 
 namespace OnlineJobRecruitmentSystem.API.Controllers
 {

@@ -7,7 +7,6 @@ using OnlineJobRecruitmentSystem.Application.Validations.UserDtoValidation;
 using OnlineJobRecruitmentSystem.Common;
 using OnlineJobRecruitmentSystem.Domain.Entities;
 using OnlineJobRecruitmentSystem.Infrastructure.Data;
-using System.Security.Claims;
 
 namespace OnlineJobRecruitmentSystem.API.Controllers
 {
@@ -79,6 +78,11 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Login(LoginDto dto)
         {
+            var validator = new LoginDtoValidation();
+            var result = await validator.ValidateAsync(dto);
+            if (!result.IsValid)
+                return BadRequest(ResponseModel<string>.Fail(result.Errors[0].ErrorMessage));
+
             var user = await context.Users.FirstOrDefaultAsync(u => u.Email == dto.Email);
 
             if (user == null || !BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash))
@@ -105,6 +109,12 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
         [HttpPost("forgot-password")]
         public async Task<IActionResult> ForgotPassword(ForgotPasswordDto dto)
         {
+            var validator = new ForgotPasswordDtoValidation();
+            var result = await validator.ValidateAsync(dto);
+            if (!result.IsValid)
+                return BadRequest(ResponseModel<string>.Fail(result.Errors[0].ErrorMessage));
+
+
             var user = await context.Users
                 .FirstOrDefaultAsync(u => u.Email == dto.Email);
 
@@ -131,8 +141,11 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
         [HttpPost("reset-password")]
         public async Task<IActionResult> ResetPassword(ResetPasswordDto dto)
         {
-            if (dto.NewPassword != dto.ConfirmPassword)
-                return BadRequest(ResponseModel<string>.Fail("Passwords do not match."));
+            var validator = new ResetPasswordDtoValidation();
+            var result = await validator.ValidateAsync(dto);
+            if (!result.IsValid)
+                return BadRequest(ResponseModel<string>.Fail(result.Errors[0].ErrorMessage));
+
 
             var user = await context.Users
                 .FirstOrDefaultAsync(u => u.PasswordResetToken == dto.Token &&
@@ -153,6 +166,12 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> RefreshToken(RefreshTokenDto dto)
         {
+            var validator = new RefreshTokenDtoValidation();
+            var result = await validator.ValidateAsync(dto);
+            if (!result.IsValid)
+                return BadRequest(ResponseModel<string>.Fail(result.Errors[0].ErrorMessage));
+
+
             var user = await context.Users
                 .FirstOrDefaultAsync(u => u.RefreshToken == dto.RefreshToken);
 
@@ -190,6 +209,12 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Verify2Fa(Verify2FaDto dto)
         {
+            var validator = new Verify2FaDtoValidation();
+            var result = await validator.ValidateAsync(dto);
+            if (!result.IsValid)
+                return BadRequest(ResponseModel<string>.Fail(result.Errors[0].ErrorMessage));
+
+
             var user = await context.Users.FirstOrDefaultAsync(u => u.Email == dto.Email);
 
             if (user == null || user.TwoFactorCode != dto.Code || user.TwoFactorCodeExpiry == null || user.TwoFactorCodeExpiry <= DateTime.UtcNow)

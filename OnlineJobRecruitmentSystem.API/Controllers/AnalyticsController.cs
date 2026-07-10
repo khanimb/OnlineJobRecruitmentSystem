@@ -5,7 +5,6 @@ using OnlineJobRecruitmentSystem.Application.DTOs.AnalyticsDtos;
 using OnlineJobRecruitmentSystem.Application.Interfaces;
 using OnlineJobRecruitmentSystem.Common;
 using OnlineJobRecruitmentSystem.Infrastructure.Data;
-using System.Security.Claims;
 
 namespace OnlineJobRecruitmentSystem.API.Controllers
 {
