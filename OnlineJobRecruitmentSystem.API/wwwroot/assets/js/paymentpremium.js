@@ -24,9 +24,9 @@ async function loadPremium() {
         }
         $('#premiumHistoryList').html(items.map(p => `
             <div class="premium-history-item">
-                <span style="text-transform:capitalize">${p.plan} plan</span>
+                <span style="text-transform:capitalize">${escapeHtml(p.plan)} plan</span>
                 <span>$${p.amount}</span>
-                <span class="tag ${p.status === 'completed' ? 'tag-teal' : 'tag-gray'}">${p.status}</span>
+                <span class="tag ${p.status === 'completed' ? 'tag-teal' : 'tag-gray'}">${escapeHtml(p.status)}</span>
                 <span style="color:#94a3b8">${new Date(p.createdAt).toLocaleDateString()}</span>
             </div>
         `).join(''));

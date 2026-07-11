@@ -63,10 +63,10 @@ function renderReceivedReviews(items) {
     $('#receivedReviewsList').html(items.map(r => `
         <div class="review-item" style="padding:16px 24px">
             <div class="review-top">
-                <div class="review-name">${r.reviewerName}</div>
+                <div class="review-name">${escapeHtml(r.reviewerName)}</div>
                 <div class="review-stars">${starsHtml(r.rating)}</div>
             </div>
-            ${r.comment ? `<div class="review-comment">${r.comment}</div>` : ''}
+            ${r.comment ? `<div class="review-comment">${escapeHtml(r.comment)}</div>` : ''}
             <div class="review-date">${new Date(r.createdAt).toLocaleDateString()}</div>
         </div>
     `).join(''));
@@ -80,17 +80,21 @@ function renderWrittenReviews(items) {
     $('#writtenReviewsList').html(items.map(r => `
         <div class="review-item" style="padding:16px 24px">
             <div class="review-top">
-                <div class="review-name">${r.revieweeName}</div>
+                <div class="review-name">${escapeHtml(r.revieweeName)}</div>
                 <div class="review-stars">${starsHtml(r.rating)}</div>
             </div>
-            ${r.comment ? `<div class="review-comment">${r.comment}</div>` : ''}
+            ${r.comment ? `<div class="review-comment">${escapeHtml(r.comment)}</div>` : ''}
             <div class="review-date">${new Date(r.createdAt).toLocaleDateString()}</div>
             <div class="portfolio-item-actions" style="margin-top:8px">
-                <button onclick="editReview(${r.id}, ${r.rating}, '${(r.comment || '').replace(/'/g, "\\'")}')"><i class="ti ti-edit"></i> Edit</button>
+                <button class="edit-review-btn" data-id="${r.id}" data-rating="${r.rating}" data-comment="${escapeHtml(r.comment || '')}"><i class="ti ti-edit"></i> Edit</button>
                 <button class="danger" onclick="deleteReview(${r.id})"><i class="ti ti-trash"></i> Delete</button>
             </div>
         </div>
     `).join(''));
+
+    $('.edit-review-btn').off('click').on('click', function () {
+        editReview(parseInt($(this).data('id')), parseInt($(this).data('rating')), $(this).data('comment'));
+    });
 }
 
 function editReview(id, rating, comment) {

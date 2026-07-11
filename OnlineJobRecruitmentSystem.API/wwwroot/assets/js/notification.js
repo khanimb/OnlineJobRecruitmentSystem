@@ -49,8 +49,8 @@ function renderDropdown(items) {
         <div class="notif-item ${n.isRead ? '' : 'unread'}" onclick="notifClick(${n.id})">
             <div class="notif-icon"><i class="ti ${notifIcon(n.type)}"></i></div>
             <div>
-                <div class="notif-item-title">${n.title}</div>
-                <div class="notif-item-msg">${n.message}</div>
+                <div class="notif-item-title">${escapeHtml(n.title)}</div>
+                <div class="notif-item-msg">${escapeHtml(n.message)}</div>
                 <div class="notif-item-time">${timeAgo(n.createdAt)}</div>
             </div>
         </div>

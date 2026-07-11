@@ -47,7 +47,7 @@ function renderContracts() {
         return `<div class="job-item">
             <div class="job-logo" style="background:${col.bg};color:${col.color}">${(partyName || '?')[0].toUpperCase()}</div>
             <div class="job-info">
-                <div class="job-name">${c.jobTitle}${partyName ? ' — ' + partyName : ''}</div>
+                <div class="job-name">${escapeHtml(c.jobTitle)}${partyName ? ' — ' + escapeHtml(partyName) : ''}</div>
                 <div class="job-meta"><span><i class="ti ti-currency-dollar"></i> $${c.amount}</span><span><i class="ti ti-calendar"></i> ${new Date(c.createdAt).toLocaleDateString()}</span></div>
             </div>
             <span class="tag ${statusTag[c.status] || 'tag-gray'}">${c.status}</span>

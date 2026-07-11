@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Microsoft.EntityFrameworkCore;
 using OnlineJobRecruitmentSystem.Application.DTOs.JobAlertDtos;
 using OnlineJobRecruitmentSystem.Application.Interfaces;
 using OnlineJobRecruitmentSystem.Domain.Entities;
@@ -10,11 +12,13 @@ namespace OnlineJobRecruitmentSystem.Infrastructure.Services
     {
         private readonly AppDbContext _context;
         private readonly IEmailService _emailService;
+        private readonly IMapper _mapper;
 
-        public JobAlertService(AppDbContext context, IEmailService emailService)
+        public JobAlertService(AppDbContext context, IEmailService emailService, IMapper mapper)
         {
             _context = context;
             _emailService = emailService;
+            _mapper = mapper;
         }
 
         public async Task<ReturnJobAlertDto> CreateAlertAsync(int userId, CreateJobAlertDto dto)
@@ -31,22 +35,14 @@ namespace OnlineJobRecruitmentSystem.Infrastructure.Services
             _context.JobAlerts.Add(alert);
             await _context.SaveChangesAsync();
 
-            return MapToDto(alert);
+            return _mapper.Map<ReturnJobAlertDto>(alert);
         }
 
         public async Task<List<ReturnJobAlertDto>> GetUserAlertsAsync(int userId)
         {
             return await _context.JobAlerts
                 .Where(a => a.UserId == userId)
-                .Select(a => new ReturnJobAlertDto
-                {
-                    Id = a.Id,
-                    Keyword = a.Keyword,
-                    Location = a.Location,
-                    Frequency = a.Frequency,
-                    IsActive = a.IsActive,
-                    CreatedAt = a.CreatedAt
-                })
+                .ProjectTo<ReturnJobAlertDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }
 
@@ -55,14 +51,13 @@ namespace OnlineJobRecruitmentSystem.Infrastructure.Services
             var alert = await _context.JobAlerts
                 .FirstOrDefaultAsync(a => a.Id == alertId && a.UserId == userId);
 
-            return alert == null ? null : MapToDto(alert);
+            return alert == null ? null : _mapper.Map<ReturnJobAlertDto>(alert);
         }
 
         public async Task<bool> UpdateAlertAsync(int alertId, int userId, UpdateJobAlertDto dto)
         {
             var alert = await _context.JobAlerts
                 .FirstOrDefaultAsync(a => a.Id == alertId && a.UserId == userId);
-
             if (alert == null) return false;
 
             alert.Keyword = dto.Keyword ?? string.Empty;
@@ -77,7 +72,6 @@ namespace OnlineJobRecruitmentSystem.Infrastructure.Services
         {
             var alert = await _context.JobAlerts
                 .FirstOrDefaultAsync(a => a.Id == alertId && a.UserId == userId);
-
             if (alert == null) return false;
 
             _context.JobAlerts.Remove(alert);
@@ -120,15 +114,5 @@ namespace OnlineJobRecruitmentSystem.Infrastructure.Services
                 }
             }
         }
-
-        private static ReturnJobAlertDto MapToDto(JobAlert alert) => new ReturnJobAlertDto
-        {
-            Id = alert.Id,
-            Keyword = alert.Keyword,
-            Location = alert.Location,
-            Frequency = alert.Frequency,
-            IsActive = alert.IsActive,
-            CreatedAt = alert.CreatedAt
-        };
     }
 }

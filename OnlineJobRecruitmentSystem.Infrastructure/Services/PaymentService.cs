@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Microsoft.EntityFrameworkCore;
 using OnlineJobRecruitmentSystem.Application.DTOs.PaymentDtos;
 using OnlineJobRecruitmentSystem.Application.Interfaces;
 using OnlineJobRecruitmentSystem.Domain.Entities;
@@ -9,10 +11,12 @@ namespace OnlineJobRecruitmentSystem.Infrastructure.Services
     public class PaymentService : IPaymentService
     {
         private readonly AppDbContext _context;
+        private readonly IMapper _mapper;
 
-        public PaymentService(AppDbContext context)
+        public PaymentService(AppDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public async Task<PaymentPremium> CreatePaymentAsync(int employerId, string plan, decimal amount, string stripePaymentId)
@@ -35,7 +39,6 @@ namespace OnlineJobRecruitmentSystem.Infrastructure.Services
         {
             var payment = await _context.Payments
                 .FirstOrDefaultAsync(p => p.StripePaymentId == stripePaymentId);
-
             if (payment == null) return;
 
             payment.Status = "completed";
@@ -55,15 +58,7 @@ namespace OnlineJobRecruitmentSystem.Infrastructure.Services
             return await _context.Payments
                 .Where(p => p.EmployerId == employerId)
                 .OrderByDescending(p => p.CreatedAt)
-                .Select(p => new ReturnPaymentDto
-                {
-                    Id = p.Id,
-                    Plan = p.Plan,
-                    Amount = p.Amount,
-                    Status = p.Status,
-                    StripePaymentId = p.StripePaymentId,
-                    CreatedAt = p.CreatedAt
-                })
+                .ProjectTo<ReturnPaymentDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }
 
@@ -72,17 +67,7 @@ namespace OnlineJobRecruitmentSystem.Infrastructure.Services
             var payment = await _context.Payments
                 .FirstOrDefaultAsync(p => p.Id == paymentId && p.EmployerId == employerId);
 
-            if (payment == null) return null;
-
-            return new ReturnPaymentDto
-            {
-                Id = payment.Id,
-                Plan = payment.Plan,
-                Amount = payment.Amount,
-                Status = payment.Status,
-                StripePaymentId = payment.StripePaymentId,
-                CreatedAt = payment.CreatedAt
-            };
+            return payment == null ? null : _mapper.Map<ReturnPaymentDto>(payment);
         }
     }
 }

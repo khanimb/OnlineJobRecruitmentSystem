@@ -14,10 +14,10 @@ function renderPortfolio() {
     }
     $('#portfolioGrid').html(myPortfolio.map(p => `
         <div class="portfolio-item">
-            <img src="${FILE_BASE_URL}${p.fileUrl}" alt="${p.title || ''}" />
+            <img src="${FILE_BASE_URL}${p.fileUrl}" alt="${escapeHtml(p.title || '')}" />
             <div class="portfolio-item-body">
-                <div class="portfolio-item-title">${p.title || 'Untitled'}</div>
-                <div class="portfolio-item-desc">${p.description || ''}</div>
+                <div class="portfolio-item-title">${escapeHtml(p.title || 'Untitled')}</div>
+                <div class="portfolio-item-desc">${escapeHtml(p.description || '')}</div>
                 <div class="portfolio-item-actions">
                     <button onclick="editPortfolioItem(${p.id})"><i class="ti ti-edit"></i> Edit</button>
                     <button class="danger" onclick="deletePortfolioItem(${p.id})"><i class="ti ti-trash"></i> Delete</button>

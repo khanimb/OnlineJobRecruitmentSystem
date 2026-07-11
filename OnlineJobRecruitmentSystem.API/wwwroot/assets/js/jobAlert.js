@@ -17,8 +17,8 @@ function renderJobAlerts() {
         return `<div class="job-item">
             <div class="job-logo" style="background:${c.bg};color:${c.color}"><i class="ti ti-bell"></i></div>
             <div class="job-info">
-                <div class="job-name">${a.keyword || 'Any keyword'}</div>
-                <div class="job-meta"><span><i class="ti ti-map-pin"></i> ${a.location || 'Any location'}</span><span><i class="ti ti-repeat"></i> ${a.frequency}</span></div>
+                <div class="job-name">${escapeHtml(a.keyword || 'Any keyword')}</div>
+                <div class="job-meta"><span><i class="ti ti-map-pin"></i> ${escapeHtml(a.location || 'Any location')}</span><span><i class="ti ti-repeat"></i> ${a.frequency}</span></div>
             </div>
             <span class="tag ${a.isActive ? 'tag-teal' : 'tag-gray'}">${a.isActive ? 'Active' : 'Paused'}</span>
             <div style="display:flex;gap:8px;margin-left:10px">

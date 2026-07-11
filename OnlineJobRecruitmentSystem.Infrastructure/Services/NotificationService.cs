@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Microsoft.EntityFrameworkCore;
 using OnlineJobRecruitmentSystem.Application.DTOs.NotificationDtos;
 using OnlineJobRecruitmentSystem.Application.Interfaces;
 using OnlineJobRecruitmentSystem.Domain.Entities;
@@ -9,10 +11,12 @@ namespace OnlineJobRecruitmentSystem.Infrastructure.Services
     public class NotificationService : INotificationService
     {
         private readonly AppDbContext _context;
+        private readonly IMapper _mapper;
 
-        public NotificationService(AppDbContext context)
+        public NotificationService(AppDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public async Task<Notification> CreateNotificationAsync(CreateNotificationDto dto)
@@ -35,15 +39,7 @@ namespace OnlineJobRecruitmentSystem.Infrastructure.Services
             return await _context.Notifications
                 .Where(n => n.UserId == userId)
                 .OrderByDescending(n => n.CreatedAt)
-                .Select(n => new ReturnNotificationDto
-                {
-                    Id = n.Id,
-                    Title = n.Title,
-                    Message = n.Message,
-                    IsRead = n.IsRead,
-                    Type = n.Type,
-                    CreatedAt = n.CreatedAt
-                })
+                .ProjectTo<ReturnNotificationDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }
 
@@ -51,7 +47,6 @@ namespace OnlineJobRecruitmentSystem.Infrastructure.Services
         {
             var notification = await _context.Notifications
                 .FirstOrDefaultAsync(n => n.Id == notificationId && n.UserId == userId);
-
             if (notification == null) return false;
 
             notification.IsRead = true;

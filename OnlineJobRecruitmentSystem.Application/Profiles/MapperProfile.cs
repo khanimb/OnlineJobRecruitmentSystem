@@ -28,7 +28,8 @@ namespace OnlineJobRecruitmentSystem.Application.Profiles
             CreateMap<CreateReviewDto, Review>();
             CreateMap<UpdateReviewDto, Review>();
             CreateMap<Review, ReturnReviewDto>()
-                .ForMember(d => d.ReviewerName, o => o.MapFrom(s => s.Reviewer.Email));
+                .ForMember(d => d.ReviewerName, o => o.MapFrom(s => s.Reviewer.Email))
+                .ForMember(d => d.RevieweeName, o => o.MapFrom(s => s.Reviewee.Email));
 
             CreateMap<CreateJobAlertDto, JobAlert>();
             CreateMap<UpdateJobAlertDto, JobAlert>();

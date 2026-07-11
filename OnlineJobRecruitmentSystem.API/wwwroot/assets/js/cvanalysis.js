@@ -75,7 +75,7 @@ async function loadJobOptions() {
     try {
         const r = await apiFetch('/Job');
         const jobs = (r.data && r.data.data) || r.data || [];
-        $('#jobSelect').append(jobs.map(j => `<option value="${j.id}">${j.title || j.jobTitle}</option>`).join(''));
+        $('#jobSelect').append(jobs.map(j => `<option value="${j.id}">${escapeHtml(j.title || j.jobTitle)}</option>`).join(''));
     } catch { }
 }
 
@@ -109,7 +109,7 @@ function renderResult(result) {
     if (result.missingSkills && result.missingSkills.length) {
         $('#missingSkillsArea').html(`
             <div class="cv-list-title">Missing skills for this job</div>
-            <div class="skills-wrap">${result.missingSkills.map(s => `<span class="tag tag-red">${s}</span>`).join('')}</div>
+            <div class="skills-wrap">${result.missingSkills.map(s => `<span class="tag tag-red">${escapeHtml(s)}</span>`).join('')}</div>
         `);
     } else {
         $('#missingSkillsArea').html('');
@@ -119,7 +119,7 @@ function renderResult(result) {
 function renderPoints(title, points, cssClass, icon) {
     if (!points || !points.length) return '';
     return `<div class="cv-list-title">${title}</div>` +
-        points.map(p => `<div class="cv-point ${cssClass}"><i class="ti ${icon}"></i> ${p}</div>`).join('');
+        points.map(p => `<div class="cv-point ${cssClass}"><i class="ti ${icon}"></i> ${escapeHtml(p)}</div>`).join('');
 }
 
 async function analyzeCv() {
@@ -151,9 +151,9 @@ async function loadRecommendedJobs() {
         $('#recommendedArea').html(jobs.map(j => `
             <div class="rec-job-item" onclick="window.location.href='jobdetail.html?id=${j.jobPostId}'">
                 <div class="rec-job-info">
-                    <div class="rec-job-title">${j.jobTitle}</div>
-                    <div class="rec-job-company">${j.companyName}</div>
-                    <div class="rec-job-reason">${j.reason || ''}</div>
+                    <div class="rec-job-title">${escapeHtml(j.jobTitle)}</div>
+                    <div class="rec-job-company">${escapeHtml(j.companyName)}</div>
+                    <div class="rec-job-reason">${escapeHtml(j.reason || '')}</div>
                 </div>
                 <span class="tag tag-blue">${j.matchScore}% match</span>
             </div>
@@ -173,7 +173,7 @@ async function loadHistory() {
         }
         $('#historyArea').html(items.map(h => `
             <div class="cv-history-item" onclick="loadHistoryDetail(${h.id})">
-                <span>${h.jobTitle || 'General analysis'}</span>
+                <span>${escapeHtml(h.jobTitle || 'General analysis')}</span>
                 <span class="tag tag-gray">${new Date(h.createdAt).toLocaleDateString()} · Score ${h.overallScore}</span>
             </div>
         `).join(''));

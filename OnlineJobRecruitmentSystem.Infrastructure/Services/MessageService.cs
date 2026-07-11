@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Microsoft.EntityFrameworkCore;
 using OnlineJobRecruitmentSystem.Application.DTOs.MessageDtos;
 using OnlineJobRecruitmentSystem.Application.Interfaces;
 using OnlineJobRecruitmentSystem.Domain.Entities;
@@ -9,10 +11,12 @@ namespace OnlineJobRecruitmentSystem.Infrastructure.Services
     public class MessageService : IMessageService
     {
         private readonly AppDbContext _context;
+        private readonly IMapper _mapper;
 
-        public MessageService(AppDbContext context)
+        public MessageService(AppDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public async Task<Message> SaveMessageAsync(int senderId, SendMessageDto dto)
@@ -36,17 +40,7 @@ namespace OnlineJobRecruitmentSystem.Infrastructure.Services
                 .Where(m => (m.SenderId == userId && m.ReceiverId == otherUserId) ||
                             (m.SenderId == otherUserId && m.ReceiverId == userId))
                 .OrderBy(m => m.CreatedAt)
-                .Select(m => new ReturnMessageDto
-                {
-                    Id = m.Id,
-                    SenderId = m.SenderId,
-                    SenderName = m.Sender.Email,
-                    ReceiverId = m.ReceiverId,
-                    ReceiverName = m.Receiver.Email,
-                    Content = m.Content,
-                    IsRead = m.IsRead,
-                    CreatedAt = m.CreatedAt
-                })
+                .ProjectTo<ReturnMessageDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }
 
@@ -55,16 +49,7 @@ namespace OnlineJobRecruitmentSystem.Infrastructure.Services
             return await _context.Messages
                 .Where(m => m.ReceiverId == userId)
                 .OrderByDescending(m => m.CreatedAt)
-                .Select(m => new ReturnMessageDto
-                {
-                    Id = m.Id,
-                    SenderId = m.SenderId,
-                    SenderName = m.Sender.Email,
-                    ReceiverId = m.ReceiverId,
-                    Content = m.Content,
-                    IsRead = m.IsRead,
-                    CreatedAt = m.CreatedAt
-                })
+                .ProjectTo<ReturnMessageDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }
 

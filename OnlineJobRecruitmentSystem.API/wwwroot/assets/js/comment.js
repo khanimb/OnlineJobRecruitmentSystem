@@ -1,4 +1,4 @@
-﻿function CurrentUserId {
+﻿function CurrentUserId () {
     const token = localStorage.getItem('token');
     if (!token) return null;
     try {
@@ -27,10 +27,10 @@ function renderComments(comments) {
     } else {
         $('#commentsList').html(comments.map(c => `
             <div class="comment-item" id="comment-${c.id}" style="padding:12px 0; border-bottom:1px solid #f3f4f6;">
-                <div style="font-weight:600;">${c.username}</div>
-                <div class="comment-text" style="color:#374151; margin:4px 0;">${c.text}</div>
+                <div style="font-weight:600;">${escapeHtml(c.username)}</div>
+                <div class="comment-text" style="color:#374151; margin:4px 0;">${escapeHtml(c.text)}</div>
                 <div style="font-size:12px; color:#9ca3af;">${new Date(c.createdAt).toLocaleString()}</div>
-                ${CurrentUserId === c.userId ? `
+                ${CurrentUserId() === c.userId ? `
                     <button onclick="editComment(${c.id})" style="font-size:12px; color:#2563eb; background:none; border:none; cursor:pointer; margin-right:8px;">Edit</button>
                     <button onclick="deleteComment(${c.id})" style="font-size:12px; color:#ef4444; background:none; border:none; cursor:pointer;">Delete</button>
                 ` : ''}
@@ -69,7 +69,7 @@ function editComment(id) {
     const textDiv = commentDiv.find('.comment-text');
     const currentText = textDiv.text();
     textDiv.html(`
-        <textarea id="editText-${id}" rows="2" style="width:100%; padding:8px; border-radius:6px; border:1px solid #e5e7eb;">${currentText}</textarea>
+        <textarea id="editText-${id}" rows="2" style="width:100%; padding:8px; border-radius:6px; border:1px solid #e5e7eb;">${escapeHtml(currentText)}</textarea>
         <button onclick="saveEdit(${id})" style="margin-top:6px;" class="btn-primary">Save</button>
     `);
 }

@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Microsoft.EntityFrameworkCore;
 using OnlineJobRecruitmentSystem.Application.DTOs.PortfolioDtos;
 using OnlineJobRecruitmentSystem.Application.Interfaces;
 using OnlineJobRecruitmentSystem.Domain.Entities;
@@ -11,11 +13,13 @@ namespace OnlineJobRecruitmentSystem.Infrastructure.Services
     {
         private readonly AppDbContext _context;
         private readonly FileManager _fileManager;
+        private readonly IMapper _mapper;
 
-        public PortfolioService(AppDbContext context, FileManager fileManager)
+        public PortfolioService(AppDbContext context, FileManager fileManager, IMapper mapper)
         {
             _context = context;
             _fileManager = fileManager;
+            _mapper = mapper;
         }
 
         public async Task<ReturnPortfolioItemDto> CreateAsync(int jobSeekerProfileId, CreatePortfolioItemDto dto)
@@ -34,22 +38,14 @@ namespace OnlineJobRecruitmentSystem.Infrastructure.Services
             _context.PortfolioItems.Add(item);
             await _context.SaveChangesAsync();
 
-            return MapToDto(item);
+            return _mapper.Map<ReturnPortfolioItemDto>(item);
         }
 
         public async Task<List<ReturnPortfolioItemDto>> GetByJobSeekerAsync(int jobSeekerProfileId)
         {
             return await _context.PortfolioItems
                 .Where(p => p.JobSeekerProfileId == jobSeekerProfileId)
-                .Select(p => new ReturnPortfolioItemDto
-                {
-                    Id = p.Id,
-                    Title = p.Title,
-                    Description = p.Description,
-                    FileUrl = p.FileUrl,
-                    FileType = p.FileType,
-                    CreatedAt = p.CreatedAt
-                })
+                .ProjectTo<ReturnPortfolioItemDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }
 
@@ -57,7 +53,6 @@ namespace OnlineJobRecruitmentSystem.Infrastructure.Services
         {
             var item = await _context.PortfolioItems
                 .FirstOrDefaultAsync(p => p.Id == itemId && p.JobSeekerProfileId == jobSeekerProfileId);
-
             if (item == null) return false;
 
             item.Title = dto.Title ?? string.Empty;
@@ -78,7 +73,6 @@ namespace OnlineJobRecruitmentSystem.Infrastructure.Services
         {
             var item = await _context.PortfolioItems
                 .FirstOrDefaultAsync(p => p.Id == itemId && p.JobSeekerProfileId == jobSeekerProfileId);
-
             if (item == null) return false;
 
             _fileManager.Delete(item.FileUrl);
@@ -86,15 +80,5 @@ namespace OnlineJobRecruitmentSystem.Infrastructure.Services
             await _context.SaveChangesAsync();
             return true;
         }
-
-        private static ReturnPortfolioItemDto MapToDto(PortfolioItem item) => new ReturnPortfolioItemDto
-        {
-            Id = item.Id,
-            Title = item.Title,
-            Description = item.Description,
-            FileUrl = item.FileUrl,
-            FileType = item.FileType,
-            CreatedAt = item.CreatedAt
-        };
     }
 }
