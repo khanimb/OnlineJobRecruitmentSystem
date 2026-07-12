@@ -30,7 +30,10 @@ namespace OnlineJobRecruitmentSystem.Infrastructure.Extensions
         private static string ExtractFromDocx(string filePath)
         {
             using var doc = WordprocessingDocument.Open(filePath, false);
-            return doc.MainDocumentPart!.Document.Body!.InnerText;
+            var body = doc.MainDocumentPart?.Document?.Body;
+            if (body == null)
+                throw new InvalidOperationException("The DOCX file appears to be corrupted or empty.");
+            return body.InnerText;
         }
     }
 }

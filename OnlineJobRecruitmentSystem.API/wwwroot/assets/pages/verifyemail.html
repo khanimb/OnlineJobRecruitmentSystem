@@ -1,0 +1,60 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NexHire - Verify Email</title>
+    <link rel="stylesheet" href="../../assets/css/style.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">
+            <a href="../../index.html" style="text-decoration:none;color:inherit;display:flex;align-items:center;gap:8px">
+                <i class="ti ti-brand-speedtest" style="color:#2563EB"></i> NexHire<span class="logo-accent">.</span>
+            </a>
+        </div>
+    </nav>
+
+    <div class="auth-wrapper">
+        <div class="auth-card" style="text-align:center">
+            <div class="auth-logo">
+                <a href="../../index.html"><i class="ti ti-brand-speedtest" style="color:#2563EB"></i> NexHire<span>.</span></a>
+            </div>
+            <div id="statusIcon" style="font-size:2.5rem;margin:16px 0;color:#94a3b8"><i class="ti ti-loader-2"></i></div>
+            <div class="auth-title" id="statusTitle">Verifying your email...</div>
+            <div class="auth-sub" id="statusSub">Please wait a moment.</div>
+            <div class="auth-footer" id="loginLink" style="display:none;margin-top:16px">
+                <a href="login.html">Go to sign in</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="../../assets/js/api.js"></script>
+    <script>
+        $(async function () {
+            const token = new URLSearchParams(window.location.search).get('token');
+            if (!token) {
+                showResult(false, 'Invalid link', 'This verification link is missing a token.');
+                return;
+            }
+            try {
+                await apiFetch('/Auth/verify-email?token=' + encodeURIComponent(token));
+                showResult(true, 'Email verified!', 'Your email has been confirmed. You can now sign in.');
+            } catch (err) {
+                showResult(false, 'Verification failed', err.message || 'This link is invalid or has expired.');
+            }
+        });
+
+        function showResult(success, title, sub) {
+            $('#statusIcon').html(success ? '<i class="ti ti-circle-check" style="color:#16a34a"></i>' : '<i class="ti ti-circle-x" style="color:#ef4444"></i>');
+            $('#statusTitle').text(title);
+            $('#statusSub').text(sub);
+            $('#loginLink').show();
+        }
+    </script>
+</body>
+</html>

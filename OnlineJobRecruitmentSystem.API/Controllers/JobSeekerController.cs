@@ -1,11 +1,9 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using OnlineJobRecruitmentSystem.Application.DTOs.JobSeekerDtos;
+using OnlineJobRecruitmentSystem.Application.Interfaces;
 using OnlineJobRecruitmentSystem.Common;
-using OnlineJobRecruitmentSystem.Domain.Entities;
-using OnlineJobRecruitmentSystem.Infrastructure.Data;
 using OnlineJobRecruitmentSystem.Infrastructure.Extensions;
 
 namespace OnlineJobRecruitmentSystem.API.Controllers
@@ -14,14 +12,11 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
     [Route("api/[controller]")]
     [Authorize(Roles = OnlineJobRecruitmentSystem.Domain.Common.Roles.JobSeeker)]
     public class JobSeekerController(
-        AppDbContext context,
+        IJobSeekerService jobSeekerService,
         IValidator<CreateJobSeekerDto> createValidator,
-        IValidator<UpdateJobSeekerDto> updateValidator,
-        FileManager fileManager 
+        IValidator<UpdateJobSeekerDto> updateValidator
     ) : BaseApiController
     {
-        
-
         [HttpPost("profile")]
         public async Task<IActionResult> CreateProfile(CreateJobSeekerDto dto)
         {
@@ -29,54 +24,21 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
             if (!result.IsValid)
                 return BadRequest(ResponseModel<string>.Fail(result.Errors[0].ErrorMessage));
 
-            var userId = CurrentUserId;
-
-            if (await context.JobSeekerProfiles.AnyAsync(j => j.UserId == userId))
+            var profile = await jobSeekerService.CreateProfileAsync(CurrentUserId, dto);
+            if (profile == null)
                 return BadRequest(ResponseModel<string>.Fail("Job seeker profile already exists."));
 
-            var profile = new JobSeekerProfile
-            {
-                UserId = userId,
-                FullName = dto.FullName,
-                Phone = dto.Phone,
-                Skills = dto.Skills,
-                WorkExperience = dto.WorkExperience
-            };
-
-            context.JobSeekerProfiles.Add(profile);
-            await context.SaveChangesAsync();
-
-            return Ok(ResponseModel<ReturnJobSeekerDto>.Ok(new ReturnJobSeekerDto
-            {
-                Id = profile.Id,
-                UserId = profile.UserId,
-                FullName = profile.FullName,
-                Phone = profile.Phone,
-                Skills = profile.Skills,
-                WorkExperience = profile.WorkExperience,
-                CvUrl = profile.CvUrl
-            }, "Job seeker profile created."));
+            return Ok(ResponseModel<ReturnJobSeekerDto>.Ok(profile, "Job seeker profile created."));
         }
 
         [HttpGet("profile")]
         public async Task<IActionResult> GetProfile()
         {
-            var userId = CurrentUserId;
-
-            var profile = await context.JobSeekerProfiles.FirstOrDefaultAsync(j => j.UserId == userId);
+            var profile = await jobSeekerService.GetProfileAsync(CurrentUserId);
             if (profile == null)
                 return NotFound(ResponseModel<string>.Fail("Job seeker profile not found."));
 
-            return Ok(ResponseModel<ReturnJobSeekerDto>.Ok(new ReturnJobSeekerDto
-            {
-                Id = profile.Id,
-                UserId = profile.UserId,
-                FullName = profile.FullName,
-                Phone = profile.Phone,
-                Skills = profile.Skills,
-                WorkExperience = profile.WorkExperience,
-                CvUrl = profile.CvUrl
-            }));
+            return Ok(ResponseModel<ReturnJobSeekerDto>.Ok(profile));
         }
 
         [HttpPut("profile")]
@@ -86,29 +48,11 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
             if (!result.IsValid)
                 return BadRequest(ResponseModel<string>.Fail(result.Errors[0].ErrorMessage));
 
-            var userId = CurrentUserId;
-
-            var profile = await context.JobSeekerProfiles.FirstOrDefaultAsync(j => j.UserId == userId);
+            var profile = await jobSeekerService.UpdateProfileAsync(CurrentUserId, dto);
             if (profile == null)
                 return NotFound(ResponseModel<string>.Fail("Job seeker profile not found."));
 
-            profile.FullName = dto.FullName;
-            profile.Phone = dto.Phone;
-            profile.Skills = dto.Skills;
-            profile.WorkExperience = dto.WorkExperience;
-
-            await context.SaveChangesAsync();
-
-            return Ok(ResponseModel<ReturnJobSeekerDto>.Ok(new ReturnJobSeekerDto
-            {
-                Id = profile.Id,
-                UserId = profile.UserId,
-                FullName = profile.FullName,
-                Phone = profile.Phone,
-                Skills = profile.Skills,
-                WorkExperience = profile.WorkExperience,
-                CvUrl = profile.CvUrl
-            }, "Job seeker profile updated."));
+            return Ok(ResponseModel<ReturnJobSeekerDto>.Ok(profile, "Job seeker profile updated."));
         }
 
         [HttpPost("upload-cv")]
@@ -123,121 +67,62 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
             if (!file.IsValidSize(5 * 1024 * 1024))
                 return BadRequest(ResponseModel<string>.Fail("File size must not exceed 5 MB."));
 
-            var userId = CurrentUserId;
+            if (!file.HasValidSignature(".pdf", ".doc", ".docx"))
+                return BadRequest(ResponseModel<string>.Fail("File content does not match its extension."));
 
-            var profile = await context.JobSeekerProfiles.FirstOrDefaultAsync(j => j.UserId == userId);
-            if (profile == null)
+            var cvUrl = await jobSeekerService.UploadCvAsync(CurrentUserId, file);
+            if (cvUrl == null)
                 return NotFound(ResponseModel<string>.Fail("Job seeker profile not found."));
 
-            if (!string.IsNullOrEmpty(profile.CvUrl))
-                fileManager.Delete(profile.CvUrl);
-
-            profile.CvUrl = await fileManager.UploadAsync(file, "cvs");
-            await context.SaveChangesAsync();
-
-            return Ok(ResponseModel<string>.Ok(profile.CvUrl, "CV uploaded successfully."));
+            return Ok(ResponseModel<string>.Ok(cvUrl, "CV uploaded successfully."));
         }
 
         [HttpGet("profile/{userId}")]
         [AllowAnonymous]
         public async Task<IActionResult> GetProfileById(int userId)
         {
-            var profile = await context.JobSeekerProfiles
-                .FirstOrDefaultAsync(j => j.UserId == userId);
+            var profile = await jobSeekerService.GetProfileAsync(userId);
             if (profile == null)
                 return NotFound(ResponseModel<string>.Fail("Profile not found."));
 
-            return Ok(ResponseModel<ReturnJobSeekerDto>.Ok(new ReturnJobSeekerDto
-            {
-                Id = profile.Id,
-                UserId = profile.UserId,
-                FullName = profile.FullName,
-                Phone = profile.Phone,
-                Skills = profile.Skills,
-                WorkExperience = profile.WorkExperience,
-                CvUrl = profile.CvUrl
-            }));
+            return Ok(ResponseModel<ReturnJobSeekerDto>.Ok(profile));
         }
 
         [HttpGet("saved")]
         public async Task<IActionResult> GetSavedJobs()
         {
-            var userId = CurrentUserId;
-
-            var profile = await context.JobSeekerProfiles.FirstOrDefaultAsync(j => j.UserId == userId);
-            if (profile == null)
+            var saved = await jobSeekerService.GetSavedJobsAsync(CurrentUserId);
+            if (saved == null)
                 return NotFound(ResponseModel<string>.Fail("Job seeker profile not found."));
 
-            var saved = await context.SavedJobs
-                .Include(s => s.JobPost)
-                    .ThenInclude(j => j!.EmployerProfile)
-                .Where(s => s.JobSeekerProfileId == profile.Id)
-                .Select(s => new
-                {
-                    s.Id,
-                    s.SavedAt,
-                    Job = new
-                    {
-                        s.JobPost!.Id,
-                        s.JobPost.Title,
-                        s.JobPost.Location,
-                        s.JobPost.JobType,
-                        s.JobPost.SalaryMin,
-                        s.JobPost.SalaryMax,
-                        s.JobPost.Deadline,
-                        CompanyName = s.JobPost.EmployerProfile!.CompanyName
-                    }
-                }).ToListAsync();
-
-            return Ok(ResponseModel<object>.Ok(saved));
+            return Ok(ResponseModel<List<ReturnSavedJobDto>>.Ok(saved));
         }
 
         [HttpPost("saved/{jobId}")]
         public async Task<IActionResult> SaveJob(int jobId)
         {
-            var userId = CurrentUserId;
+            var result = await jobSeekerService.SaveJobAsync(CurrentUserId, jobId);
 
-            var profile = await context.JobSeekerProfiles.FirstOrDefaultAsync(j => j.UserId == userId);
-            if (profile == null)
-                return NotFound(ResponseModel<string>.Fail("Job seeker profile not found."));
-
-            var job = await context.JobPosts.FirstOrDefaultAsync(j => j.Id == jobId && j.IsActive);
-            if (job == null)
-                return NotFound(ResponseModel<string>.Fail("Job not found."));
-
-            if (await context.SavedJobs.AnyAsync(s => s.JobSeekerProfileId == profile.Id && s.JobPostId == jobId))
-                return BadRequest(ResponseModel<string>.Fail("Job already saved."));
-
-            context.SavedJobs.Add(new SavedJob
+            return result switch
             {
-                JobSeekerProfileId = profile.Id,
-                JobPostId = jobId
-            });
-
-            await context.SaveChangesAsync();
-
-            return Ok(ResponseModel<string>.Ok(null!, "Job saved."));
+                SaveJobResult.ProfileNotFound => NotFound(ResponseModel<string>.Fail("Job seeker profile not found.")),
+                SaveJobResult.JobNotFound => NotFound(ResponseModel<string>.Fail("Job not found.")),
+                SaveJobResult.AlreadySaved => BadRequest(ResponseModel<string>.Fail("Job already saved.")),
+                _ => Ok(ResponseModel<string>.Ok(null!, "Job saved."))
+            };
         }
 
         [HttpDelete("saved/{jobId}")]
         public async Task<IActionResult> RemoveSavedJob(int jobId)
         {
-            var userId = CurrentUserId;
+            var result = await jobSeekerService.RemoveSavedJobAsync(CurrentUserId, jobId);
 
-            var profile = await context.JobSeekerProfiles.FirstOrDefaultAsync(j => j.UserId == userId);
-            if (profile == null)
-                return NotFound(ResponseModel<string>.Fail("Job seeker profile not found."));
-
-            var saved = await context.SavedJobs
-                .FirstOrDefaultAsync(s => s.JobSeekerProfileId == profile.Id && s.JobPostId == jobId);
-
-            if (saved == null)
-                return NotFound(ResponseModel<string>.Fail("Saved job not found."));
-
-            context.SavedJobs.Remove(saved);
-            await context.SaveChangesAsync();
-
-            return Ok(ResponseModel<string>.Ok(null!, "Job removed from saved list."));
+            return result switch
+            {
+                RemoveSavedJobResult.ProfileNotFound => NotFound(ResponseModel<string>.Fail("Job seeker profile not found.")),
+                RemoveSavedJobResult.SavedJobNotFound => NotFound(ResponseModel<string>.Fail("Saved job not found.")),
+                _ => Ok(ResponseModel<string>.Ok(null!, "Job removed from saved list."))
+            };
         }
     }
 }

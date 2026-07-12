@@ -22,7 +22,7 @@ namespace OnlineJobRecruitmentSystem.API
             services.AddControllers();
             services.AddCors(options =>
             {
-                options.AddPolicy("AllowAll", policy =>
+                options.AddPolicy("AllowConfiguredOrigin", policy =>
                 {
                     policy.WithOrigins(configuration["App:BaseUrl"]!)
                           .AllowAnyMethod()
@@ -74,6 +74,9 @@ namespace OnlineJobRecruitmentSystem.API
             services.AddHostedService<JobExpiryService>();
             services.AddHostedService<JobAlertBackgroundService>();
 
+            services.AddScoped<IAdminService, Infrastructure.Services.AdminService>();
+            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IAccountService, Infrastructure.Services.AccountService>();
             services.AddScoped<IMessageService, MessageService>();
             services.AddScoped<INotificationService, NotificationService>();
             services.AddScoped<IReviewService, OnlineJobRecruitmentSystem.Infrastructure.Services.ReviewService>();
@@ -81,6 +84,12 @@ namespace OnlineJobRecruitmentSystem.API
             services.AddScoped<IPortfolioService, PortfolioService>();
             services.AddScoped<IAnalyticsService, AnalyticsService>();
             services.AddScoped<IPaymentService, PaymentService>();
+            services.AddScoped<ICommentService, CommentService>();
+            services.AddScoped<IJobService, JobService>();
+            services.AddScoped<IJobApplicationService, JobApplicationService>();
+            services.AddScoped<IEmployerService, EmployerService>();
+            services.AddScoped<IJobSeekerService, JobSeekerService>();
+            services.AddScoped<IContractService, ContractService>();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>

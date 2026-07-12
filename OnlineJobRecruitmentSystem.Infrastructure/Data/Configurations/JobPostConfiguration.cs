@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using OnlineJobRecruitmentSystem.Domain.Entities;
 
-namespace OnlineJobRecruitmentSystem.Data.Configurations
+namespace OnlineJobRecruitmentSystem.Infrastructure.Data.Configurations
 {
     public class JobPostConfiguration : IEntityTypeConfiguration<JobPost>
     {
@@ -38,13 +38,17 @@ namespace OnlineJobRecruitmentSystem.Data.Configurations
             builder.Property(j => j.SalaryMax)
                 .HasColumnType("decimal(18,2)");
 
+            builder.HasIndex(j => j.Category);
+            builder.HasIndex(j => j.Location);
+            builder.HasIndex(j => j.JobType);
+
             builder.HasOne(j => j.EmployerProfile)
                 .WithMany(e => e.JobPosts)
                 .HasForeignKey(j => j.EmployerProfileId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.Property(j => j.Budget)
-                 .HasColumnType("decimal(18,2)");
+                .HasColumnType("decimal(18,2)");
         }
     }
 }

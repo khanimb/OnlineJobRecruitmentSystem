@@ -5,6 +5,7 @@ $(function () {
     if (!localStorage.getItem('token')) return;
 
     loadNotifications();
+    loadUnreadMessages();
     connectNotifHub();
 
     $('#notifBellBtn').on('click', function (e) {
@@ -16,6 +17,13 @@ $(function () {
         $('#notifDropdown').removeClass('open');
     });
 });
+
+async function loadUnreadMessages() {
+    try {
+        const r = await apiFetch('/Message/unread-count');
+        $('#msgDot').toggle((r.data || 0) > 0);
+    } catch { }
+}
 
 function notifIcon(type) {
     const map = { contract: 'ti-file-text', payment: 'ti-credit-card', review: 'ti-star', application: 'ti-briefcase', message: 'ti-message' };
@@ -39,27 +47,28 @@ async function loadNotifications() {
     } catch { }
 }
 
+function notifItemHtml(n, onclickFn) {
+    return `<div class="notif-item ${n.isRead ? '' : 'unread'}" onclick="${onclickFn}(${n.id})">
+        <div class="notif-icon"><i class="ti ${notifIcon(n.type)}"></i></div>
+        <div>
+            <div class="notif-item-title">${escapeHtml(n.title)}</div>
+            <div class="notif-item-msg">${escapeHtml(n.message)}</div>
+            <div class="notif-item-time">${timeAgo(n.createdAt)}</div>
+        </div>
+    </div>`;
+}
 function renderDropdown(items) {
     const list = $('#notifList');
     if (!items.length) {
         list.html('<div style="padding:16px;color:#94a3b8;font-size:0.8rem">No notifications yet.</div>');
         return;
     }
-    list.html(items.slice(0, 8).map(n => `
-        <div class="notif-item ${n.isRead ? '' : 'unread'}" onclick="notifClick(${n.id})">
-            <div class="notif-icon"><i class="ti ${notifIcon(n.type)}"></i></div>
-            <div>
-                <div class="notif-item-title">${escapeHtml(n.title)}</div>
-                <div class="notif-item-msg">${escapeHtml(n.message)}</div>
-                <div class="notif-item-time">${timeAgo(n.createdAt)}</div>
-            </div>
-        </div>
-    `).join(''));
+    list.html(items.slice(0, 8).map(n => notifItemHtml(n, 'notifClick')).join(''));
 }
 
 async function notifClick(id) {
     try {
-        await apiFetch('/Notification/' + id, { method: 'PUT' });
+        await apiFetch('/Notification/' + id, { method: 'PUT', body: JSON.stringify({ isRead: true }) });
         loadNotifications();
     } catch { }
 }

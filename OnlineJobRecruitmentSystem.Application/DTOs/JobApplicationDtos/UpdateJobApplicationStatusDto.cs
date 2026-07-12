@@ -1,6 +1,6 @@
 ﻿using OnlineJobRecruitmentSystem.Domain.Enums;
 
-namespace OnlineJobRecruitmentSystem.Application.DTOs.ApplicationDtos
+namespace OnlineJobRecruitmentSystem.Application.DTOs.JobApplicationDtos
 {
     public class UpdateJobApplicationStatusDto
     {

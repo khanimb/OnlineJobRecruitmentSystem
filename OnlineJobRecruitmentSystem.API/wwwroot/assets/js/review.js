@@ -55,21 +55,23 @@ async function loadReviews() {
     renderWrittenReviews(written);
 }
 
+function reviewItemHtml(r, nameField) {
+    return `<div class="review-item" style="padding:16px 24px">
+        <div class="review-top">
+            <div class="review-name">${escapeHtml(r[nameField])}</div>
+            <div class="review-stars">${starsHtml(r.rating)}</div>
+        </div>
+        ${r.comment ? `<div class="review-comment">${escapeHtml(r.comment)}</div>` : ''}
+        <div class="review-date">${new Date(r.createdAt).toLocaleDateString()}</div>
+    </div>`;
+}
+
 function renderReceivedReviews(items) {
     if (!items.length) {
         $('#receivedReviewsList').html(`<div class="empty-state"><div class="empty-icon"><i class="ti ti-star-off"></i></div><div class="empty-title">No reviews received yet</div></div>`);
         return;
     }
-    $('#receivedReviewsList').html(items.map(r => `
-        <div class="review-item" style="padding:16px 24px">
-            <div class="review-top">
-                <div class="review-name">${escapeHtml(r.reviewerName)}</div>
-                <div class="review-stars">${starsHtml(r.rating)}</div>
-            </div>
-            ${r.comment ? `<div class="review-comment">${escapeHtml(r.comment)}</div>` : ''}
-            <div class="review-date">${new Date(r.createdAt).toLocaleDateString()}</div>
-        </div>
-    `).join(''));
+    $('#receivedReviewsList').html(items.map(r => reviewItemHtml(r, 'reviewerName')).join(''));
 }
 
 function renderWrittenReviews(items) {

@@ -1,7 +1,7 @@
-﻿let allUsers = [], allJobs = [], allApps = [];
+﻿let allUsers = [], allJobs = [], allApps = [], allPayments = [], allReviews = [], allContracts = [];
 
 function showTab(tab, el) {
-    ['overview', 'users', 'jobs', 'applications', 'payments'].forEach(t => $('#tab-' + t).hide());
+    ['overview', 'users', 'jobs', 'applications', 'payments', 'reviews', 'contracts'].forEach(t => $('#tab-' + t).hide());
     $('#tab-' + tab).show();
     $('.nav-item').removeClass('active');
     if (el) $(el).addClass('active');
@@ -10,7 +10,9 @@ function showTab(tab, el) {
         users: ['Users', 'Manage all registered users'],
         jobs: ['Jobs', 'Manage all job listings'],
         applications: ['Applications', 'View all applications'],
-        payments: ['Payments', 'Transaction history']
+        payments: ['Payments', 'Transaction history'],
+        reviews: ['Reviews', 'Platform-wide reviews'],
+        contracts: ['Contracts', 'Active and completed contracts']
     };
     $('#pageTitle').text(titles[tab][0]);
     $('#pageSubtitle').text(titles[tab][1]);
@@ -38,6 +40,89 @@ async function loadApps() {
     $('#totalApps').text(allApps.length);
     $('#appsBadge').text(allApps.length);
     $('#appsSubtitle').text(allApps.length + ' applications');
+}
+
+async function loadPayments() {
+    try { const r = await apiFetch('/Admin/payments'); allPayments = r.data || []; } catch { allPayments = []; }
+    renderPayments(allPayments);
+}
+
+function paymentItemHTML(p, i) {
+    const c = colors[i % colors.length];
+    return `<div class="job-item">
+    <div class="job-logo" style="background:${c.bg};color:${c.color}">${safeInitial(p.employerEmail)}</div>
+    <div class="job-info">
+      <div class="job-name">${escapeHtml(p.employerEmail)}</div>
+      <div class="job-meta"><span><i class="ti ti-package"></i> ${escapeHtml(p.plan)}</span><span><i class="ti ti-calendar"></i> ${new Date(p.createdAt).toLocaleDateString()}</span></div>
+    </div>
+    <span class="job-status ${p.status === 'completed' ? 'status-active' : 'status-expired'}">${escapeHtml(p.status)}</span>
+    <div style="font-weight:700;color:#16a34a;min-width:70px;text-align:right">$${Number(p.amount).toFixed(2)}</div>
+  </div>`;
+}
+
+function renderPayments(payments) {
+    renderList('#allPaymentsList', payments, paymentItemHTML,
+        `<div class="empty-state"><div class="empty-icon"><i class="ti ti-credit-card-off"></i></div><div class="empty-title">No payments yet</div><div class="empty-sub">Stripe payments will appear here</div></div>`);
+}
+
+function renderReviews(reviews) {
+    renderList('#allReviewsList', reviews, reviewItemHTML,
+        `<div class="empty-state"><div class="empty-icon"><i class="ti ti-star-off"></i></div><div class="empty-title">No reviews found</div></div>`);
+}
+
+async function loadStats() {
+    try {
+        const r = await apiFetch('/Admin/stats');
+        $('#totalRevenue').text('$' + Number(r.data.totalRevenue || 0).toLocaleString());
+    } catch { }
+}
+
+async function loadReviews() {
+    try { const r = await apiFetch('/Admin/reviews'); allReviews = r.data || []; } catch { allReviews = []; }
+    renderReviews(allReviews);
+}
+
+function reviewItemHTML(rv, i) {
+    const c = colors[i % colors.length];
+    return `<div class="job-item">
+    <div class="job-logo" style="background:${c.bg};color:${c.color}">${safeInitial(rv.reviewerEmail)}</div>
+    <div class="job-info">
+      <div class="job-name">${escapeHtml(rv.reviewerEmail)} → ${escapeHtml(rv.revieweeEmail)}</div>
+      <div class="job-meta"><span><i class="ti ti-star-filled"></i> ${rv.rating}/5</span><span>${escapeHtml(rv.comment || '')}</span></div>
+    </div>
+    <div class="job-actions">
+      <button class="act-btn danger" onclick="deleteReview(${rv.id})" title="Delete"><i class="ti ti-trash"></i></button>
+    </div>
+  </div>`;
+}
+
+async function deleteReview(id) {
+    if (!confirm('Delete this review?')) return;
+    try { await apiFetch('/Admin/reviews/' + id, { method: 'DELETE' }); showToast('Review deleted'); await loadReviews(); }
+    catch (err) { showToast(err.message || 'Failed', false); }
+}
+
+async function loadContracts() {
+    try { const r = await apiFetch('/Admin/contracts'); allContracts = r.data || []; } catch { allContracts = []; }
+    renderContracts(allContracts);
+}
+
+function contractItemHTML(ct, i) {
+    const c = colors[i % colors.length];
+    return `<div class="job-item">
+    <div class="job-logo" style="background:${c.bg};color:${c.color}">${safeInitial(ct.jobTitle)}</div>
+    <div class="job-info">
+      <div class="job-name">${escapeHtml(ct.jobTitle)}</div>
+      <div class="job-meta"><span><i class="ti ti-building"></i> ${escapeHtml(ct.employerName)}</span><span><i class="ti ti-user"></i> ${escapeHtml(ct.jobSeekerName)}</span></div>
+    </div>
+    <span class="job-status ${ct.status === 'Completed' ? 'status-active' : 'status-expired'}">${escapeHtml(ct.status)}</span>
+    <div style="font-weight:700;color:#16a34a;min-width:70px;text-align:right">$${Number(ct.amount).toFixed(2)}</div>
+  </div>`;
+}
+
+function renderContracts(contracts) {
+    const empty = `<div class="empty-state"><div class="empty-icon"><i class="ti ti-file-off"></i></div><div class="empty-title">No contracts found</div></div>`;
+    $('#allContractsList').html(contracts.length ? contracts.map(contractItemHTML).join('') : empty);
 }
 
 function filterUsers() {
@@ -122,7 +207,7 @@ async function deleteUser(id) {
 
 async function deleteJob(id) {
     if (!confirm('Delete this job?')) return;
-    try { await apiFetch('/Job/' + id, { method: 'DELETE' }); showToast('Job deleted'); await loadJobs(); }
+    try { await apiFetch('/Admin/jobs/' + id, { method: 'DELETE' }); showToast('Job deleted'); await loadJobs(); }
     catch (err) { showToast(err.message || 'Failed', false); }
 }
 
@@ -140,5 +225,5 @@ $(function () {
     $('#sidebarToggleBtn').on('click', function () { $('.sidebar').toggleClass('open'); });
     const user = getUser();
     if (!user || user.role !== 'Admin') { window.location.href = 'login.html'; return; }
-    Promise.all([loadUsers(), loadJobs(), loadApps()]);
+    Promise.all([loadUsers(), loadJobs(), loadApps(), loadPayments(), loadStats(), loadReviews(), loadContracts()]);
 });

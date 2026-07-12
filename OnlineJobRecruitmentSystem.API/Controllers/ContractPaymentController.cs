@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
@@ -20,14 +21,17 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
         AppDbContext context,
         IHubContext<NotificationHub> notificationHub,
         IConfiguration configuration,
-        ILogger<ContractPaymentController> logger) : BaseApiController
+        ILogger<ContractPaymentController> logger,
+        IValidator<CreateContractPaymentDto> validator) : BaseApiController  
     {
-        
-
-        [HttpPost("{contractId}")]
+        [HttpPost]
         [Authorize(Roles = OnlineJobRecruitmentSystem.Domain.Common.Roles.Employer)]
-        public async Task<IActionResult> CreatePayment(int contractId)
+        public async Task<IActionResult> CreatePayment(CreateContractPaymentDto dto)
         {
+            var result = await validator.ValidateAsync(dto);
+            if (!result.IsValid)
+                return BadRequest(ResponseModel<string>.Fail(result.Errors[0].ErrorMessage));
+
             var userId = CurrentUserId;
             var employer = await context.EmployerProfiles
                 .FirstOrDefaultAsync(e => e.UserId == userId);
@@ -37,7 +41,7 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
 
             var contract = await context.Contracts
                 .Include(c => c.JobPost)
-                .FirstOrDefaultAsync(c => c.Id == contractId && c.EmployerProfileId == employer.Id);
+                .FirstOrDefaultAsync(c => c.Id == dto.ContractId && c.EmployerProfileId == employer.Id);  
 
             if (contract == null)
                 return NotFound(ResponseModel<string>.Fail("Contract not found."));
@@ -46,7 +50,7 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
                 return BadRequest(ResponseModel<string>.Fail("Contract must be completed before payment."));
 
             var alreadyPaid = await context.ContractPayments
-                .AnyAsync(cp => cp.ContractId == contractId && cp.Status == ContractPaymentStatus.Completed);
+                .AnyAsync(cp => cp.ContractId == dto.ContractId && cp.Status == ContractPaymentStatus.Completed);  
 
             if (alreadyPaid)
                 return BadRequest(ResponseModel<string>.Fail("This contract has already been paid."));

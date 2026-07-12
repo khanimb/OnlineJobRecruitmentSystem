@@ -19,8 +19,13 @@ namespace OnlineJobRecruitmentSystem.Application.Validations.JobDtoValidation
 
             RuleFor(x => x.JobType)
                 .NotEmpty().WithMessage("Job type cannot be empty.")
-                .Must(t => t == "FullTime" || t == "PartTime" || t == "Remote")
-                .WithMessage("Job type must be 'FullTime', 'PartTime' or 'Remote'.");
+                .Must(t => new[] { "FullTime", "PartTime", "Remote", "Contract", "Internship" }.Contains(t))
+                .WithMessage("Invalid job type.");
+
+            RuleFor(x => x.Category)
+                .NotEmpty().WithMessage("Category cannot be empty.")
+                .Must(c => new[] { "IT", "Sales", "Marketing", "Finance", "HR", "Design", "Technology", "Healthcare", "Education", "Other" }.Contains(c))
+                .WithMessage("Invalid category.");
 
             RuleFor(x => x.SalaryMin)
                 .GreaterThan(0).WithMessage("Minimum salary must be greater than 0.");

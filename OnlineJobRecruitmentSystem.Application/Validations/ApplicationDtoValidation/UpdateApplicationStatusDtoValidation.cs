@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using OnlineJobRecruitmentSystem.Application.DTOs.ApplicationDtos;
+using OnlineJobRecruitmentSystem.Application.DTOs.JobApplicationDtos;
 
 namespace OnlineJobRecruitmentSystem.Application.Validations.ApplicationDtoValidation
 {

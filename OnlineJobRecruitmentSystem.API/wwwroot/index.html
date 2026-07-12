@@ -33,7 +33,7 @@
     <section class="hero">
         <div class="hero-inner">
             <div class="hero-left">
-                <div class="hero-badge"><i class="ti ti-sparkles"></i> AI-powered job matching</div>
+                <div class="hero-badge" onclick="window.location.href='assets/pages/cvanalysis.html'" style="cursor:pointer"><i class="ti ti-sparkles"></i> AI-powered job matching</div>
                 <h1>Find the job<br>you <em>actually</em><br>want.</h1>
                 <p>NexHire connects ambitious professionals with forward-thinking companies. Smart matching, real opportunities.</p>
                 <div class="search-box">
@@ -53,26 +53,7 @@
             </div>
             <div class="hero-card">
                 <div class="card-label">Latest openings</div>
-                <div class="mini-job">
-                    <div class="mini-avatar" style="background:#eff6ff;color:#2563EB">G</div>
-                    <div class="mini-info"><div class="mini-title">UI/UX Designer</div><div class="mini-sub">Google · Remote</div></div>
-                    <div class="mini-salary">$4,800</div>
-                </div>
-                <div class="mini-job">
-                    <div class="mini-avatar" style="background:#f0fdfa;color:#0f766e">M</div>
-                    <div class="mini-info"><div class="mini-title">Product Manager</div><div class="mini-sub">Meta · Hybrid</div></div>
-                    <div class="mini-salary">$5,500</div>
-                </div>
-                <div class="mini-job">
-                    <div class="mini-avatar" style="background:#f0f9ff;color:#0369a1">A</div>
-                    <div class="mini-info"><div class="mini-title">Backend Engineer</div><div class="mini-sub">Apple · On-site</div></div>
-                    <div class="mini-salary">$4,200</div>
-                </div>
-                <div class="mini-job">
-                    <div class="mini-avatar" style="background:#f0fdf4;color:#166534">S</div>
-                    <div class="mini-info"><div class="mini-title">Data Scientist</div><div class="mini-sub">Spotify · Remote</div></div>
-                    <div class="mini-salary">$5,100</div>
-                </div>
+                <div id="heroJobsList"></div>
             </div>
         </div>
     </section>
@@ -80,10 +61,10 @@
     <!-- STATS -->
     <div class="stats-bar">
         <div class="stats-inner">
-            <div class="stat"><div class="stat-num">18,400+</div><div class="stat-label">Active jobs</div></div>
-            <div class="stat"><div class="stat-num">4,200+</div><div class="stat-label">Companies</div></div>
-            <div class="stat"><div class="stat-num">120,000+</div><div class="stat-label">Job seekers</div></div>
-            <div class="stat"><div class="stat-num">94%</div><div class="stat-label">Success rate</div></div>
+            <div class="stat"><div class="stat-num" id="statJobs">0</div><div class="stat-label">Active jobs</div></div>
+            <div class="stat"><div class="stat-num" id="statCompanies">0</div><div class="stat-label">Companies</div></div>
+            <div class="stat"><div class="stat-num" id="statSeekers">0</div><div class="stat-label">Job seekers</div></div>
+            <div class="stat"><div class="stat-num" id="statSuccess">0%</div><div class="stat-label">Success rate</div></div>
         </div>
     </div>
 
@@ -111,7 +92,7 @@
                 </div>
                 <div class="job-footer">
                     <span class="salary">$4,500 / mo</span>
-                    <button class="apply-btn" onclick="window.location.href='assets/pages/job-detail.html'">Quick apply</button>
+                    <button class="apply-btn" onclick="window.location.href='assets/pages/jobdetail.html'">Quick apply</button>
                 </div>
             </div>
             <div class="job-card">
@@ -128,7 +109,7 @@
                 </div>
                 <div class="job-footer">
                     <span class="salary">$5,200 / mo</span>
-                    <button class="apply-btn" onclick="window.location.href='assets/pages/job-detail.html'">Quick apply</button>
+                    <button class="apply-btn" onclick="window.location.href='assets/pages/jobdetail.html'">Quick apply</button>
                 </div>
             </div>
             <div class="job-card">
@@ -145,7 +126,7 @@
                 </div>
                 <div class="job-footer">
                     <span class="salary">$4,000 / mo</span>
-                    <button class="apply-btn" onclick="window.location.href='assets/pages/job-detail.html'">Quick apply</button>
+                    <button class="apply-btn" onclick="window.location.href='assets/pages/jobdetail.html'">Quick apply</button>
                 </div>
             </div>
         </div>
@@ -161,14 +142,14 @@
                 </div>
             </div>
             <div class="cat-grid">
-                <div class="cat-card"><div class="cat-icon"><i class="ti ti-code"></i></div><div class="cat-name">Technology</div><div class="cat-count">2,340 jobs</div></div>
-                <div class="cat-card"><div class="cat-icon"><i class="ti ti-chart-line"></i></div><div class="cat-name">Finance</div><div class="cat-count">1,120 jobs</div></div>
-                <div class="cat-card"><div class="cat-icon"><i class="ti ti-heart-rate-monitor"></i></div><div class="cat-name">Healthcare</div><div class="cat-count">890 jobs</div></div>
-                <div class="cat-card"><div class="cat-icon"><i class="ti ti-school"></i></div><div class="cat-name">Education</div><div class="cat-count">670 jobs</div></div>
-                <div class="cat-card"><div class="cat-icon"><i class="ti ti-ad-2"></i></div><div class="cat-name">Marketing</div><div class="cat-count">540 jobs</div></div>
-                <div class="cat-card"><div class="cat-icon"><i class="ti ti-palette"></i></div><div class="cat-name">Design</div><div class="cat-count">430 jobs</div></div>
-                <div class="cat-card"><div class="cat-icon"><i class="ti ti-building"></i></div><div class="cat-name">Real Estate</div><div class="cat-count">380 jobs</div></div>
-                <div class="cat-card"><div class="cat-icon"><i class="ti ti-truck"></i></div><div class="cat-name">Logistics</div><div class="cat-count">560 jobs</div></div>
+                <div class="cat-card" onclick="filterCategory('Technology')"><div class="cat-icon"><i class="ti ti-code"></i></div><div class="cat-name">Technology</div><div class="cat-count">2,340 jobs</div></div>
+                <div class="cat-card" onclick="filterCategory('Finance')"><div class="cat-icon"><i class="ti ti-chart-line"></i></div><div class="cat-name">Finance</div><div class="cat-count">1,120 jobs</div></div>
+                <div class="cat-card" onclick="filterCategory('Healthcare')"><div class="cat-icon"><i class="ti ti-heart-rate-monitor"></i></div><div class="cat-name">Healthcare</div><div class="cat-count">890 jobs</div></div>
+                <div class="cat-card" onclick="filterCategory('Education')"><div class="cat-icon"><i class="ti ti-school"></i></div><div class="cat-name">Education</div><div class="cat-count">670 jobs</div></div>
+                <div class="cat-card" onclick="filterCategory('Marketing')"><div class="cat-icon"><i class="ti ti-ad-2"></i></div><div class="cat-name">Marketing</div><div class="cat-count">540 jobs</div></div>
+                <div class="cat-card" onclick="filterCategory('Design')"><div class="cat-icon"><i class="ti ti-palette"></i></div><div class="cat-name">Design</div><div class="cat-count">430 jobs</div></div>
+                <div class="cat-card" onclick="filterCategory('Real Estate')"><div class="cat-icon"><i class="ti ti-building"></i></div><div class="cat-name">Real Estate</div><div class="cat-count">380 jobs</div></div>
+                <div class="cat-card" onclick="filterCategory('Logistics')"><div class="cat-icon"><i class="ti ti-truck"></i></div><div class="cat-name">Logistics</div><div class="cat-count">560 jobs</div></div>
             </div>
         </div>
     </div>
@@ -245,17 +226,85 @@
         function toggleMenu() {
             $('.nav-links').toggleClass('open');
         }
+
         function searchJobs() {
             const keyword = $('#searchKeyword').val();
             const location = $('#searchLocation').val();
             window.location.href = `assets/pages/jobs.html?keyword=${keyword}&location=${location}`;
         }
+
         function quickSearch(term) {
             window.location.href = `assets/pages/jobs.html?keyword=${term}`;
         }
+
         function filterCategory(category) {
             window.location.href = `assets/pages/jobs.html?category=${category}`;
         }
+
+        async function loadFeaturedJobs() {
+            try {
+                const r = await apiFetch('/Job?pageSize=3&page=1');
+                const jobs = r.data?.data || [];
+                if (!jobs.length) return;
+                $('#featuredJobs').html(jobs.map((j, i) => {
+                    const c = colors[i % colors.length];
+                    return `<div class="job-card">
+                <div class="card-top">
+                    <div class="company-logo" style="background:${c.bg};color:${c.color}">${safeInitial(j.companyName)}</div>
+                    <i class="ti ti-bookmark bookmark" onclick="quickSaveJob(${j.id}, event)"></i>
+                </div>
+                <div class="job-title">${escapeHtml(j.title)}</div>
+                <div class="job-company"><i class="ti ti-map-pin"></i> ${escapeHtml(j.companyName)} · ${escapeHtml(j.location)}</div>
+                <div class="job-tags">
+                    <span class="tag tag-blue">${escapeHtml(j.jobType)}</span>
+                    ${j.category ? `<span class="tag tag-gray">${escapeHtml(j.category)}</span>` : ''}
+                </div>
+                <div class="job-footer">
+                    <span class="salary">${j.salaryMin ? '$' + j.salaryMin.toLocaleString() + ' / mo' : 'Negotiable'}</span>
+                    <button class="apply-btn" onclick="window.location.href='assets/pages/jobdetail.html?id=${j.id}'">Quick apply</button>
+                </div>
+            </div>`;
+                }).join(''));
+            } catch { }
+        }
+
+        async function loadStats() {
+            try {
+                const r = await apiFetch('/Job/stats');
+                const s = r.data;
+                $('#statJobs').text(s.totalActiveJobs.toLocaleString() + '+');
+                $('#statCompanies').text(s.totalCompanies.toLocaleString() + '+');
+                $('#statSeekers').text(s.totalJobSeekers.toLocaleString() + '+');
+                $('#statSuccess').text(s.successRate + '%');
+            } catch { }
+        }
+
+        async function loadHeroJobs() {
+            try {
+                const r = await apiFetch('/Job?pageSize=4&page=1');
+                const jobs = r.data?.data || [];
+                if (!jobs.length) return;
+                $('#heroJobsList').html(jobs.map((j, i) => {
+                    const c = colors[i % colors.length];
+                    return `<div class="mini-job">
+                <div class="mini-avatar" style="background:${c.bg};color:${c.color}">${safeInitial(j.companyName)}</div>
+                <div class="mini-info"><div class="mini-title">${escapeHtml(j.title)}</div><div class="mini-sub">${escapeHtml(j.companyName)} · ${escapeHtml(j.location)}</div></div>
+                <div class="mini-salary">${j.salaryMin ? '$' + j.salaryMin.toLocaleString() : '—'}</div>
+            </div>`;
+                }).join(''));
+            } catch { }
+        }
+
+        function quickSaveJob(jobId, e) {
+            e.stopPropagation();
+            const user = getUser();
+            if (!user) { window.location.href = 'assets/pages/login.html'; return; }
+            apiFetch(`/JobSeeker/saved/${jobId}`, { method: 'POST' })
+                .then(() => showToast('Job saved!'))
+                .catch(err => showToast(err.message, false));
+        }
+
+        $(function () { loadFeaturedJobs(); loadStats(); loadHeroJobs(); });
         function goToPricing() {
             const user = getUser();
             if (!user) { window.location.href = 'assets/pages/login.html'; return; }

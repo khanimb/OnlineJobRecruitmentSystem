@@ -27,7 +27,7 @@ namespace OnlineJobRecruitmentSystem.Infrastructure.Data.Configurations
 
             builder.HasOne(p => p.Employer)
                 .WithMany()
-                .HasForeignKey(p => p.EmployerId)
+                .HasForeignKey(p => p.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }

@@ -1,7 +1,18 @@
-﻿const BASE_URL = 'http://localhost:5179/api';
-const FILE_BASE_URL = 'http://localhost:5179';
+﻿const FILE_BASE_URL = window.location.origin;
+const BASE_URL = `${FILE_BASE_URL}/api`;
 
-async function apiFetch(endpoint, options = {}) {
+const colors = [
+    { bg: '#DBEAFE', color: '#2563EB' },
+    { bg: '#DCFCE7', color: '#16A34A' },
+    { bg: '#FEF3C7', color: '#D97706' },
+    { bg: '#F3E8FF', color: '#9333EA' },
+    { bg: '#FEE2E2', color: '#DC2626' },
+    { bg: '#E0F2FE', color: '#0284C7' },
+    { bg: '#FCE7F3', color: '#DB2777' },
+    { bg: '#E2E8F0', color: '#475569' }
+];
+
+async function apiFetch(endpoint, options = {}, isRetry = false) {
     const token = localStorage.getItem('token');
     const isFormData = options.body instanceof FormData;
 
@@ -27,14 +38,37 @@ async function apiFetch(endpoint, options = {}) {
     try {
         return await $.ajax(settings);
     } catch (xhr) {
-        if (xhr.status === 401 && token) {
+        if (xhr.status === 401 && token && !isRetry) {
+            const refreshed = await tryRefreshToken();
+            if (refreshed) return apiFetch(endpoint, options, true);
+
             localStorage.removeItem('token');
+            localStorage.removeItem('refreshToken');
             localStorage.removeItem('user');
             window.location.href = '/assets/pages/login.html';
             return;
         }
         const error = xhr.responseJSON || {};
         throw new Error(error.message || 'Something went wrong');
+    }
+}
+
+async function tryRefreshToken() {
+    const refreshToken = localStorage.getItem('refreshToken');
+    if (!refreshToken) return false;
+    try {
+        const res = await $.ajax({
+            url: `${BASE_URL}/Auth/refresh-token`,
+            method: 'POST',
+            contentType: 'application/json',
+            dataType: 'json',
+            data: JSON.stringify({ refreshToken })
+        });
+        localStorage.setItem('token', res.data.token);
+        localStorage.setItem('refreshToken', res.data.refreshToken);
+        return true;
+    } catch {
+        return false;
     }
 }
 
@@ -55,4 +89,14 @@ function showToast(msg, ok = true) {
     $('#toastMsg').text(msg);
     t.addClass('show');
     setTimeout(() => t.removeClass('show'), 3000);
+}
+
+function renderList(containerSel, items, templateFn, emptyHtml) {
+    const el = $(containerSel);
+    if (!el.length) return;
+    if (!items.length) {
+        el.html(emptyHtml || '<div class="empty-state"><div class="empty-title">Nothing here yet</div></div>');
+        return;
+    }
+    el.html(items.map(templateFn).join(''));
 }

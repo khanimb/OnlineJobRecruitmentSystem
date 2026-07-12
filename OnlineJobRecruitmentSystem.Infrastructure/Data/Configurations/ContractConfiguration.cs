@@ -14,10 +14,12 @@ namespace OnlineJobRecruitmentSystem.Infrastructure.Data.Configurations
                 .HasColumnType("decimal(18,2)");
 
             builder.Property(c => c.Status)
-                .HasConversion<string>();
+                .HasConversion<string>()
+                .HasMaxLength(20);
 
             builder.Property(c => c.PaymentType)
-                .HasConversion<string>();
+                .HasConversion<string>()
+                .HasMaxLength(20);
 
             builder.HasOne(c => c.JobPost)
                 .WithMany()

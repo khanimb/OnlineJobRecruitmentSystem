@@ -20,6 +20,8 @@
         <a class="nav-item" onclick="showTab('jobs',this)"><i class="ti ti-briefcase"></i> Jobs <span class="nav-badge" id="jobsBadge">0</span></a>
         <a class="nav-item" onclick="showTab('applications',this)"><i class="ti ti-file-text"></i> Applications <span class="nav-badge" id="appsBadge">0</span></a>
         <a class="nav-item" onclick="showTab('payments',this)"><i class="ti ti-credit-card"></i> Payments</a>
+        <a class="nav-item" onclick="showTab('reviews',this)"><i class="ti ti-star"></i> Reviews</a>
+        <a class="nav-item" onclick="showTab('contracts',this)"><i class="ti ti-file-signature"></i> Contracts</a>
         <div class="sidebar-bottom">
             <div class="sidebar-user">
                 <div class="user-avatar" style="background:#fef2f2;color:#ef4444">A</div>
@@ -149,11 +151,27 @@
                     <div class="dash-card-header">
                         <div><div class="dash-card-title">Payment History</div><div class="dash-card-sub">All transactions</div></div>
                     </div>
-                    <div class="empty-state">
-                        <div class="empty-icon"><i class="ti ti-credit-card-off"></i></div>
-                        <div class="empty-title">No payments yet</div>
-                        <div class="empty-sub">Stripe payments will appear here</div>
+                    <div id="allPaymentsList"></div>
+                </div>
+            </div>
+
+            <!-- REVIEWS TAB -->
+            <div id="tab-reviews" style="display:none">
+                <div class="dash-card">
+                    <div class="dash-card-header">
+                        <div><div class="dash-card-title">All Reviews</div><div class="dash-card-sub">Platform-wide reviews</div></div>
                     </div>
+                    <div id="allReviewsList"></div>
+                </div>
+            </div>
+
+            <!-- CONTRACTS TAB -->
+            <div id="tab-contracts" style="display:none">
+                <div class="dash-card">
+                    <div class="dash-card-header">
+                        <div><div class="dash-card-title">All Contracts</div><div class="dash-card-sub">Active and completed contracts</div></div>
+                    </div>
+                    <div id="allContractsList"></div>
                 </div>
             </div>
 

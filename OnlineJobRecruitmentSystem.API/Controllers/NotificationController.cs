@@ -11,8 +11,6 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
     [Authorize]
     public class NotificationController(INotificationService notificationService) : BaseApiController
     {
-        
-
         [HttpGet]
         public async Task<IActionResult> GetNotifications()
         {
@@ -21,13 +19,13 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> MarkAsRead(int id)
+        public async Task<IActionResult> UpdateNotification(int id, UpdateNotificationDto dto)
         {
-            var marked = await notificationService.MarkAsReadAsync(id, CurrentUserId);
-            if (!marked)
+            var updated = await notificationService.UpdateReadStatusAsync(id, CurrentUserId, dto.IsRead);
+            if (!updated)
                 return NotFound(ResponseModel<string>.Fail("Notification not found."));
 
-            return Ok(ResponseModel<string>.Ok(null!, "Marked as read."));
+            return Ok(ResponseModel<string>.Ok(null!, dto.IsRead ? "Marked as read." : "Marked as unread."));
         }
 
         [HttpPut("read-all")]

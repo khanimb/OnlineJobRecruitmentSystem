@@ -2,12 +2,12 @@
 {
     public class PaymentPremium : BaseEntity
     {
-        public int EmployerId { get; set; }
-        public string StripePaymentId { get; set; }
+        public string StripePaymentId { get; set; } = null!;
         public decimal Amount { get; set; }
-        public string Status { get; set; } 
-        public string Plan { get; set; } 
+        public string Status { get; set; } = null!;
+        public string Plan { get; set; } = null!;
+        public int UserId { get; set; }
 
-        public User Employer { get; set; }
+        public User Employer { get; set; } = null!;
     }
 }

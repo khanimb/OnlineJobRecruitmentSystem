@@ -22,6 +22,7 @@ namespace OnlineJobRecruitmentSystem.Infrastructure.Data.Configurations
                 .IsRequired()
                 .HasMaxLength(50);
 
+            builder.HasIndex(n => new { n.UserId, n.IsRead });
             builder.HasOne(n => n.User)
                 .WithMany()
                 .HasForeignKey(n => n.UserId)

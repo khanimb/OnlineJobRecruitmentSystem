@@ -12,19 +12,21 @@ function renderPortfolio() {
         $('#portfolioGrid').html(`<div class="empty-state"><div class="empty-icon"><i class="ti ti-photo-off"></i></div><div class="empty-title">No portfolio items yet</div><div class="empty-sub">Add your work to stand out to employers</div></div>`);
         return;
     }
-    $('#portfolioGrid').html(myPortfolio.map(p => `
-        <div class="portfolio-item">
-            <img src="${FILE_BASE_URL}${p.fileUrl}" alt="${escapeHtml(p.title || '')}" />
-            <div class="portfolio-item-body">
-                <div class="portfolio-item-title">${escapeHtml(p.title || 'Untitled')}</div>
-                <div class="portfolio-item-desc">${escapeHtml(p.description || '')}</div>
-                <div class="portfolio-item-actions">
-                    <button onclick="editPortfolioItem(${p.id})"><i class="ti ti-edit"></i> Edit</button>
-                    <button class="danger" onclick="deletePortfolioItem(${p.id})"><i class="ti ti-trash"></i> Delete</button>
-                </div>
-            </div>
+    $('#portfolioGrid').html(myPortfolio.map(p => portfolioItemHtml(p, true)).join(''));
+}
+
+function portfolioItemHtml(p, editable) {
+    return `<div class="portfolio-item">
+        <img src="${FILE_BASE_URL}${p.fileUrl}" alt="${escapeHtml(p.title || '')}" />
+        <div class="portfolio-item-body">
+            <div class="portfolio-item-title">${escapeHtml(p.title || 'Untitled')}</div>
+            <div class="portfolio-item-desc">${escapeHtml(p.description || '')}</div>
+            ${editable ? `<div class="portfolio-item-actions">
+                <button onclick="editPortfolioItem(${p.id})"><i class="ti ti-edit"></i> Edit</button>
+                <button class="danger" onclick="deletePortfolioItem(${p.id})"><i class="ti ti-trash"></i> Delete</button>
+            </div>` : ''}
         </div>
-    `).join(''));
+    </div>`;
 }
 
 async function submitPortfolioItem() {

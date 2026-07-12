@@ -60,13 +60,8 @@ function appItemHTML(app, i) {
 
 function renderApplications() {
     const empty = `<div class="empty-state"><div class="empty-icon"><i class="ti ti-file-off"></i></div><div class="empty-title">No applications yet</div><div class="empty-sub">Start applying to jobs!</div></div>`;
-    if (!myApplications.length) {
-        $('#recentApplicationsList').html(empty);
-        $('#allApplicationsList').html(empty);
-        return;
-    }
-    $('#recentApplicationsList').html(myApplications.slice(0, 3).map(appItemHTML).join(''));
-    $('#allApplicationsList').html(myApplications.map(appItemHTML).join(''));
+    renderList('#recentApplicationsList', myApplications.slice(0, 3), appItemHTML, empty);
+    renderList('#allApplicationsList', myApplications, appItemHTML, empty);
 }
 
 // ── SAVED ──
@@ -79,12 +74,8 @@ function renderSaved() {
     const empty = `<div class="empty-state"><div class="empty-icon"><i class="ti ti-bookmark-off"></i></div><div class="empty-title">No saved jobs</div><div class="empty-sub">Bookmark jobs to see them here</div></div>`;
     $('#savedCount').text(mySaved.length);
     $('#savedBadge').text(mySaved.length);
-    if (!mySaved.length) {
-        $('#recentSavedList').html(empty);
-        $('#allSavedList').html(empty);
-        return;
-    }
-    const html = mySaved.map((s, i) => {
+
+    renderList('#allSavedList', mySaved, (s, i) => {
         const c = colors[i % colors.length];
         return `<div class="job-item">
             <div class="job-logo" style="background:${c.bg};color:${c.color}">${safeInitial(s.job.companyName)}</div>
@@ -97,8 +88,9 @@ function renderSaved() {
                 <button class="btn-danger" onclick="unsaveJob(${s.job.id})">Remove</button>
             </div>
         </div>`;
-    }).join('');
-    $('#recentSavedList').html(mySaved.slice(0, 3).map((s, i) => {
+    }, empty);
+
+    renderList('#recentSavedList', mySaved.slice(0, 3), (s, i) => {
         const c = colors[i % colors.length];
         return `<div class="job-item">
             <div class="job-logo" style="background:${c.bg};color:${c.color}">${safeInitial(s.job.companyName)}</div>
@@ -108,8 +100,7 @@ function renderSaved() {
             </div>
             <span class="tag tag-gray">${s.job.jobType}</span>
         </div>`;
-    }).join(''));
-    $('#allSavedList').html(html);
+    }, empty);
 }
 
 async function unsaveJob(jobId) {
@@ -126,8 +117,7 @@ async function loadBrowseJobs() {
     try {
         const r = await apiFetch('/Job');
         const jobs = r.data.data || [];
-        if (!jobs.length) { $('#browseJobsList').html('<div class="empty-state"><p>No jobs available</p></div>'); return; }
-        $('#browseJobsList').html(jobs.map((j, i) => {
+        renderList('#browseJobsList', jobs, (j, i) => {
             const c = colors[i % colors.length];
             return `<div class="job-item">
                 <div class="job-logo" style="background:${c.bg};color:${c.color}">${safeInitial(j.companyName || j.title)}</div>
@@ -140,7 +130,7 @@ async function loadBrowseJobs() {
                     <button class="btn-primary" onclick="window.location.href='/assets/pages/jobdetail.html?id=${j.id}'">Apply</button>
                 </div>
             </div>`;
-        }).join(''));
+        }, '<div class="empty-state"><p>No jobs available</p></div>');
     } catch (e) { $('#browseJobsList').html('<div class="empty-state"><p>Error loading jobs</p></div>'); }
 }
 
@@ -160,9 +150,17 @@ async function loadProfile() {
         $('#profilePhone').val(p.phone || '');
         $('#profileSkills').val(p.skills || '');
         $('#profileExperience').val(p.workExperience || '');
-        if (p.cvUrl) {
-            $('#cvLink').attr('href', FILE_BASE_URL + p.cvUrl).css('display', 'inline-flex');
-        }
+        if (p.cvUrl) $('#cvLink').attr('href', FILE_BASE_URL + p.cvUrl).css('display', 'inline-flex');
+    } catch { }
+    loadAccountInfo();
+}
+
+async function loadAccountInfo() {
+    try {
+        const r = await apiFetch('/Account/profile');
+        const line = `${escapeHtml(r.data.email)} · ${escapeHtml(r.data.role)}`;
+        if ($('#accountInfoLine').length) { $('#accountInfoLine').html(line); return; }
+        $('#tab-profile .dash-card-header').first().after(`<div id="accountInfoLine" style="padding:12px 28px 0;font-size:0.8rem;color:#64748b">${line}</div>`);
     } catch { }
 }
 
@@ -197,6 +195,27 @@ async function uploadCv() {
         $('#cvLink').attr('href', FILE_BASE_URL + result.data).css('display', 'inline-flex');
     } catch (e) {
         showToast(e.message || 'Upload failed', false);
+    }
+}
+
+async function downloadCvPdf() {
+    try {
+        const token = localStorage.getItem('token');
+        const res = await fetch(`${BASE_URL}/Account/cv/download`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (!res.ok) throw new Error('Could not generate CV.');
+        const blob = await res.blob();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'CV.pdf';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+    } catch (err) {
+        showToast(err.message || 'Failed to download CV', false);
     }
 }
 

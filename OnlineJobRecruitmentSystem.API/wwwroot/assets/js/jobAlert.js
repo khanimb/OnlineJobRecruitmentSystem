@@ -8,11 +8,7 @@ async function loadJobAlerts() {
 }
 
 function renderJobAlerts() {
-    if (!myAlerts.length) {
-        $('#alertsList').html(`<div class="empty-state"><div class="empty-icon"><i class="ti ti-bell-off"></i></div><div class="empty-title">No job alerts yet</div><div class="empty-sub">Get notified when matching jobs are posted</div></div>`);
-        return;
-    }
-    $('#alertsList').html(myAlerts.map((a, i) => {
+    renderList('#alertsList', myAlerts, (a, i) => {
         const c = colors[i % colors.length];
         return `<div class="job-item">
             <div class="job-logo" style="background:${c.bg};color:${c.color}"><i class="ti ti-bell"></i></div>
@@ -27,7 +23,7 @@ function renderJobAlerts() {
                 <button class="btn-danger" onclick="deleteJobAlert(${a.id})"><i class="ti ti-trash"></i></button>
             </div>
         </div>`;
-    }).join(''));
+    }, `<div class="empty-state"><div class="empty-icon"><i class="ti ti-bell-off"></i></div><div class="empty-title">No job alerts yet</div><div class="empty-sub">Get notified when matching jobs are posted</div></div>`);
 }
 
 async function submitJobAlert() {
@@ -60,8 +56,9 @@ async function toggleJobAlert(id, currentlyActive) {
     } catch (e) { showToast(e.message, false); }
 }
 
-function editJobAlert(id) {
-    const alert = myAlerts.find(a => a.id === id);
+async function editJobAlert(id) {
+    let alert;
+    try { const r = await apiFetch('/JobAlert/' + id); alert = r.data; } catch { alert = myAlerts.find(a => a.id === id); }
     if (!alert) return;
     editingAlertId = id;
     $('#alertKeyword').val(alert.keyword || '');

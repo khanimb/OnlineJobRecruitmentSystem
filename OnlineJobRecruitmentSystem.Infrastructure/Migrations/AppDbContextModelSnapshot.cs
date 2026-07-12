@@ -81,11 +81,13 @@ namespace OnlineJobRecruitmentSystem.Infrastructure.Migrations
 
                     b.Property<string>("PaymentType")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.HasKey("Id");
 
@@ -120,7 +122,8 @@ namespace OnlineJobRecruitmentSystem.Infrastructure.Migrations
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("StripePaymentId")
                         .IsRequired()
@@ -363,7 +366,13 @@ namespace OnlineJobRecruitmentSystem.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Category");
+
                     b.HasIndex("EmployerProfileId");
+
+                    b.HasIndex("JobType");
+
+                    b.HasIndex("Location");
 
                     b.ToTable("JobPosts");
                 });
@@ -483,12 +492,12 @@ namespace OnlineJobRecruitmentSystem.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId", "IsRead");
 
                     b.ToTable("Notifications");
                 });
 
-            modelBuilder.Entity("OnlineJobRecruitmentSystem.Domain.Entities.Payment", b =>
+            modelBuilder.Entity("OnlineJobRecruitmentSystem.Domain.Entities.PaymentPremium", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -501,9 +510,6 @@ namespace OnlineJobRecruitmentSystem.Infrastructure.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("EmployerId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Plan")
                         .IsRequired()
@@ -520,9 +526,12 @@ namespace OnlineJobRecruitmentSystem.Infrastructure.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("EmployerId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Payments");
                 });
@@ -870,11 +879,11 @@ namespace OnlineJobRecruitmentSystem.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("OnlineJobRecruitmentSystem.Domain.Entities.Payment", b =>
+            modelBuilder.Entity("OnlineJobRecruitmentSystem.Domain.Entities.PaymentPremium", b =>
                 {
                     b.HasOne("OnlineJobRecruitmentSystem.Domain.Entities.User", "Employer")
                         .WithMany()
-                        .HasForeignKey("EmployerId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 

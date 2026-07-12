@@ -12,5 +12,7 @@
         public decimal SalaryMax { get; set; }
         public DateTime Deadline { get; set; }
         public bool IsActive { get; set; }
+        public decimal? Budget { get; set; }
+        public string? PaymentType { get; set; }
     }
 }

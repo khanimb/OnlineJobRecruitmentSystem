@@ -1,13 +1,13 @@
 ﻿let allJobs = [];
 
 async function loadJobs() {
+    const salary = parseInt($('#salaryFilter').val()) || null;
+    const qs = new URLSearchParams({ pageSize: 200, page: 1 });
+    if (salary) qs.set('salaryMin', salary);
     try {
-        const r = await apiFetch('/Job');
-        allJobs = r.data || [];
-    } catch (e) {
-        allJobs = [];
-        showToast('Failed to load jobs. Please try again.', false);
-    }
+        const r = await apiFetch('/Job?' + qs.toString());
+        allJobs = r.data?.data || [];
+    } catch (e) { allJobs = []; showToast('Failed to load jobs. Please try again.', false); }
     applyFilters();
 }
 
@@ -18,7 +18,7 @@ function applyFilters() {
     const sort = $('#sortSelect').val();
 
     const checkedTypes = $('.filter-check input[type=checkbox]:checked').map(function () { return $(this).val(); }).get()
-        .filter(v => ['Full-time', 'Part-time', 'Remote', 'Contract', 'Internship'].includes(v));
+        .filter(v => ['FullTime', 'PartTime', 'Remote', 'Contract', 'Internship'].includes(v));
 
     const checkedCats = $('.filter-check input[type=checkbox]:checked').map(function () { return $(this).val(); }).get()
         .filter(v => ['Technology', 'Finance', 'Healthcare', 'Education', 'Marketing', 'Design'].includes(v));

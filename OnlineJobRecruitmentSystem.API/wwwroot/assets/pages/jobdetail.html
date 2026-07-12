@@ -46,6 +46,11 @@
 
                 <div id="commentsList"></div>
             </div>
+
+            <div class="job-detail-section" id="similarJobsSection" style="display:none">
+                <div class="job-detail-section-title">Similar jobs</div>
+                <div id="similarJobsList"></div>
+            </div>
         </div>
 
         <aside class="job-detail-sidebar">
@@ -85,23 +90,44 @@
                 const r = await apiFetch('/Job/' + id);
                 currentJob = r.data;
                 renderJob(currentJob);
+                loadSimilarJobs(id);
             } catch {
                 $('#jobContent').html(`<div class="empty-state"><div class="empty-icon"><i class="ti ti-alert-circle"></i></div><div class="empty-title">Job not found</div></div>`);
             }
         }
 
+        async function loadSimilarJobs(id) {
+            try {
+                const r = await apiFetch(`/Job/${id}/similar`);
+                const jobs = r.data || [];
+                if (!jobs.length) return;
+                $('#similarJobsList').html(jobs.map((j, i) => {
+                    const c = colors[i % colors.length];
+                    return `<div class="job-item" style="cursor:pointer" onclick="window.location.href='jobdetail.html?id=${j.id}'">
+                <div class="job-logo" style="background:${c.bg};color:${c.color}">${escapeHtml((j.companyName || 'J')[0].toUpperCase())}</div>
+                <div class="job-info">
+                    <div class="job-name">${escapeHtml(j.title || j.jobTitle || 'Job')}</div>
+                    <div class="job-meta"><span><i class="ti ti-map-pin"></i> ${escapeHtml(j.location || 'Remote')}</span><span><i class="ti ti-clock"></i> ${escapeHtml(j.jobType || 'Full-time')}</span></div>
+                </div>
+            </div>`;
+                }).join(''));
+                $('#similarJobsSection').show();
+            } catch { }
+        }
+
         function renderJob(job) {
-            const title = job.title || job.jobTitle || 'Job';
-            const company = job.companyName || 'Company';
-            const loc = job.location || 'Remote';
-            const type = job.jobType || 'Full-time';
-            const cat = job.category || '';
-            const desc = job.description || '';
-            const reqs = job.requirements || '';
+            const rawTitle = job.title || job.jobTitle || 'Job';
+            const title = escapeHtml(rawTitle);
+            const company = escapeHtml(job.companyName || 'Company');
+            const loc = escapeHtml(job.location || 'Remote');
+            const type = escapeHtml(job.jobType || 'Full-time');
+            const cat = escapeHtml(job.category || '');
+            const desc = escapeHtml(job.description || '');
+            const reqs = escapeHtml(job.requirements || '');
             const salMin = job.salaryMin || 0;
             const salMax = job.salaryMax || 0;
 
-            document.title = title + ' — NexHire';
+            document.title = rawTitle + ' — NexHire';
 
             $('#jobContent').html(`
                   <div class="job-detail-header">

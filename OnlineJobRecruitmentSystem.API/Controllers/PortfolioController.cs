@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OnlineJobRecruitmentSystem.Application.DTOs.PortfolioDtos;
@@ -14,10 +15,10 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
     [Authorize(Roles = OnlineJobRecruitmentSystem.Domain.Common.Roles.JobSeeker)]
     public class PortfolioController(
         AppDbContext context,
-        IPortfolioService portfolioService) : BaseApiController
+        IPortfolioService portfolioService,
+        IValidator<CreatePortfolioItemDto> createValidator,
+        IValidator<UpdatePortfolioItemDto> updateValidator) : BaseApiController
     {
-        
-
         private async Task<int> GetProfileId()
         {
             var userId = CurrentUserId;
@@ -29,6 +30,10 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromForm] CreatePortfolioItemDto dto)
         {
+            var result = await createValidator.ValidateAsync(dto);
+            if (!result.IsValid)
+                return BadRequest(ResponseModel<string>.Fail(result.Errors[0].ErrorMessage));
+
             if (dto.File == null || dto.File.Length == 0)
                 return BadRequest(ResponseModel<string>.Fail("File is required."));
 
@@ -37,6 +42,9 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
 
             if (!dto.File.IsValidSize(5 * 1024 * 1024))
                 return BadRequest(ResponseModel<string>.Fail("File size must not exceed 5 MB."));
+
+            if (!dto.File.HasValidSignature(".jpg", ".jpeg", ".png"))
+                return BadRequest(ResponseModel<string>.Fail("File content does not match its extension."));
 
             var profileId = await GetProfileId();
             if (profileId == 0)
@@ -65,6 +73,10 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromForm] UpdatePortfolioItemDto dto)
         {
+            var result = await updateValidator.ValidateAsync(dto);
+            if (!result.IsValid)
+                return BadRequest(ResponseModel<string>.Fail(result.Errors[0].ErrorMessage));
+
             if (dto.File != null)
             {
                 if (!dto.File.IsValidType(".jpg", ".jpeg", ".png"))
@@ -72,6 +84,9 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
 
                 if (!dto.File.IsValidSize(5 * 1024 * 1024))
                     return BadRequest(ResponseModel<string>.Fail("File size must not exceed 5 MB."));
+
+                if (!dto.File.HasValidSignature(".jpg", ".jpeg", ".png"))
+                    return BadRequest(ResponseModel<string>.Fail("File content does not match its extension."));
             }
 
             var profileId = await GetProfileId();

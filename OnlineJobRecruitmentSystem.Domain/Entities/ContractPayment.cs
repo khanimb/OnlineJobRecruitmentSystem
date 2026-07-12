@@ -11,6 +11,6 @@ namespace OnlineJobRecruitmentSystem.Domain.Entities
         public decimal JobSeekerAmount { get; set; }
         public ContractPaymentStatus Status { get; set; } = ContractPaymentStatus.Pending;
 
-        public Contract Contract { get; set; }
+        public Contract Contract { get; set; } = null!;
     }
 }

@@ -11,11 +11,33 @@ builder.Services.AddApplicationServices(builder.Configuration);
 
 var app = builder.Build();
 
-app.UseSwagger();
-app.MapScalarApiReference(options =>
+using (var scope = app.Services.CreateScope())
 {
-    options.WithOpenApiRoutePattern("/swagger/v1/swagger.json");
-});
+    var context = scope.ServiceProvider.GetRequiredService<OnlineJobRecruitmentSystem.Infrastructure.Data.AppDbContext>();
+    var config = scope.ServiceProvider.GetRequiredService<IConfiguration>();
+
+    if (!context.Users.Any(u => u.Role == OnlineJobRecruitmentSystem.Domain.Common.Roles.Admin))
+    {
+        context.Users.Add(new OnlineJobRecruitmentSystem.Domain.Entities.User
+        {
+            Username = config["SeedAdmin:Username"] ?? "admin",
+            Email = config["SeedAdmin:Email"] ?? "admin@jobsystem.local",
+            PasswordHash = BCrypt.Net.BCrypt.HashPassword(config["SeedAdmin:Password"] ?? "ChangeMe123!"),
+            Role = OnlineJobRecruitmentSystem.Domain.Common.Roles.Admin,
+            IsEmailVerified = true
+        });
+        context.SaveChanges();
+    }
+}
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.MapScalarApiReference(options =>
+    {
+        options.WithOpenApiRoutePattern("/swagger/v1/swagger.json");
+    });
+}
 
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
@@ -24,7 +46,11 @@ app.UseMiddleware<RateLimitingMiddleware>();
 
 app.UseDefaultFiles();
 app.UseStaticFiles();
-app.UseCors("AllowAll");
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
+app.UseCors("AllowConfiguredOrigin");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

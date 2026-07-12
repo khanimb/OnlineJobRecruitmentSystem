@@ -211,6 +211,9 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
                 return NotFound(ResponseModel<string>.Fail("History not found."));
 
             var result = JsonSerializer.Deserialize<CvAnalysisResultDto>(history.ResultJson, JsonOptions);
+            if (result == null)
+                return NotFound(ResponseModel<string>.Fail("Analysis result could not be read."));
+
             return Ok(ResponseModel<CvAnalysisResultDto>.Ok(result));
         }
 

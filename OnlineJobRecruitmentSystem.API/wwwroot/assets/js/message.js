@@ -70,7 +70,7 @@ function renderInbox() {
         const other = otherPerson(m);
         const unread = !m.isRead && m.senderId !== currentUser.id;
         const activeClass = other.id === activeUserId ? 'active' : '';
-        return `<div class="msg-conv-item ${activeClass}" data-id="${other.id}" data-name="${other.name}">
+        return `<div class="msg-conv-item ${activeClass}" data-id="${other.id}" data-name="${escapeHtml(other.name)}">
             <div class="msg-avatar">${(other.name || '?')[0].toUpperCase()}</div>
             <div class="msg-conv-info">
                 <div class="msg-conv-name"><span>${escapeHtml(other.name)}</span>${unread ? '<span class="msg-unread-dot"></span>' : ''}</div>
@@ -91,7 +91,7 @@ async function openConversation(userId, userName) {
     $(`.msg-conv-item[data-id="${userId}"]`).addClass('active');
 
     $('#msgMain').html(`
-        <div class="msg-main-header"><div class="msg-avatar" style="width:34px;height:34px;font-size:0.85rem">${escapeHtml(userName)} || '?')[0].toUpperCase()}</div> ${userName}</div>
+        <div class="msg-main-header"><div class="msg-avatar" style="width:34px;height:34px;font-size:0.85rem">${(userName || '?')[0].toUpperCase()}</div> ${escapeHtml(userName)}</div>
         <div class="msg-list" id="msgList"></div>
         <div class="msg-composer">
             <input type="text" id="msgInput" placeholder="Type a message..." />

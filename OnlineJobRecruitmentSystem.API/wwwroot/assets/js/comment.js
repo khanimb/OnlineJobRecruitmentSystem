@@ -1,13 +1,4 @@
-﻿function CurrentUserId () {
-    const token = localStorage.getItem('token');
-    if (!token) return null;
-    try {
-        const payload = JSON.parse(atob(token.split('.')[1]));
-        return parseInt(payload['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier']);
-    } catch {
-        return null;
-    }
-}
+﻿
 
 async function loadComments() {
     const id = new URLSearchParams(window.location.search).get('id');
@@ -30,7 +21,7 @@ function renderComments(comments) {
                 <div style="font-weight:600;">${escapeHtml(c.username)}</div>
                 <div class="comment-text" style="color:#374151; margin:4px 0;">${escapeHtml(c.text)}</div>
                 <div style="font-size:12px; color:#9ca3af;">${new Date(c.createdAt).toLocaleString()}</div>
-                ${CurrentUserId() === c.userId ? `
+                ${getCurrentUserId() === c.userId ? `
                     <button onclick="editComment(${c.id})" style="font-size:12px; color:#2563eb; background:none; border:none; cursor:pointer; margin-right:8px;">Edit</button>
                     <button onclick="deleteComment(${c.id})" style="font-size:12px; color:#ef4444; background:none; border:none; cursor:pointer;">Delete</button>
                 ` : ''}

@@ -12,11 +12,13 @@ namespace OnlineJobRecruitmentSystem.Infrastructure.Services
     {
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
+        private readonly INotificationService _notificationService;
 
-        public MessageService(AppDbContext context, IMapper mapper)
+        public MessageService(AppDbContext context, IMapper mapper, INotificationService notificationService)
         {
             _context = context;
             _mapper = mapper;
+            _notificationService = notificationService;
         }
 
         public async Task<Message> SaveMessageAsync(int senderId, SendMessageDto dto)
@@ -31,6 +33,15 @@ namespace OnlineJobRecruitmentSystem.Infrastructure.Services
 
             _context.Messages.Add(message);
             await _context.SaveChangesAsync();
+
+            await _notificationService.CreateNotificationAsync(new OnlineJobRecruitmentSystem.Application.DTOs.NotificationDtos.CreateNotificationDto
+            {
+                UserId = dto.ReceiverId,
+                Title = "New Message",
+                Message = "You have received a new message.",
+                Type = "Message"
+            });
+
             return message;
         }
 

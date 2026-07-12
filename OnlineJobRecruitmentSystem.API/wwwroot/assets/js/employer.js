@@ -1,4 +1,5 @@
 ﻿let myJobs = [], myApplicants = [];
+let editingJobId = null;
 
 function showTab(tab, el) {
     ['overview', 'jobs', 'applicants', 'contracts', 'reviews', 'premium', 'profile'].forEach(t => {
@@ -27,7 +28,11 @@ function showTab(tab, el) {
 }
 
 function openModal() { $('#modalOverlay').addClass('open'); }
-function closeModal() { $('#modalOverlay').removeClass('open'); }
+function closeModal() {
+    $('#modalOverlay').removeClass('open');
+    editingJobId = null;
+    $('.modal-title').text('Post a New Job');
+}
 function closeModalOutside(e) { if (e.target.id === 'modalOverlay') closeModal(); }
 
 // ── JOBS ──
@@ -37,6 +42,7 @@ async function loadJobs() {
     $('#totalJobs').text(myJobs.length);
     $('#jobsBadge').text(myJobs.length);
     $('#jobsSubtitle').text(myJobs.length + ' positions posted');
+    $('#jobFilterSelect').html('<option value="">All jobs</option>' + myJobs.map(j => `<option value="${j.id}">${escapeHtml(j.title)}</option>`).join(''));
 }
 
 function jobItemHTML(job, i) {
@@ -50,6 +56,7 @@ function jobItemHTML(job, i) {
         </div>
         <span class="job-status status-active">Active</span>
         <div class="job-actions">
+            <button class="act-btn" title="Edit" onclick="editJob(${job.id})"><i class="ti ti-edit"></i></button>
             <button class="act-btn danger" title="Delete" onclick="deleteJob(${job.id})"><i class="ti ti-trash"></i></button>
         </div>
     </div>`;
@@ -57,18 +64,14 @@ function jobItemHTML(job, i) {
 
 function renderJobs() {
     const empty = `<div class="empty-state"><div class="empty-icon"><i class="ti ti-briefcase-off"></i></div><div class="empty-title">No jobs posted yet</div><div class="empty-sub">Click "Post a Job" to get started</div></div>`;
-    if (!myJobs.length) {
-        $('#recentJobsList').html(empty);
-        $('#allJobsList').html(empty);
-        return;
-    }
-    $('#recentJobsList').html(myJobs.slice(0, 5).map(jobItemHTML).join(''));
-    $('#allJobsList').html(myJobs.map(jobItemHTML).join(''));
+    renderList('#recentJobsList', myJobs.slice(0, 5), jobItemHTML, empty);
+    renderList('#allJobsList', myJobs, jobItemHTML, empty);
 }
 
 // ── APPLICANTS ──
-async function loadApplicants() {
-    try { const r = await apiFetch('/Employer/applications'); myApplicants = r.data || []; } catch (e) { myApplicants = []; showToast('Failed to load applicants.', false); }
+async function loadApplicants(jobId, status) {
+    const endpoint = jobId ? `/Employer/applications/${jobId}` : `/Employer/applications${status ? '?status=' + status : ''}`;
+    try { const r = await apiFetch(endpoint); myApplicants = r.data || []; } catch (e) { myApplicants = []; showToast('Failed to load applicants.', false); }
     renderApplicants();
     $('#totalApps').text(myApplicants.length);
     $('#appsBadge').text(myApplicants.length);
@@ -77,17 +80,14 @@ async function loadApplicants() {
 
 function renderApplicants() {
     const empty = `<div class="empty-state"><div class="empty-icon"><i class="ti ti-user-off"></i></div><div class="empty-title">No applicants yet</div><div class="empty-sub">Applicants will appear here</div></div>`;
-    if (!myApplicants.length) {
-        $('#recentAppsList').html(empty);
-        $('#allApplicantsList').html(empty);
-        return;
-    }
     const badgeMap = { Applied: 'badge-new', Reviewed: 'badge-review', Shortlisted: 'badge-hired', Rejected: 'badge-rejected' };
-    const html = myApplicants.map((app, i) => {
+    const nextStatusMap = { Applied: ['Reviewed'], Reviewed: ['Shortlisted', 'Rejected'], Shortlisted: [], Rejected: [] };
+    const templateFn = (app, i) => {
         const c = colors[i % colors.length];
         const rawName = app.jobSeeker?.fullName || 'Applicant';
         const cvUrl = app.jobSeeker?.cvUrl;
         const userId = app.jobSeeker?.userId || '';
+        const nextOptions = (nextStatusMap[app.status] || []).map(s => `<option value="${s}">${s}</option>`).join('');
         return `<div class="applicant-item">
     <div class="app-avatar" style="background:${c.bg};color:${c.color}">${safeInitial(rawName)}</div>
     <div style="flex:1">
@@ -99,16 +99,15 @@ function renderApplicants() {
     ${cvUrl ? `<a href="${FILE_BASE_URL}${cvUrl}" target="_blank" class="act-btn" title="View CV"><i class="ti ti-file-text"></i></a>` : ''}
     <span class="app-badge ${badgeMap[app.status] || 'badge-new'}">${app.status || 'Applied'}</span>
     ${app.status === 'Shortlisted' ? `<button class="btn-outline" onclick="openContractModal(${app.jobPostId}, ${app.jobSeeker?.id}, '${rawName.replace(/'/g, "\\'")}')"><i class="ti ti-file-text"></i> Contract</button>` : ''}
+    ${nextOptions ? `
     <select class="status-select" onchange="updateStatus(${app.id}, this.value)">
         <option value="">Change status</option>
-        <option value="Reviewed">Reviewed</option>
-        <option value="Shortlisted">Shortlisted</option>
-        <option value="Rejected">Rejected</option>
-    </select>
+        ${nextOptions}
+    </select>` : ''}
 </div>`;
-    }).join('');
-    $('#recentAppsList').html(html);
-    $('#allApplicantsList').html(html);
+    };
+    renderList('#recentAppsList', myApplicants, templateFn, empty);
+    renderList('#allApplicantsList', myApplicants, templateFn, empty);
 }
 
 async function updateStatus(appId, status) {
@@ -122,27 +121,53 @@ async function updateStatus(appId, status) {
 
 // ── POST JOB ──
 async function postJob() {
-    const title = $('#jobTitle').val().trim();
-    const location = $('#jobLocation').val().trim();
-    const description = $('#jobDesc').val().trim();
-    if (!title || !location || !description) { showToast('Please fill required fields', false); return; }
+    const dto = {
+        title: $('#jobTitle').val().trim(),
+        location: $('#jobLocation').val().trim(),
+        description: $('#jobDesc').val().trim(),
+        requirements: $('#jobReqs').val().trim(),
+        jobType: $('#jobType').val(),
+        category: $('#jobCategory').val(),
+        salaryMin: parseInt($('#salaryMin').val()) || 0,
+        salaryMax: parseInt($('#salaryMax').val()) || 0,
+        budget: $('#jobBudget').val() ? parseFloat($('#jobBudget').val()) : null,
+        paymentType: $('#jobPaymentType').val(),
+        deadline: $('#jobDeadline').val() || null
+    };
+    if (!dto.title || !dto.location || !dto.description) { showToast('Please fill required fields', false); return; }
+
     try {
-        await apiFetch('/Job', {
-            method: 'POST', body: JSON.stringify({
-                title, location, description,
-                requirements: $('#jobReqs').val().trim(),
-                jobType: $('#jobType').val(),
-                category: $('#jobCategory').val(),
-                salaryMin: parseInt($('#salaryMin').val()) || 0,
-                salaryMax: parseInt($('#salaryMax').val()) || 0,
-                deadline: $('#jobDeadline').val() || null
-            })
-        });
+        if (editingJobId) {
+            const existing = myJobs.find(j => j.id === editingJobId);
+            dto.isActive = existing ? existing.isActive : true;
+            await apiFetch('/Job/' + editingJobId, { method: 'PUT', body: JSON.stringify(dto) });
+            showToast('Job updated successfully!');
+        } else {
+            await apiFetch('/Job', { method: 'POST', body: JSON.stringify(dto) });
+            showToast('Job posted successfully!');
+        }
         closeModal();
-        showToast('Job posted successfully!');
-        ['jobTitle', 'jobLocation', 'jobDesc', 'jobReqs'].forEach(id => $('#' + id).val(''));
         await loadJobs();
-    } catch (err) { showToast(err.message || 'Failed to post job', false); }
+    } catch (err) { showToast(err.message || 'Failed to save job', false); }
+}
+
+function editJob(id) {
+    const job = myJobs.find(j => j.id === id);
+    if (!job) return;
+    editingJobId = id;
+    $('#jobTitle').val(job.title);
+    $('#jobLocation').val(job.location);
+    $('#jobType').val(job.jobType);
+    $('#jobCategory').val(job.category);
+    $('#salaryMin').val(job.salaryMin);
+    $('#salaryMax').val(job.salaryMax);
+    $('#jobDesc').val(job.description);
+    $('#jobReqs').val(job.requirements);
+    $('#jobBudget').val(job.budget || '');
+    $('#jobPaymentType').val(job.paymentType || 'Fixed');
+    $('#jobDeadline').val(job.deadline ? job.deadline.split('T')[0] : '');
+    $('.modal-title').text('Edit Job');
+    openModal();
 }
 
 async function deleteJob(id) {
@@ -159,7 +184,40 @@ async function loadProfile() {
         if ($('#companyName').length) $('#companyName').val(p.companyName || '');
         if ($('#companyDesc').length) $('#companyDesc').val(p.description || '');
         if ($('#companyWebsite').length) $('#companyWebsite').val(p.website || '');
+        if (p.logoUrl) $('#logoPreview').attr('src', FILE_BASE_URL + p.logoUrl).show();
     } catch { }
+    loadAccountInfo();
+}
+
+async function loadAccountInfo() {
+    try {
+        const r = await apiFetch('/Account/profile');
+        const line = `${escapeHtml(r.data.email)} · ${escapeHtml(r.data.role)}`;
+        if ($('#accountInfoLine').length) { $('#accountInfoLine').html(line); return; }
+        $('#tab-profile .dash-card-header').first().after(`<div id="accountInfoLine" style="padding:12px 28px 0;font-size:0.8rem;color:#64748b">${line}</div>`);
+    } catch { }
+}
+
+async function loadDashboard() {
+    try {
+        const r = await apiFetch('/Employer/dashboard');
+        $('#totalShortlisted').text(r.data.shortlisted);
+        $('#totalRejected').text(r.data.rejected);
+    } catch { }
+}
+
+async function uploadLogo() {
+    const file = $('#logoFile')[0].files[0];
+    if (!file) { showToast('Please select a file', false); return; }
+    const formData = new FormData();
+    formData.append('file', file);
+    try {
+        const result = await apiFetch('/Employer/upload-logo', { method: 'POST', body: formData });
+        showToast('Logo uploaded successfully!');
+        $('#logoPreview').attr('src', FILE_BASE_URL + result.data).show();
+    } catch (e) {
+        showToast(e.message || 'Upload failed', false);
+    }
 }
 
 async function saveProfile() {
@@ -204,7 +262,7 @@ $(function () {
     $('#sidebarName').text(name);
     $('#sidebarAvatar').text(name[0].toUpperCase());
     renderChart();
-    Promise.all([loadJobs(), loadApplicants()]).then(() => {
+    Promise.all([loadJobs(), loadApplicants(), loadDashboard()]).then(() => {
         if (location.hash === '#premium') {
             showTab('premium', $('.nav-item[onclick*="premium"]').get(0));
         }

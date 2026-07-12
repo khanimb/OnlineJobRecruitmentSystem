@@ -20,6 +20,21 @@ body {
     background: #f8faff;
 }
 
+.form-textarea {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 0.875rem;
+    font-family: Inter, sans-serif;
+    outline: none;
+    resize: vertical;
+}
+
+    .form-textarea.tinted {
+        background: #f8faff;
+    }
+
 /* ========== NAVBAR ========== */
 .navbar {
     background: #fff;
@@ -1344,6 +1359,11 @@ footer {
 .status-active {
     background: #ecfdf5;
     color: #10b981;
+}
+
+.status-expired {
+    background: #fef2f2;
+    color: #ef4444;
 }
 
 .job-apps {

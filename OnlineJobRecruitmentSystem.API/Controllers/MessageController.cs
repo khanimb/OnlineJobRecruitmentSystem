@@ -1,9 +1,9 @@
+using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using OnlineJobRecruitmentSystem.API.Hubs;
 using OnlineJobRecruitmentSystem.Application.DTOs.MessageDtos;
-using OnlineJobRecruitmentSystem.Application.DTOs.NotificationDtos;
 using OnlineJobRecruitmentSystem.Application.Interfaces;
 using OnlineJobRecruitmentSystem.Common;
 
@@ -15,14 +15,18 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
     public class MessageController(
         IMessageService messageService,
         IHubContext<ChatHub> chatHub,
-        INotificationService notificationService
+        IValidator<SendMessageDto> validator
         ) : BaseApiController
     {
-        
+
 
         [HttpPost]
         public async Task<IActionResult> SendMessage(SendMessageDto dto)
         {
+            var result = await validator.ValidateAsync(dto);
+            if (!result.IsValid)
+                return BadRequest(ResponseModel<string>.Fail(result.Errors[0].ErrorMessage));
+
             var senderId = CurrentUserId;
             var message = await messageService.SaveMessageAsync(senderId, dto);
 
@@ -34,14 +38,6 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
                     message.Content,
                     message.CreatedAt
                 });
-
-            await notificationService.CreateNotificationAsync(new CreateNotificationDto
-            {
-                UserId = dto.ReceiverId,
-                Title = "New Message",
-                Message = "You have received a new message.",
-                Type = "Message"
-            });
 
             return Ok(ResponseModel<string>.Ok(null!, "Message sent."));
         }

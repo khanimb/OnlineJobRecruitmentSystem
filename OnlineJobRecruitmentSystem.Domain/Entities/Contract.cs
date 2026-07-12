@@ -12,8 +12,8 @@ namespace OnlineJobRecruitmentSystem.Domain.Entities
         public PaymentType PaymentType { get; set; } = PaymentType.Fixed;
         public DateTime? CompletedAt { get; set; }
 
-        public JobPost JobPost { get; set; }
-        public EmployerProfile EmployerProfile { get; set; }
-        public JobSeekerProfile JobSeekerProfile { get; set; }
+        public JobPost JobPost { get; set; } = null!;
+        public EmployerProfile EmployerProfile { get; set; } = null!;
+        public JobSeekerProfile JobSeekerProfile { get; set; } = null!;
     }
 }

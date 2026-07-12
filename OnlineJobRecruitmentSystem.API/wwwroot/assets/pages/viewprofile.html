@@ -12,12 +12,12 @@
 
     <nav class="navbar">
         <div class="logo">
-            <a href="../index.html" style="text-decoration:none;color:inherit;display:flex;align-items:center;gap:8px">
+            <a href="../../index.html" style="text-decoration:none;color:inherit;display:flex;align-items:center;gap:8px">
                 <i class="ti ti-brand-speedtest" style="color:#2563EB"></i> NexHire<span class="logo-accent">.</span>
             </a>
         </div>
         <div class="nav-links">
-            <a href="../index.html">Home</a>
+            <a href="../../index.html">Home</a>
             <a href="jobs.html">Find Jobs</a>
         </div>
         <div class="nav-btns"></div>
@@ -33,6 +33,8 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="../../assets/js/api.js"></script>
     <script src="../../assets/js/auth.js"></script>
+    <script src="../../assets/js/portfolio.js"></script>
+    <script src="../../assets/js/review.js"></script>
     <script>
         function toggleMenu() {
             $('.nav-links').toggleClass('open');
@@ -66,8 +68,8 @@
             renderHeader(profile);
             loadRating();
             loadSkillsAndExperience(profile);
-            loadPortfolio();
-            loadReviews();
+            loadPortfolio();     
+            loadReviews();     
         }
 
         function renderHeader(profile) {
@@ -75,35 +77,36 @@
             const canMessage = currentUser && String(currentUser.id) !== String(targetUserId);
 
             $('#profilePage').html(`
-                            <div class="profile-header">
-                                <div class="profile-avatar">${(profile.fullName || '?')[0].toUpperCase()}</div>
-                                <div>
-                                    <div class="profile-name">${profile.fullName || 'Unnamed'}</div>
-                                    <div class="profile-sub"><i class="ti ti-phone"></i> ${profile.phone || 'No phone provided'}</div>
-                                    <div class="profile-rating" id="ratingArea"></div>
-                                </div>
-                                <div class="profile-header-actions">
-                                    ${profile.cvUrl ? `<a class="btn-outline" href="${FILE_BASE_URL}${profile.cvUrl}" target="_blank"><i class="ti ti-file-text"></i> View CV</a>` : ''}
-                                    ${canMessage ? `<button class="btn-primary" onclick="messageUser('${profile.fullName || 'User'}')"><i class="ti ti-message"></i> Message</button>` : ''}
-                                </div>
-                            </div>
-                            <div class="profile-section">
-                                <div class="profile-section-title">Skills</div>
-                                <div class="skills-wrap" id="skillsArea"></div>
-                            </div>
-                            <div class="profile-section">
-                                <div class="profile-section-title">Work experience</div>
-                                <div id="experienceArea" style="color:#475569;font-size:0.9rem;line-height:1.6"></div>
-                            </div>
-                            <div class="profile-section">
-                                <div class="profile-section-title">Portfolio</div>
-                                <div class="portfolio-grid" id="portfolioArea"></div>
-                            </div>
-                            <div class="profile-section">
-                                <div class="profile-section-title">Reviews</div>
-                                <div id="reviewsArea"></div>
-                            </div>
-                        `);
+                                            <div class="profile-header">
+                                                <div class="profile-avatar">${(profile.fullName || '?')[0].toUpperCase()}</div>
+                                                <div>
+                                                    <div class="profile-name">${escapeHtml(profile.fullName || 'Unnamed')}</div>
+                                                    <div class="profile-sub"><i class="ti ti-phone"></i> ${escapeHtml(profile.phone || 'No phone provided')}</div>
+                                                    <div class="profile-rating" id="ratingArea"></div>
+                                                </div>
+                                                <div class="profile-header-actions">
+                                                    ${profile.cvUrl ? `<a class="btn-outline" href="${FILE_BASE_URL}${profile.cvUrl}" target="_blank"><i class="ti ti-file-text"></i> View CV</a>` : ''}
+                                                    ${canMessage ? `<button class="btn-primary" id="msgBtn"><i class="ti ti-message"></i> Message</button>` : ''}
+</div>
+                                            </div>
+                                            <div class="profile-section">
+                                                <div class="profile-section-title">Skills</div>
+                                                <div class="skills-wrap" id="skillsArea"></div>
+                                            </div>
+                                            <div class="profile-section">
+                                                <div class="profile-section-title">Work experience</div>
+                                                <div id="experienceArea" style="color:#475569;font-size:0.9rem;line-height:1.6"></div>
+                                            </div>
+                                            <div class="profile-section">
+                                                <div class="profile-section-title">Portfolio</div>
+                                                <div class="portfolio-grid" id="portfolioArea"></div>
+                                            </div>
+                                            <div class="profile-section">
+                                                <div class="profile-section-title">Reviews</div>
+                                                <div id="reviewsArea"></div>
+                                            </div>
+                                        `);
+            $('#msgBtn').on('click', function () { messageUser(profile.fullName || 'User'); });
         }
 
         function messageUser(name) {
@@ -138,19 +141,7 @@
             try {
                 const r = await apiFetch('/Portfolio/' + jobSeekerProfileId);
                 const items = r.data || [];
-                if (!items.length) {
-                    $('#portfolioArea').html('<span style="color:#94a3b8;font-size:0.85rem">No portfolio items yet.</span>');
-                    return;
-                }
-                $('#portfolioArea').html(items.map(p => `
-                                <div class="portfolio-item">
-                                    <img src="${FILE_BASE_URL}${p.fileUrl}" alt="${p.title || ''}" />
-                                    <div class="portfolio-item-body">
-                                        <div class="portfolio-item-title">${p.title || 'Untitled'}</div>
-                                        <div class="portfolio-item-desc">${p.description || ''}</div>
-                                    </div>
-                                </div>
-                            `).join(''));
+                $('#portfolioArea').html(items.length ? items.map(p => portfolioItemHtml(p, false)).join('') : '<span style="color:#94a3b8;font-size:0.85rem">No portfolio items yet.</span>');
             } catch {
                 $('#portfolioArea').html('<span style="color:#94a3b8;font-size:0.85rem">No portfolio items yet.</span>');
             }
@@ -160,20 +151,7 @@
             try {
                 const r = await apiFetch('/Review/user/' + targetUserId);
                 const reviews = r.data || [];
-                if (!reviews.length) {
-                    $('#reviewsArea').html('<span style="color:#94a3b8;font-size:0.85rem">No reviews yet.</span>');
-                    return;
-                }
-                $('#reviewsArea').html(reviews.map(rv => `
-                                <div class="review-item">
-                                    <div class="review-top">
-                                        <div class="review-name">${rv.reviewerName}</div>
-                                        <div class="review-stars">${starString(rv.rating)}</div>
-                                    </div>
-                                    ${rv.comment ? `<div class="review-comment">${rv.comment}</div>` : ''}
-                                    <div class="review-date">${new Date(rv.createdAt).toLocaleDateString()}</div>
-                                </div>
-                            `).join(''));
+                $('#reviewsArea').html(reviews.length ? reviews.map(rv => reviewItemHtml(rv, 'reviewerName')).join('') : '<span style="color:#94a3b8;font-size:0.85rem">No reviews yet.</span>');
             } catch {
                 $('#reviewsArea').html('<span style="color:#94a3b8;font-size:0.85rem">No reviews yet.</span>');
             }

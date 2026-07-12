@@ -15,5 +15,7 @@
         public bool IsActive { get; set; }
         public string CompanyName { get; set; } = string.Empty;
         public int ApplicationCount { get; set; }
+        public decimal? Budget { get; set; }
+        public string? PaymentType { get; set; }
     }
 }

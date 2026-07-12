@@ -9,8 +9,8 @@ namespace OnlineJobRecruitmentSystem.Application.Validations.PaymentDtoValidatio
         {
             RuleFor(x => x.Plan)
                 .NotEmpty().WithMessage("Plan is required.")
-                .Must(p => p == "basic" || p == "premium")
-                .WithMessage("Plan must be 'basic' or 'premium'.");
+                .Must(p => p == "basic" || p == "standard" || p == "premium")
+                .WithMessage("Plan must be 'basic', 'standard' or 'premium'.");
         }
     }
 }

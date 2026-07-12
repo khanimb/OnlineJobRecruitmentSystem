@@ -12,12 +12,12 @@
 
     <nav class="navbar">
         <div class="logo">
-            <a href="../index.html" style="text-decoration:none;color:inherit;display:flex;align-items:center;gap:8px">
+            <a href="../../index.html" style="text-decoration:none;color:inherit;display:flex;align-items:center;gap:8px">
                 <i class="ti ti-brand-speedtest" style="color:#2563EB"></i> NexHire<span class="logo-accent">.</span>
             </a>
         </div>
         <div class="nav-links">
-            <a href="../index.html">Home</a>
+            <a href="../../index.html">Home</a>
             <a href="jobs.html">Find Jobs</a>
         </div>
         <div class="nav-btns">
@@ -37,8 +37,10 @@
     </div>
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@microsoft/signalr@8.0.0/dist/browser/signalr.min.js"></script>
     <script src="../../assets/js/api.js"></script>
     <script src="../../assets/js/auth.js"></script>
+    <script src="../../assets/js/notification.js"></script>
     <script>
         function toggleMenu() {
             $('.nav-links').toggleClass('open');
@@ -76,20 +78,11 @@
                 $('#notifFullList').html('<div style="padding:20px;color:#94a3b8;font-size:0.85rem">No notifications yet.</div>');
                 return;
             }
-            $('#notifFullList').html(items.map(n => `
-                            <div class="notif-full-item ${n.isRead ? '' : 'unread'}" onclick="notifClickPage(${n.id})">
-                                <div class="notif-icon"><i class="ti ${notifIcon(n.type)}"></i></div>
-                                <div>
-                                    <div class="notif-item-title">${n.title}</div>
-                                    <div class="notif-item-msg">${n.message}</div>
-                                    <div class="notif-item-time">${timeAgo(n.createdAt)}</div>
-                                </div>
-                            </div>
-                        `).join(''));
+            $('#notifFullList').html(items.map(n => notifItemHtml(n, 'notifClickPage')).join(''));
         }
 
         async function notifClickPage(id) {
-            try { await apiFetch('/Notification/' + id, { method: 'PUT' }); loadFullNotifications(); } catch { }
+            try { await apiFetch('/Notification/' + id, { method: 'PUT', body: JSON.stringify({ isRead: true }) }); loadFullNotifications(); } catch { }
         }
 
         async function markAllReadPage() {

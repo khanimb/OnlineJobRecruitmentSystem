@@ -23,7 +23,7 @@ namespace OnlineJobRecruitmentSystem.Infrastructure.Services
         {
             var payment = new PaymentPremium
             {
-                EmployerId = employerId,
+                UserId = employerId,
                 StripePaymentId = stripePaymentId,
                 Amount = amount,
                 Status = "pending",
@@ -56,7 +56,7 @@ namespace OnlineJobRecruitmentSystem.Infrastructure.Services
         public async Task<List<ReturnPaymentDto>> GetUserPaymentsAsync(int employerId)
         {
             return await _context.Payments
-                .Where(p => p.EmployerId == employerId)
+                .Where(p => p.UserId == employerId)
                 .OrderByDescending(p => p.CreatedAt)
                 .ProjectTo<ReturnPaymentDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
@@ -65,7 +65,7 @@ namespace OnlineJobRecruitmentSystem.Infrastructure.Services
         public async Task<ReturnPaymentDto?> GetPaymentByIdAsync(int paymentId, int employerId)
         {
             var payment = await _context.Payments
-                .FirstOrDefaultAsync(p => p.Id == paymentId && p.EmployerId == employerId);
+                .FirstOrDefaultAsync(p => p.Id == paymentId && p.UserId == employerId);
 
             return payment == null ? null : _mapper.Map<ReturnPaymentDto>(payment);
         }

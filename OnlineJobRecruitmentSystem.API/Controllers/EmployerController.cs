@@ -1,15 +1,11 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using OnlineJobRecruitmentSystem.Application.DTOs.ApplicationDtos;
 using OnlineJobRecruitmentSystem.Application.DTOs.EmployerDtos;
+using OnlineJobRecruitmentSystem.Application.DTOs.JobApplicationDtos;
 using OnlineJobRecruitmentSystem.Application.DTOs.NotificationDtos;
 using OnlineJobRecruitmentSystem.Application.Interfaces;
 using OnlineJobRecruitmentSystem.Common;
-using OnlineJobRecruitmentSystem.Domain.Entities;
-using OnlineJobRecruitmentSystem.Domain.Enums;
-using OnlineJobRecruitmentSystem.Infrastructure.Data;
 using OnlineJobRecruitmentSystem.Infrastructure.Extensions;
 
 namespace OnlineJobRecruitmentSystem.API.Controllers
@@ -18,17 +14,14 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
     [Route("api/[controller]")]
     [Authorize(Roles = OnlineJobRecruitmentSystem.Domain.Common.Roles.Employer)]
     public class EmployerController(
-        AppDbContext context,
+        IEmployerService employerService,
         IValidator<CreateEmployerDto> createValidator,
         IValidator<UpdateEmployerDto> updateValidator,
         IValidator<UpdateJobApplicationStatusDto> statusValidator,
-        FileManager fileManager,
         IEmailService emailService,
         INotificationService notificationService
     ) : BaseApiController
     {
-        
-
         [HttpPost("profile")]
         public async Task<IActionResult> CreateProfile(CreateEmployerDto dto)
         {
@@ -36,51 +29,21 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
             if (!result.IsValid)
                 return BadRequest(ResponseModel<string>.Fail(result.Errors[0].ErrorMessage));
 
-            var userId = CurrentUserId;
-
-            if (await context.EmployerProfiles.AnyAsync(e => e.UserId == userId))
+            var profile = await employerService.CreateProfileAsync(CurrentUserId, dto);
+            if (profile == null)
                 return BadRequest(ResponseModel<string>.Fail("Employer profile already exists."));
 
-            var profile = new EmployerProfile
-            {
-                UserId = userId,
-                CompanyName = dto.CompanyName,
-                Description = dto.Description,
-                Website = dto.Website
-            };
-
-            context.EmployerProfiles.Add(profile);
-            await context.SaveChangesAsync();
-
-            return Ok(ResponseModel<ReturnEmployerDto>.Ok(new ReturnEmployerDto
-            {
-                Id = profile.Id,
-                UserId = profile.UserId,
-                CompanyName = profile.CompanyName,
-                Description = profile.Description,
-                Website = profile.Website,
-                LogoUrl = profile.LogoUrl
-            }, "Employer profile created."));
+            return Ok(ResponseModel<ReturnEmployerDto>.Ok(profile, "Employer profile created."));
         }
 
         [HttpGet("profile")]
         public async Task<IActionResult> GetProfile()
         {
-            var userId = CurrentUserId;
-
-            var profile = await context.EmployerProfiles.FirstOrDefaultAsync(e => e.UserId == userId);
+            var profile = await employerService.GetProfileAsync(CurrentUserId);
             if (profile == null)
                 return NotFound(ResponseModel<string>.Fail("Employer profile not found."));
 
-            return Ok(ResponseModel<ReturnEmployerDto>.Ok(new ReturnEmployerDto
-            {
-                Id = profile.Id,
-                UserId = profile.UserId,
-                CompanyName = profile.CompanyName,
-                Description = profile.Description,
-                Website = profile.Website,
-                LogoUrl = profile.LogoUrl
-            }));
+            return Ok(ResponseModel<ReturnEmployerDto>.Ok(profile));
         }
 
         [HttpPut("profile")]
@@ -90,27 +53,11 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
             if (!result.IsValid)
                 return BadRequest(ResponseModel<string>.Fail(result.Errors[0].ErrorMessage));
 
-            var userId = CurrentUserId;
-
-            var profile = await context.EmployerProfiles.FirstOrDefaultAsync(e => e.UserId == userId);
+            var profile = await employerService.UpdateProfileAsync(CurrentUserId, dto);
             if (profile == null)
                 return NotFound(ResponseModel<string>.Fail("Employer profile not found."));
 
-            profile.CompanyName = dto.CompanyName;
-            profile.Description = dto.Description;
-            profile.Website = dto.Website;
-
-            await context.SaveChangesAsync();
-
-            return Ok(ResponseModel<ReturnEmployerDto>.Ok(new ReturnEmployerDto
-            {
-                Id = profile.Id,
-                UserId = profile.UserId,
-                CompanyName = profile.CompanyName,
-                Description = profile.Description,
-                Website = profile.Website,
-                LogoUrl = profile.LogoUrl
-            }, "Employer profile updated."));
+            return Ok(ResponseModel<ReturnEmployerDto>.Ok(profile, "Employer profile updated."));
         }
 
         [HttpPost("upload-logo")]
@@ -125,93 +72,37 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
             if (!file.IsValidSize(2 * 1024 * 1024))
                 return BadRequest(ResponseModel<string>.Fail("File size must not exceed 2 MB."));
 
-            var userId = CurrentUserId;
+            if (!file.HasValidSignature(".jpg", ".jpeg", ".png"))
+                return BadRequest(ResponseModel<string>.Fail("File content does not match its extension."));
 
-            var profile = await context.EmployerProfiles.FirstOrDefaultAsync(e => e.UserId == userId);
-            if (profile == null)
+            var logoUrl = await employerService.UploadLogoAsync(CurrentUserId, file);
+            if (logoUrl == null)
                 return NotFound(ResponseModel<string>.Fail("Employer profile not found."));
 
-            if (!string.IsNullOrEmpty(profile.LogoUrl))
-                fileManager.Delete(profile.LogoUrl);
-
-            profile.LogoUrl = await fileManager.UploadAsync(file, "logos");
-            await context.SaveChangesAsync();
-
-            return Ok(ResponseModel<string>.Ok(profile.LogoUrl, "Logo uploaded successfully."));
+            return Ok(ResponseModel<string>.Ok(logoUrl, "Logo uploaded successfully."));
         }
 
         [HttpGet("applications")]
         public async Task<IActionResult> GetApplications([FromQuery] string? status)
         {
-            var userId = CurrentUserId;
-
-            var employer = await context.EmployerProfiles.FirstOrDefaultAsync(e => e.UserId == userId);
-            if (employer == null)
+            var list = await employerService.GetApplicationsAsync(CurrentUserId, status);
+            if (list == null)
                 return NotFound(ResponseModel<string>.Fail("Employer profile not found."));
 
-            var query = context.JobApplications
-                .Include(a => a.JobPost)
-                .Include(a => a.JobSeekerProfile)
-                .Where(a => a.JobPost!.EmployerProfileId == employer.Id)
-                .AsQueryable();
-
-            if (!string.IsNullOrEmpty(status) && Enum.TryParse<ApplicationStatus>(status, out var statusEnum))
-                query = query.Where(a => a.Status == statusEnum);
-
-            var list = await query.Select(a => new
-            {
-                a.Id,
-                a.Status,
-                a.CoverLetter,
-                a.Notes,
-                a.AppliedAt,
-                a.JobPostId,
-                JobTitle = a.JobPost!.Title,
-                JobSeeker = new
-                {
-                    a.JobSeekerProfile!.Id,
-                    a.JobSeekerProfile!.UserId,
-                    a.JobSeekerProfile!.FullName,
-                    a.JobSeekerProfile.Skills,
-                    a.JobSeekerProfile.CvUrl
-                }
-            }).ToListAsync();
-
-            return Ok(ResponseModel<object>.Ok(list));
+            return Ok(ResponseModel<List<ReturnEmployerApplicationDto>>.Ok(list));
         }
 
         [HttpGet("applications/{jobId}")]
         public async Task<IActionResult> GetApplicationsByJob(int jobId)
         {
-            var userId = CurrentUserId;
+            var result = await employerService.GetApplicationsByJobAsync(CurrentUserId, jobId);
 
-            var employer = await context.EmployerProfiles.FirstOrDefaultAsync(e => e.UserId == userId);
-            if (employer == null)
+            if (result.EmployerNotFound)
                 return NotFound(ResponseModel<string>.Fail("Employer profile not found."));
-
-            var job = await context.JobPosts.FirstOrDefaultAsync(j => j.Id == jobId && j.EmployerProfileId == employer.Id);
-            if (job == null)
+            if (result.JobNotFound)
                 return NotFound(ResponseModel<string>.Fail("Job not found."));
 
-            var list = await context.JobApplications
-                .Include(a => a.JobSeekerProfile)
-                .Where(a => a.JobPostId == jobId)
-                .Select(a => new
-                {
-                    a.Id,
-                    a.Status,
-                    a.CoverLetter,
-                    a.Notes,
-                    a.AppliedAt,
-                    JobSeeker = new
-                    {
-                        a.JobSeekerProfile!.FullName,
-                        a.JobSeekerProfile.Skills,
-                        a.JobSeekerProfile.CvUrl
-                    }
-                }).ToListAsync();
-
-            return Ok(ResponseModel<object>.Ok(list));
+            return Ok(ResponseModel<List<ReturnJobApplicantDto>>.Ok(result.Applicants));
         }
 
         [HttpPut("applications/{id}/status")]
@@ -221,48 +112,33 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
             if (!result.IsValid)
                 return BadRequest(ResponseModel<string>.Fail(result.Errors[0].ErrorMessage));
 
-            var userId = CurrentUserId;
+            var updateResult = await employerService.UpdateApplicationStatusAsync(CurrentUserId, id, dto.Status, dto.Notes);
 
-            var employer = await context.EmployerProfiles.FirstOrDefaultAsync(e => e.UserId == userId);
-            if (employer == null)
+            if (updateResult.EmployerNotFound)
                 return NotFound(ResponseModel<string>.Fail("Employer profile not found."));
-
-            var application = await context.JobApplications
-                .Include(a => a.JobPost)
-                .Include(a => a.JobSeekerProfile)
-                .FirstOrDefaultAsync(a => a.Id == id && a.JobPost!.EmployerProfileId == employer.Id);
-
-            if (application == null)
+            if (updateResult.ApplicationNotFound)
                 return NotFound(ResponseModel<string>.Fail("Application not found."));
+            if (updateResult.InvalidTransition)
+                return BadRequest(ResponseModel<string>.Fail($"Cannot change status from {updateResult.CurrentStatus} to {dto.Status}."));
 
-            application.Status = dto.Status;
-            application.Notes = dto.Notes;
-
-            await context.SaveChangesAsync();
-
-            var jobSeeker = await context.JobSeekerProfiles
-                .Include(j => j.User)
-                .FirstOrDefaultAsync(j => j.Id == application.JobSeekerProfileId);
-
-            if (jobSeeker?.User != null)
+            if (!string.IsNullOrEmpty(updateResult.JobSeekerEmail))
             {
                 await emailService.SendEmailAsync(
-                    jobSeeker.User.Email,
+                    updateResult.JobSeekerEmail,
                     "Application Status Updated",
                     $"<h3>Your application status has been updated.</h3>" +
-                    $"<p>Job: <b>{application.JobPost!.Title}</b></p>" +
-                    $"<p>New Status: <b>{application.Status}</b></p>"
+                    $"<p>Job: <b>{updateResult.JobTitle}</b></p>" +
+                    $"<p>New Status: <b>{updateResult.NewStatus}</b></p>"
                 );
 
                 await notificationService.CreateNotificationAsync(new CreateNotificationDto
                 {
-                    UserId = jobSeeker.UserId,
+                    UserId = updateResult.JobSeekerUserId,
                     Title = "Application Status Updated",
-                    Message = $"Your application for '{application.JobPost!.Title}' is now: {application.Status}.",
+                    Message = $"Your application for '{updateResult.JobTitle}' is now: {updateResult.NewStatus}.",
                     Type = "ApplicationStatus"
                 });
             }
-
 
             return Ok(ResponseModel<string>.Ok(null!, "Application status updated."));
         }
@@ -270,30 +146,11 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
         [HttpGet("dashboard")]
         public async Task<IActionResult> GetDashboard()
         {
-            var userId = CurrentUserId;
-
-            var employer = await context.EmployerProfiles.FirstOrDefaultAsync(e => e.UserId == userId);
-            if (employer == null)
+            var dashboard = await employerService.GetDashboardAsync(CurrentUserId);
+            if (dashboard == null)
                 return NotFound(ResponseModel<string>.Fail("Employer profile not found."));
 
-            var totalJobs = await context.JobPosts.CountAsync(j => j.EmployerProfileId == employer.Id);
-            var totalApplications = await context.JobApplications
-                .Include(a => a.JobPost)
-                .CountAsync(a => a.JobPost!.EmployerProfileId == employer.Id);
-            var shortlisted = await context.JobApplications
-                .Include(a => a.JobPost)
-                .CountAsync(a => a.JobPost!.EmployerProfileId == employer.Id && a.Status == ApplicationStatus.Shortlisted);
-            var rejected = await context.JobApplications
-                .Include(a => a.JobPost)
-                .CountAsync(a => a.JobPost!.EmployerProfileId == employer.Id && a.Status == ApplicationStatus.Rejected);
-
-            return Ok(ResponseModel<object>.Ok(new
-            {
-                TotalJobs = totalJobs,
-                TotalApplications = totalApplications,
-                Shortlisted = shortlisted,
-                Rejected = rejected
-            }));
+            return Ok(ResponseModel<EmployerDashboardDto>.Ok(dashboard));
         }
     }
 }

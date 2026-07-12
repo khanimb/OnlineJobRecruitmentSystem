@@ -10,6 +10,8 @@
         public string Category { get; set; } = string.Empty;
         public decimal SalaryMin { get; set; }
         public decimal SalaryMax { get; set; }
+        public decimal? Budget { get; set; }
+        public string? PaymentType { get; set; }
         public DateTime Deadline { get; set; }
     }
 }

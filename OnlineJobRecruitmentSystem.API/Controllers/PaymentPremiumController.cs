@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OnlineJobRecruitmentSystem.Application.DTOs.PaymentDtos;
 using OnlineJobRecruitmentSystem.Application.Interfaces;
@@ -12,22 +13,25 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
     [Route("api/[controller]")]
     [Authorize]
     public class PaymentPremiumController(
-        AppDbContext context,
-        IPaymentService paymentService,
-        IConfiguration configuration,
-        ILogger<PaymentPremiumController> logger) : BaseApiController
+    AppDbContext context,
+    IPaymentService paymentService,
+    IConfiguration configuration,
+    ILogger<PaymentPremiumController> logger,
+    IValidator<CreatePaymentDto> validator) : BaseApiController 
     {
-        
-
         [HttpPost("create-checkout-session")]
         public async Task<IActionResult> CreateCheckoutSession(CreatePaymentDto dto)
         {
+            var result = await validator.ValidateAsync(dto);
+            if (!result.IsValid)
+                return BadRequest(ResponseModel<string>.Fail(result.Errors[0].ErrorMessage));
+
             var plans = new Dictionary<string, (decimal amount, string name, int months)>
-            {
-                { "basic",   (9.99m,  "Basic Plan - 1 Month Premium",  1) },
-                { "standard",(29.99m, "Standard Plan - 3 Month Premium", 3) },
-                { "premium", (49.99m, "Premium Plan - 6 Month Premium", 6) }
-            };
+        {
+            { "basic",   (9.99m,  "Basic Plan - 1 Month Premium",  1) },
+            { "standard",(29.99m, "Standard Plan - 3 Month Premium", 3) },
+            { "premium", (49.99m, "Premium Plan - 6 Month Premium", 6) }
+        };
 
             if (!plans.TryGetValue(dto.Plan ?? "", out var plan))
                 return BadRequest(ResponseModel<string>.Fail("Invalid plan selected."));

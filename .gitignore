@@ -2,3 +2,6 @@ bin/
 obj/
 .vs/
 *.user
+wwwroot/cvs/
+wwwroot/logos/
+wwwroot/portfolio/

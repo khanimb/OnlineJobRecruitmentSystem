@@ -173,13 +173,21 @@ async function loadHistory() {
         }
         $('#historyArea').html(items.map(h => `
             <div class="cv-history-item" onclick="loadHistoryDetail(${h.id})">
-                <span>${escapeHtml(h.jobTitle || 'General analysis')}</span>
-                <span class="tag tag-gray">${new Date(h.createdAt).toLocaleDateString()} · Score ${h.overallScore}</span>
+               <span>${escapeHtml(h.jobTitle || 'General analysis')}</span>
+               <span class="tag tag-gray">${new Date(h.createdAt).toLocaleDateString()} · Score ${h.overallScore}</span>
+               <button class="act-btn danger" title="Delete" onclick="deleteHistory(event, ${h.id})"><i class="ti ti-trash"></i></button>
             </div>
-        `).join(''));
+`).join(''));
     } catch {
         $('#historyArea').html('<span style="color:#94a3b8;font-size:0.85rem">No past analyses yet.</span>');
     }
+}
+
+async function deleteHistory(e, id) {
+    e.stopPropagation();
+    if (!confirm('Delete this analysis?')) return;
+    try { await apiFetch('/CvAnalysis/history/' + id, { method: 'DELETE' }); loadHistory(); }
+    catch (err) { showToast(err.message || 'Could not delete', false); }
 }
 
 async function loadHistoryDetail(id) {

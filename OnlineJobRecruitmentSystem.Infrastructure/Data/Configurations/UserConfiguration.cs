@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using OnlineJobRecruitmentSystem.Domain.Entities;
 
-namespace OnlineJobRecruitmentSystem.Data.Configurations
+namespace OnlineJobRecruitmentSystem.Infrastructure.Data.Configurations
 {
     public class UserConfiguration : IEntityTypeConfiguration<User>
     {

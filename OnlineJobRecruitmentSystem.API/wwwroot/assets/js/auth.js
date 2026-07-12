@@ -11,8 +11,21 @@ function isLoggedIn() {
     return !!getToken();
 }
 
-function logout() {
+function getCurrentUserId() {
+    const token = getToken();
+    if (!token) return null;
+    try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        return parseInt(payload['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier']);
+    } catch {
+        return null;
+    }
+}
+
+async function logout() {
+    try { await apiFetch('/Auth/logout', { method: 'POST' }); } catch { }
     localStorage.removeItem('token');
+    localStorage.removeItem('refreshToken');
     localStorage.removeItem('user');
     window.location.href = '/assets/pages/login.html';
 }

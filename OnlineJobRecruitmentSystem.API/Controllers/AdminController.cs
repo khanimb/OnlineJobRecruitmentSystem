@@ -1,228 +1,101 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using OnlineJobRecruitmentSystem.Application.Interfaces;
 using OnlineJobRecruitmentSystem.Common;
-using OnlineJobRecruitmentSystem.Infrastructure.Data;
 
 namespace OnlineJobRecruitmentSystem.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
     [Authorize(Roles = OnlineJobRecruitmentSystem.Domain.Common.Roles.Admin)]
-    public class AdminController(AppDbContext context) : BaseApiController
+    public class AdminController(IAdminService adminService) : BaseApiController
     {
         [HttpGet("users")]
         public async Task<IActionResult> GetUsers()
-        {
-            var users = await context.Users
-                .Select(u => new
-                {
-                    u.Id,
-                    u.Email,
-                    u.Username,
-                    u.Role,
-                    u.IsEmailVerified
-                }).ToListAsync();
-
-            return Ok(ResponseModel<object>.Ok(users));
-        }
+            => Ok(ResponseModel<object>.Ok(await adminService.GetUsersAsync()));
 
         [HttpGet("users/{id}")]
         public async Task<IActionResult> GetUser(int id)
         {
-            var user = await context.Users.FindAsync(id);
+            var user = await adminService.GetUserAsync(id);
             if (user == null)
                 return NotFound(ResponseModel<string>.Fail("User not found."));
 
-            return Ok(ResponseModel<object>.Ok(new
-            {
-                user.Id,
-                user.Email,
-                user.Username,
-                user.Role,
-                user.IsEmailVerified
-            }));
+            return Ok(ResponseModel<object>.Ok(user));
         }
 
         [HttpDelete("users/{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
-            var user = await context.Users.FindAsync(id);
-            if (user == null)
+            var deleted = await adminService.DeleteUserAsync(id);
+            if (!deleted)
                 return NotFound(ResponseModel<string>.Fail("User not found."));
-
-            context.Users.Remove(user);
-            await context.SaveChangesAsync();
 
             return Ok(ResponseModel<string>.Ok(null!, "User deleted."));
         }
 
         [HttpGet("jobs")]
         public async Task<IActionResult> GetJobs()
-        {
-            var jobs = await context.JobPosts
-                .Include(j => j.EmployerProfile)
-                .Select(j => new
-                {
-                    j.Id,
-                    j.Title,
-                    j.Location,
-                    j.IsActive,
-                    j.Deadline,
-                    Company = j.EmployerProfile!.CompanyName
-                }).ToListAsync();
-
-            return Ok(ResponseModel<object>.Ok(jobs));
-        }
+            => Ok(ResponseModel<object>.Ok(await adminService.GetJobsAsync()));
 
         [HttpDelete("jobs/{id}")]
         public async Task<IActionResult> DeleteJob(int id)
         {
-            var job = await context.JobPosts.FindAsync(id);
-            if (job == null)
+            var deleted = await adminService.DeleteJobAsync(id);
+            if (!deleted)
                 return NotFound(ResponseModel<string>.Fail("Job not found."));
-
-            context.JobPosts.Remove(job);
-            await context.SaveChangesAsync();
 
             return Ok(ResponseModel<string>.Ok(null!, "Job deleted."));
         }
 
         [HttpGet("applications")]
         public async Task<IActionResult> GetApplications()
-        {
-            var apps = await context.JobApplications
-                .Include(a => a.JobPost)
-                .Include(a => a.JobSeekerProfile)
-                    .ThenInclude(j => j!.User)
-                .Select(a => new
-                {
-                    a.Id,
-                    JobTitle = a.JobPost!.Title,
-                    ApplicantName = a.JobSeekerProfile!.User!.Username,
-                    Status = a.Status.ToString()
-                }).ToListAsync();
-
-            return Ok(ResponseModel<object>.Ok(apps));
-        }
+            => Ok(ResponseModel<object>.Ok(await adminService.GetApplicationsAsync()));
 
         [HttpGet("reviews")]
         public async Task<IActionResult> GetReviews()
-        {
-            var reviews = await context.Reviews
-                .Include(r => r.Reviewer)
-                .Include(r => r.Reviewee)
-                .Select(r => new
-                {
-                    r.Id,
-                    ReviewerEmail = r.Reviewer.Email,
-                    RevieweeEmail = r.Reviewee.Email,
-                    r.Rating,
-                    r.Comment,
-                    r.CreatedAt
-                }).ToListAsync();
-
-            return Ok(ResponseModel<object>.Ok(reviews));
-        }
+            => Ok(ResponseModel<object>.Ok(await adminService.GetReviewsAsync()));
 
         [HttpDelete("reviews/{id}")]
         public async Task<IActionResult> DeleteReview(int id)
         {
-            var review = await context.Reviews.FindAsync(id);
-            if (review == null)
+            var deleted = await adminService.DeleteReviewAsync(id);
+            if (!deleted)
                 return NotFound(ResponseModel<string>.Fail("Review not found."));
-
-            context.Reviews.Remove(review);
-            await context.SaveChangesAsync();
 
             return Ok(ResponseModel<string>.Ok(null!, "Review deleted."));
         }
 
         [HttpGet("payments")]
         public async Task<IActionResult> GetPayments()
-        {
-            var payments = await context.Payments
-                .Include(p => p.Employer)
-                .Select(p => new
-                {
-                    p.Id,
-                    EmployerEmail = p.Employer.Email,
-                    p.Plan,
-                    p.Amount,
-                    p.Status,
-                    p.CreatedAt
-                }).ToListAsync();
-
-            return Ok(ResponseModel<object>.Ok(payments));
-        }
+            => Ok(ResponseModel<object>.Ok(await adminService.GetPaymentsAsync()));
 
         [HttpGet("stats")]
         public async Task<IActionResult> GetStats()
-        {
-            var totalUsers = await context.Users.CountAsync();
-            var totalJobs = await context.JobPosts.CountAsync();
-            var activeJobs = await context.JobPosts.CountAsync(j => j.IsActive);
-            var totalApplications = await context.JobApplications.CountAsync();
-            var totalPayments = await context.Payments.CountAsync();
-            var totalRevenue = await context.Payments
-                .Where(p => p.Status == "completed")
-                .SumAsync(p => p.Amount);
-
-            return Ok(ResponseModel<object>.Ok(new
-            {
-                totalUsers,
-                totalJobs,
-                activeJobs,
-                totalApplications,
-                totalPayments,
-                totalRevenue
-            }));
-        }
+            => Ok(ResponseModel<object>.Ok(await adminService.GetStatsAsync()));
 
         [HttpGet("contracts")]
         public async Task<IActionResult> GetContracts()
-        {
-            var contracts = await context.Contracts
-                .Include(c => c.JobPost)
-                .Include(c => c.EmployerProfile)
-                .Include(c => c.JobSeekerProfile)
-                .Select(c => new
-                {
-                    c.Id,
-                    JobTitle = c.JobPost.Title,
-                    EmployerName = c.EmployerProfile.CompanyName,
-                    JobSeekerName = c.JobSeekerProfile.FullName,
-                    c.Amount,
-                    Status = c.Status.ToString(),
-                    c.CreatedAt
-                })
-                .ToListAsync();
-
-            return Ok(ResponseModel<object>.Ok(contracts));
-        }
+            => Ok(ResponseModel<object>.Ok(await adminService.GetContractsAsync()));
 
         [HttpPut("users/{id}/role")]
         public async Task<IActionResult> UpdateUserRole(int id, [FromBody] string role)
         {
-            var user = await context.Users.FindAsync(id);
-            if (user == null)
-                return NotFound(ResponseModel<string>.Fail("User not found."));
-
-            user.Role = role;
-            await context.SaveChangesAsync();
-
-            return Ok(ResponseModel<string>.Ok(null!, "User role updated."));
+            var result = await adminService.UpdateUserRoleAsync(id, role);
+            return result switch
+            {
+                AdminRoleUpdateResult.InvalidRole => BadRequest(ResponseModel<string>.Fail("Invalid role.")),
+                AdminRoleUpdateResult.UserNotFound => NotFound(ResponseModel<string>.Fail("User not found.")),
+                _ => Ok(ResponseModel<string>.Ok(null!, "User role updated."))
+            };
         }
 
         [HttpPut("jobs/{id}/status")]
         public async Task<IActionResult> UpdateJobStatus(int id, [FromBody] bool isActive)
         {
-            var job = await context.JobPosts.FindAsync(id);
-            if (job == null)
+            var updated = await adminService.UpdateJobStatusAsync(id, isActive);
+            if (!updated)
                 return NotFound(ResponseModel<string>.Fail("Job not found."));
-
-            job.IsActive = isActive;
-            await context.SaveChangesAsync();
 
             return Ok(ResponseModel<string>.Ok(null!, "Job status updated."));
         }

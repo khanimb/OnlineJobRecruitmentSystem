@@ -5,9 +5,9 @@
         public int ReviewerId { get; set; }
         public int RevieweeId { get; set; }
         public int Rating { get; set; } 
-        public string Comment { get; set; }
+        public string Comment { get; set; } = null!;
 
-        public User Reviewer { get; set; }
-        public User Reviewee { get; set; }
+        public User Reviewer { get; set; } = null!;
+        public User Reviewee { get; set; } = null!;
     }
 }

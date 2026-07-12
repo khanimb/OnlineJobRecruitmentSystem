@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using OnlineJobRecruitmentSystem.API.Controllers;
 using OnlineJobRecruitmentSystem.Application.DTOs.UserDtos;
 using OnlineJobRecruitmentSystem.Application.Interfaces;
+using OnlineJobRecruitmentSystem.Application.Validations.UserDtoValidation;
 using OnlineJobRecruitmentSystem.Domain.Entities;
 using OnlineJobRecruitmentSystem.Infrastructure.Data;
 using OnlineJobRecruitmentSystem.Infrastructure.Services;
@@ -24,23 +25,32 @@ namespace OnlineJobRecruitmentSystem.Tests.Controllers
                 .UseInMemoryDatabase(Guid.NewGuid().ToString())
                 .Options);
 
-        private static IJwtService CreateJwtService()
+        private static IConfiguration CreateConfiguration()
         {
             var configValues = new Dictionary<string, string?>
             {
                 { "Jwt:Key", "TestSecretKeyForUnitTestsOnly12345!" },
                 { "Jwt:Issuer", "TestIssuer" },
-                { "Jwt:Audience", "TestAudience" }
+                { "Jwt:Audience", "TestAudience" },
+                { "App:BaseUrl", "http://localhost:5179" }
             };
-            IConfiguration configuration = new ConfigurationBuilder()
-                .AddInMemoryCollection(configValues)
-                .Build();
-            return new JwtService(configuration);
+            return new ConfigurationBuilder().AddInMemoryCollection(configValues).Build();
         }
 
         private static AuthController CreateController(AppDbContext context)
         {
-            var controller = new AuthController(context, CreateJwtService(), new FakeEmailService());
+            var configuration = CreateConfiguration();
+            var jwtService = new JwtService(configuration);
+            var authService = new AuthService(context, jwtService, new FakeEmailService(), configuration);
+
+            var controller = new AuthController(
+                authService,
+                new RegisterDtoValidation(),
+                new LoginDtoValidation(),
+                new ForgotPasswordDtoValidation(),
+                new ResetPasswordDtoValidation(),
+                new RefreshTokenDtoValidation(),
+                new Verify2FaDtoValidation());
 
             controller.ControllerContext = new ControllerContext
             {

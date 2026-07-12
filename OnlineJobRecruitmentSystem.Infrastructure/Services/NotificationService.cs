@@ -34,6 +34,17 @@ namespace OnlineJobRecruitmentSystem.Infrastructure.Services
             return notification;
         }
 
+        public async Task<bool> UpdateReadStatusAsync(int notificationId, int userId, bool isRead)
+        {
+            var notification = await _context.Notifications
+                .FirstOrDefaultAsync(n => n.Id == notificationId && n.UserId == userId);
+            if (notification == null) return false;
+
+            notification.IsRead = isRead;
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
         public async Task<List<ReturnNotificationDto>> GetUserNotificationsAsync(int userId)
         {
             return await _context.Notifications

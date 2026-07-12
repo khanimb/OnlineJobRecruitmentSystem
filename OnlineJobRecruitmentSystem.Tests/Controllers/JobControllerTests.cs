@@ -1,11 +1,15 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using OnlineJobRecruitmentSystem.API.Controllers;
 using OnlineJobRecruitmentSystem.Application.DTOs.JobDtos;
+using OnlineJobRecruitmentSystem.Application.Profiles;
 using OnlineJobRecruitmentSystem.Application.Validations.JobDtoValidation;
 using OnlineJobRecruitmentSystem.Domain.Entities;
 using OnlineJobRecruitmentSystem.Infrastructure.Data;
+using OnlineJobRecruitmentSystem.Infrastructure.Services;
 using System.Security.Claims;
 
 namespace OnlineJobRecruitmentSystem.Tests.Controllers
@@ -29,7 +33,13 @@ namespace OnlineJobRecruitmentSystem.Tests.Controllers
 
         private static JobController CreateController(AppDbContext context, int userId)
         {
-            var controller = new JobController(context, new CreateJobDtoValidation(), new UpdateJobDtoValidation());
+            var services = new ServiceCollection();
+            services.AddLogging();
+            services.AddAutoMapper(cfg => cfg.AddProfile<MapperProfile>());
+            var mapper = services.BuildServiceProvider().GetRequiredService<IMapper>();
+
+            var jobService = new JobService(context, mapper);
+            var controller = new JobController(jobService, new CreateJobDtoValidation(), new UpdateJobDtoValidation());
 
             var claims = new List<Claim> { new Claim(ClaimTypes.NameIdentifier, userId.ToString()) };
             var identity = new ClaimsIdentity(claims, "TestAuth");
