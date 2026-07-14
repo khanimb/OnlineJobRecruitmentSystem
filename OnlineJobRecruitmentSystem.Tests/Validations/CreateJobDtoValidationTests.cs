@@ -15,6 +15,7 @@ namespace OnlineJobRecruitmentSystem.Tests.Validations
             Description = "We are looking for a .NET developer.",
             Location = "Baku",
             JobType = "FullTime",
+            Category = "Technology",
             SalaryMin = 1000,
             SalaryMax = 2000,
             Deadline = DateTime.UtcNow.AddMonths(1)
@@ -41,7 +42,7 @@ namespace OnlineJobRecruitmentSystem.Tests.Validations
 
         [Theory]
         [InlineData("Full-time")]
-        [InlineData("Contract")]
+        [InlineData("Freelance")]
         [InlineData("")]
         public void InvalidJobType_FailsValidation(string jobType)
         {

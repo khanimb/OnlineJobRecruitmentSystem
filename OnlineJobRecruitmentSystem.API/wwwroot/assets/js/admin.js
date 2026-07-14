@@ -121,8 +121,8 @@ function contractItemHTML(ct, i) {
 }
 
 function renderContracts(contracts) {
-    const empty = `<div class="empty-state"><div class="empty-icon"><i class="ti ti-file-off"></i></div><div class="empty-title">No contracts found</div></div>`;
-    $('#allContractsList').html(contracts.length ? contracts.map(contractItemHTML).join('') : empty);
+    renderList('#allContractsList', contracts, contractItemHTML,
+        `<div class="empty-state"><div class="empty-icon"><i class="ti ti-file-off"></i></div><div class="empty-title">No contracts found</div></div>`);
 }
 
 function filterUsers() {
@@ -147,16 +147,17 @@ function userItemHTML(user, i) {
       <option value="Admin" ${user.role === 'Admin' ? 'selected' : ''}>Admin</option>
     </select>
     <div class="job-actions">
+      <button class="act-btn" title="View" onclick="toggleUserDetail(${user.id})"><i class="ti ti-info-circle"></i></button>
       <button class="act-btn danger" onclick="deleteUser(${user.id})" title="Delete"><i class="ti ti-trash"></i></button>
     </div>
-  </div>`;
+  </div>
+  <div id="user-detail-${user.id}" style="display:none;padding:12px 16px;background:#f8fafc;border-radius:10px;margin:-6px 0 10px"></div>`;
 }
 
 function renderUsers(users) {
     const empty = `<div class="empty-state"><div class="empty-icon"><i class="ti ti-user-off"></i></div><div class="empty-title">No users found</div></div>`;
-    if (!users.length) { $('#recentUsersList').html(empty); $('#allUsersList').html(empty); return; }
-    $('#recentUsersList').html(users.slice(0, 5).map(userItemHTML).join(''));
-    $('#allUsersList').html(users.map(userItemHTML).join(''));
+    renderList('#recentUsersList', users.slice(0, 5), userItemHTML, empty);
+    renderList('#allUsersList', users, userItemHTML, empty);
 }
 
 function jobItemHTML(job, i) {
@@ -179,16 +180,13 @@ function jobItemHTML(job, i) {
 
 function renderJobs(jobs) {
     const empty = `<div class="empty-state"><div class="empty-icon"><i class="ti ti-briefcase-off"></i></div><div class="empty-title">No jobs found</div></div>`;
-    if (!jobs.length) { $('#recentJobsList').html(empty); $('#allJobsList').html(empty); return; }
-    $('#recentJobsList').html(jobs.slice(0, 5).map(jobItemHTML).join(''));
-    $('#allJobsList').html(jobs.map(jobItemHTML).join(''));
+    renderList('#recentJobsList', jobs.slice(0, 5), jobItemHTML, empty);
+    renderList('#allJobsList', jobs, jobItemHTML, empty);
 }
 
 function renderApps(apps) {
-    const empty = `<div class="empty-state"><div class="empty-icon"><i class="ti ti-file-off"></i></div><div class="empty-title">No applications found</div></div>`;
-    if (!apps.length) { $('#allAppsList').html(empty); return; }
     const badgeMap = { Pending: 'badge-review', Accepted: 'badge-hired', Rejected: 'badge-rejected', Reviewing: 'badge-new' };
-    $('#allAppsList').html(apps.map((app, i) => {
+    renderList('#allAppsList', apps, (app, i) => {
         const c = colors[i % colors.length];
         const rawName = app.applicantName || app.userName || 'Applicant';
         return `<div class="applicant-item">
@@ -196,7 +194,7 @@ function renderApps(apps) {
       <div><div class="app-name">${escapeHtml(rawName)}</div><div class="app-role">${escapeHtml(app.jobTitle || 'Position')}</div></div>
       <span class="app-badge ${badgeMap[app.status] || 'badge-new'}">${app.status || 'Pending'}</span>
     </div>`;
-    }).join(''));
+    }, `<div class="empty-state"><div class="empty-icon"><i class="ti ti-file-off"></i></div><div class="empty-title">No applications found</div></div>`);
 }
 
 async function deleteUser(id) {
@@ -219,6 +217,20 @@ async function updateUserRole(id, role) {
 async function toggleJobStatus(id, currentlyActive) {
     try { await apiFetch(`/Admin/jobs/${id}/status`, { method: 'PUT', body: JSON.stringify(!currentlyActive) }); showToast('Job status updated'); await loadJobs(); }
     catch (err) { showToast(err.message || 'Failed', false); }
+}
+
+async function toggleUserDetail(id) {
+    const box = $('#user-detail-' + id);
+    if (box.is(':visible')) { box.hide(); return; }
+    box.show().html('<span style="color:#94a3b8;font-size:0.85rem">Loading...</span>');
+    try {
+        const r = await apiFetch('/Admin/users/' + id);
+        const u = r.data;
+        box.html(`<div style="font-size:0.85rem;line-height:1.6">
+            <div><b>Username:</b> ${escapeHtml(u.username)}</div>
+            <div><b>Email verified:</b> ${u.isEmailVerified ? 'Yes' : 'No'}</div>
+        </div>`);
+    } catch { box.html('<span style="color:#ef4444;font-size:0.85rem">Could not load details.</span>'); }
 }
 
 $(function () {
