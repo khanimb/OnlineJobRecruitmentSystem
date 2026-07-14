@@ -100,3 +100,7 @@ function renderList(containerSel, items, templateFn, emptyHtml) {
     }
     el.html(items.map(templateFn).join(''));
 }
+
+function showLoading(containerSel) {
+    $(containerSel).html('<div class="spinner"></div>');
+}

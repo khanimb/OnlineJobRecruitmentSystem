@@ -1,6 +1,7 @@
 ﻿let allJobs = [];
 
 async function loadJobs() {
+    showLoading('#jobsList');
     const salary = parseInt($('#salaryFilter').val()) || null;
     const qs = new URLSearchParams({ pageSize: 200, page: 1 });
     if (salary) qs.set('salaryMin', salary);

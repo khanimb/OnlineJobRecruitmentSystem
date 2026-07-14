@@ -35,6 +35,10 @@ namespace OnlineJobRecruitmentSystem.Infrastructure.Data.Configurations
                 .WithMany()
                 .HasForeignKey(c => c.JobSeekerProfileId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasIndex(c => new { c.JobPostId, c.JobSeekerProfileId })
+                .IsUnique()
+                .HasFilter("[Status] = 'Active'");
         }
     }
 }

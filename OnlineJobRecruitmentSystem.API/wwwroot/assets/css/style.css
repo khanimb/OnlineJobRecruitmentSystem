@@ -2980,3 +2980,19 @@ footer {
     .premium-history-item:last-child {
         border-bottom: none;
     }
+
+.spinner {
+    width: 28px;
+    height: 28px;
+    border: 3px solid #e2e8f0;
+    border-top-color: #2563EB;
+    border-radius: 50%;
+    margin: 30px auto;
+    animation: spin .7s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

@@ -122,8 +122,8 @@
             const loc = escapeHtml(job.location || 'Remote');
             const type = escapeHtml(job.jobType || 'Full-time');
             const cat = escapeHtml(job.category || '');
-            const desc = escapeHtml(job.description || '');
-            const reqs = escapeHtml(job.requirements || '');
+            const desc = escapeHtml(job.description || '').replace(/\n/g, '<br>');
+            const reqs = escapeHtml(job.requirements || '').replace(/\n/g, '<br>');
             const salMin = job.salaryMin || 0;
             const salMax = job.salaryMax || 0;
 
