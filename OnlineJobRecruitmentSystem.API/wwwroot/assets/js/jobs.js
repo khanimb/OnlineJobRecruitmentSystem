@@ -26,12 +26,13 @@ function applyFilters() {
 
     let filtered = allJobs.filter(job => {
         const title = (job.title || job.jobTitle || '').toLowerCase();
+        const company = (job.companyName || '').toLowerCase();
         const loc = (job.location || '').toLowerCase();
         const type = job.jobType || job.type || '';
         const cat = job.category || '';
         const minSal = job.salaryMin || 0;
 
-        if (keyword && !title.includes(keyword)) return false;
+        if (keyword && !title.includes(keyword) && !company.includes(keyword)) return false;
         if (location && !loc.includes(location)) return false;
         if (salary && minSal < salary) return false;
         if (checkedTypes.length && !checkedTypes.includes(type)) return false;
