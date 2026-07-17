@@ -56,6 +56,7 @@ function jobItemHTML(job, i) {
         </div>
         <span class="job-status status-active">Active</span>
         <div class="job-actions">
+            <button class="act-btn" title="View" onclick="window.location.href='jobdetail.html?id=${job.id}'"><i class="ti ti-eye"></i></button>
             <button class="act-btn" title="Edit" onclick="editJob(${job.id})"><i class="ti ti-edit"></i></button>
             <button class="act-btn danger" title="Delete" onclick="deleteJob(${job.id})"><i class="ti ti-trash"></i></button>
         </div>
@@ -76,18 +77,22 @@ async function loadApplicants(jobId, status) {
     $('#totalApps').text(myApplicants.length);
     $('#appsBadge').text(myApplicants.length);
     $('#miniNew').text(myApplicants.filter(a => a.status === 'Applied').length);
+    $('#miniReview').text(myApplicants.filter(a => a.status === 'Reviewed').length);
+    $('#miniShortlisted').text(myApplicants.filter(a => a.status === 'Shortlisted').length);
 }
 
 function renderApplicants() {
     const empty = `<div class="empty-state"><div class="empty-icon"><i class="ti ti-user-off"></i></div><div class="empty-title">No applicants yet</div><div class="empty-sub">Applicants will appear here</div></div>`;
     const badgeMap = { Applied: 'badge-new', Reviewed: 'badge-review', Shortlisted: 'badge-hired', Rejected: 'badge-rejected' };
     const nextStatusMap = { Applied: ['Reviewed'], Reviewed: ['Shortlisted', 'Rejected'], Shortlisted: [], Rejected: [] };
+    const statusNames = ['Applied', 'Reviewed', 'Shortlisted', 'Rejected'];
     const templateFn = (app, i) => {
         const c = colors[i % colors.length];
         const rawName = app.jobSeeker?.fullName || 'Applicant';
+        const statusName = typeof app.status === 'number' ? statusNames[app.status] : app.status;
         const cvUrl = app.jobSeeker?.cvUrl;
         const userId = app.jobSeeker?.userId || '';
-        const nextOptions = (nextStatusMap[app.status] || []).map(s => `<option value="${s}">${s}</option>`).join('');
+        const nextOptions = (nextStatusMap[statusName] || []).map(s => `<option value="${s}">${s}</option>`).join('');
         return `<div class="applicant-item">
     <div class="app-avatar" style="background:${c.bg};color:${c.color}">${safeInitial(rawName)}</div>
     <div style="flex:1">
@@ -97,8 +102,8 @@ function renderApplicants() {
     </div>
     <a href="/assets/pages/viewprofile.html?id=${userId}" class="act-btn" title="View Profile"><i class="ti ti-user"></i></a>
     ${cvUrl ? `<a href="${FILE_BASE_URL}${cvUrl}" target="_blank" class="act-btn" title="View CV"><i class="ti ti-file-text"></i></a>` : ''}
-    <span class="app-badge ${badgeMap[app.status] || 'badge-new'}">${app.status || 'Applied'}</span>
-    ${app.status === 'Shortlisted' ? `<button class="btn-outline" onclick="openContractModal(${app.jobPostId}, ${app.jobSeeker?.id}, '${escapeHtml(rawName).replace(/'/g, "\\'")}')"><i class="ti ti-file-text"></i> Contract</button>` : ''}
+    <span class="app-badge ${badgeMap[statusName] || 'badge-new'}">${statusName}</span>
+    ${statusName === 'Shortlisted' ? `<button class="btn-outline" onclick="openContractModal(${app.jobPostId}, ${app.jobSeeker?.id}, '${rawName.replace(/'/g, "\\'")}')"><i class="ti ti-file-text"></i> Contract</button>` : ''}
     ${nextOptions ? `
     <select class="status-select" onchange="updateStatus(${app.id}, this.value)">
         <option value="">Change status</option>
@@ -245,10 +250,19 @@ async function renderChart() {
     try {
         const r = await apiFetch('/Analytics');
         const trend = r.data.applicationTrend || [];
-        const last7 = trend.slice(-7);
+        const trendMap = {};
+        trend.forEach(t => { trendMap[t.date] = t.count; });
+
+        const last7 = [];
+        for (let i = 6; i >= 0; i--) {
+            const d = new Date();
+            d.setDate(d.getDate() - i);
+            const key = d.toISOString().split('T')[0];
+            last7.push({ date: d, count: trendMap[key] || 0 });
+        }
         const max = Math.max(...last7.map(t => t.count), 1);
         el.html(last7.map((t, i) =>
-            `<div class="bar-wrap"><div class="bar ${i === last7.length - 1 ? 'active' : ''}" style="height:${(t.count / max) * 130}px"></div><span class="bar-label">${new Date(t.date).toLocaleDateString('en', { weekday: 'short' })}</span></div>`
+            `<div class="bar-wrap"><div class="bar ${i === last7.length - 1 ? 'active' : ''}" style="height:${(t.count / max) * 130}px"></div><span class="bar-label">${t.date.toLocaleDateString('en', { weekday: 'short', timeZone: 'UTC' })}</span></div>`
         ).join(''));
     } catch { el.html(''); }
 }
@@ -256,6 +270,11 @@ async function renderChart() {
 // ── INIT ──
 $(function () {
     $('#sidebarToggleBtn').on('click', function () { $('.sidebar').toggleClass('open'); });
+    $('.dash-main').on('click', function (e) {
+        if ($('.sidebar').hasClass('open') && !$(e.target).closest('.sidebar').length && !$(e.target).closest('#sidebarToggleBtn').length) {
+            $('.sidebar').removeClass('open');
+        }
+    });
     const user = getUser();
     if (!user || user.role !== 'Employer') { window.location.href = 'login.html'; return; }
     const name = user.firstName || user.username || user.email || 'Employer';

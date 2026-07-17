@@ -57,11 +57,16 @@ namespace OnlineJobRecruitmentSystem.Infrastructure.Services
 
         public async Task<List<ReturnMessageDto>> GetInboxAsync(int userId)
         {
-            return await _context.Messages
-                .Where(m => m.ReceiverId == userId)
+            var messages = await _context.Messages
+                .Where(m => m.SenderId == userId || m.ReceiverId == userId)
                 .OrderByDescending(m => m.CreatedAt)
                 .ProjectTo<ReturnMessageDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
+
+            return messages
+                .GroupBy(m => m.SenderId == userId ? m.ReceiverId : m.SenderId)
+                .Select(g => g.First())
+                .ToList();
         }
 
         public async Task<int> GetUnreadCountAsync(int userId)

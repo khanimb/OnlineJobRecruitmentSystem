@@ -202,5 +202,18 @@ namespace OnlineJobRecruitmentSystem.Infrastructure.Services
                 Rejected = rejected
             };
         }
+
+        public async Task<List<PublicCompanyDto>> GetPublicCompaniesAsync()
+        {
+            return await _context.EmployerProfiles
+                .Select(e => new PublicCompanyDto
+                {
+                    CompanyName = e.CompanyName,
+                    Description = e.Description,
+                    Website = e.Website,
+                    LogoUrl = e.LogoUrl
+                })
+                .ToListAsync();
+        }
     }
 }

@@ -2,7 +2,7 @@
 obj/
 .vs/
 *.user
-wwwroot/cvs/
-wwwroot/logos/
-wwwroot/portfolio/
+**/wwwroot/cvs/
+**/wwwroot/logos/
+**/wwwroot/portfolio/
 .claude/

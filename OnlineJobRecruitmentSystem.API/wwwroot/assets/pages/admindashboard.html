@@ -21,6 +21,7 @@
         <a class="nav-item" onclick="showTab('applications',this)"><i class="ti ti-file-text"></i> Applications <span class="nav-badge" id="appsBadge">0</span></a>
         <a class="nav-item" onclick="showTab('payments',this)"><i class="ti ti-credit-card"></i> Payments</a>
         <a class="nav-item" onclick="showTab('reviews',this)"><i class="ti ti-star"></i> Reviews</a>
+        <a class="nav-item" onclick="showTab('messages',this)"><i class="ti ti-mail"></i> Messages</a>
         <a class="nav-item" onclick="showTab('contracts',this)"><i class="ti ti-file-signature"></i> Contracts</a>
         <div class="sidebar-bottom">
             <div class="sidebar-user">
@@ -172,6 +173,35 @@
                         <div><div class="dash-card-title">All Contracts</div><div class="dash-card-sub">Active and completed contracts</div></div>
                     </div>
                     <div id="allContractsList"></div>
+                </div>
+            </div>
+
+            <!-- MESSAGES TAB -->
+            <div id="tab-messages" style="display:none">
+                <div class="dash-card">
+                    <div class="dash-card-header">
+                        <div><div class="dash-card-title">Contact Messages</div><div class="dash-card-sub">Messages submitted via the Contact page</div></div>
+                    </div>
+                    <div id="allMessagesList"></div>
+                </div>
+            </div>
+
+            <!-- MESSAGE DETAIL MODAL -->
+            <div class="modal-overlay" id="messageModalOverlay" onclick="closeMessageModalOutside(event)">
+                <div class="modal">
+                    <div class="modal-header">
+                        <div class="modal-title">Contact Message</div>
+                        <button class="modal-close" onclick="closeMessageModal()"><i class="ti ti-x"></i></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group"><label>Name</label><input type="text" id="msgModalName" disabled /></div>
+                        <div class="form-group"><label>Email</label><input type="text" id="msgModalEmail" disabled /></div>
+                        <div class="form-group"><label>Date</label><input type="text" id="msgModalDate" disabled /></div>
+                        <div class="form-group"><label>Message</label><textarea id="msgModalText" rows="5" disabled></textarea></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn-cancel" onclick="closeMessageModal()">Close</button>
+                    </div>
                 </div>
             </div>
 

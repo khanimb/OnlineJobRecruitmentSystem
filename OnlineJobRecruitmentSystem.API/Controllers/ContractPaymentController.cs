@@ -78,7 +78,7 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
                     }
                 },
                 Mode = "payment",
-                SuccessUrl = $"{configuration["App:BaseUrl"]}/assets/pages/paymentsuccess.html?session_id={{CHECKOUT_SESSION_ID}}",
+                SuccessUrl = $"{configuration["App:BaseUrl"]}/assets/pages/paymentsuccess.html?session_id={{CHECKOUT_SESSION_ID}}&type=contract",
                 CancelUrl = $"{configuration["App:BaseUrl"]}/assets/pages/paymentcancel.html",
                 Metadata = new Dictionary<string, string>
                 {
@@ -143,6 +143,63 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
                 .ToListAsync();
 
             return Ok(ResponseModel<List<ReturnContractPaymentDto>>.Ok(payments));
+        }
+
+        [HttpPost("verify/{sessionId}")]
+        public async Task<IActionResult> VerifyPayment(string sessionId)
+        {
+            var contractPayment = await context.ContractPayments
+                .Include(cp => cp.Contract)
+                .FirstOrDefaultAsync(cp => cp.StripePaymentId == sessionId);
+
+            if (contractPayment == null)
+                return NotFound(ResponseModel<string>.Fail("Payment not found."));
+
+            if (contractPayment.Status == ContractPaymentStatus.Completed)
+                return Ok(ResponseModel<string>.Ok(null!, "Already confirmed."));
+
+            var service = new SessionService();
+            var session = await service.GetAsync(sessionId);
+
+            if (session.PaymentStatus == "paid")
+            {
+                contractPayment.Status = ContractPaymentStatus.Completed;
+                await context.SaveChangesAsync();
+
+                var jobSeeker = await context.JobSeekerProfiles
+                    .Include(j => j.User)
+                    .FirstOrDefaultAsync(j => j.Id == contractPayment.Contract.JobSeekerProfileId);
+
+                if (jobSeeker != null)
+                {
+                    var notification = new Notification
+                    {
+                        UserId = jobSeeker.UserId,
+                        Title = "Payment Received",
+                        Message = $"You have received ${contractPayment.JobSeekerAmount} for your work.",
+                        Type = "payment"
+                    };
+
+                    context.Notifications.Add(notification);
+                    await context.SaveChangesAsync();
+
+                    await notificationHub.Clients
+                        .Group($"user_{jobSeeker.UserId}")
+                        .SendAsync("ReceiveNotification", new ReturnNotificationDto
+                        {
+                            Id = notification.Id,
+                            Title = notification.Title,
+                            Message = notification.Message,
+                            IsRead = false,
+                            Type = notification.Type,
+                            CreatedAt = notification.CreatedAt
+                        });
+                }
+
+                return Ok(ResponseModel<string>.Ok(null!, "Payment confirmed."));
+            }
+
+            return BadRequest(ResponseModel<string>.Fail("Payment not completed yet."));
         }
 
         [HttpPost("webhook")]

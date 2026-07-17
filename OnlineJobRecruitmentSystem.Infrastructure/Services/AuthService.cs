@@ -146,7 +146,7 @@ namespace OnlineJobRecruitmentSystem.Infrastructure.Services
             user.RefreshTokenExpiry = DateTime.UtcNow.AddDays(30);
             await _context.SaveChangesAsync();
 
-            return new TokenResult { Token = newToken, RefreshToken = newRefreshToken };
+            return new TokenResult { Id = user.Id, Token = newToken, RefreshToken = newRefreshToken };
         }
 
         public async Task LogoutAsync(int userId)
@@ -178,7 +178,7 @@ namespace OnlineJobRecruitmentSystem.Infrastructure.Services
             user.RefreshTokenExpiry = DateTime.UtcNow.AddDays(30);
             await _context.SaveChangesAsync();
 
-            return new TokenResult { Token = token, RefreshToken = refreshToken, Role = user.Role };
+            return new TokenResult { Id = user.Id, Token = token, RefreshToken = refreshToken, Role = user.Role };
         }
     }
 }

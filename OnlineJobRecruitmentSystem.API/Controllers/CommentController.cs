@@ -29,6 +29,7 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
             return Ok(ResponseModel<string>.Ok(null!, "Comment added."));
         }
 
+        [AllowAnonymous]
         [HttpGet("jobpost/{jobPostId}")]
         public async Task<IActionResult> GetComments(int jobPostId)
         {

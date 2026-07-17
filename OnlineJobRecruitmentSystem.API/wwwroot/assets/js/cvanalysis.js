@@ -199,3 +199,22 @@ async function loadHistoryDetail(id) {
         showToast(err.message || 'Could not load analysis', false);
     }
 }
+
+async function sendChatMessage() {
+    const input = $('#chatInput');
+    const msg = input.val().trim();
+    if (!msg) return;
+    input.val('');
+    $('#chatMessages').append(`<div style="align-self:flex-end;background:#2563EB;color:#fff;padding:8px 14px;border-radius:12px;max-width:80%;font-size:0.85rem">${escapeHtml(msg)}</div>`);
+    const loadingId = 'chat-loading-' + Date.now();
+    $('#chatMessages').append(`<div id="${loadingId}" style="align-self:flex-start;background:#f1f5f9;color:#334155;padding:8px 14px;border-radius:12px;max-width:80%;font-size:0.85rem">Thinking...</div>`);
+    $('#chatMessages').scrollTop($('#chatMessages')[0].scrollHeight);
+
+    try {
+        const r = await apiFetch('/CvAnalysis/chat', { method: 'POST', body: JSON.stringify({ message: msg }) });
+        $('#' + loadingId).text(r.data || 'No response.');
+    } catch (e) {
+        $('#' + loadingId).text(e.message || 'Something went wrong.').css('color', '#ef4444');
+    }
+    $('#chatMessages').scrollTop($('#chatMessages')[0].scrollHeight);
+}

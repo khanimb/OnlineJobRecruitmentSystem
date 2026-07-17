@@ -28,6 +28,10 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
                 return BadRequest(ResponseModel<string>.Fail(result.Errors[0].ErrorMessage));
 
             var senderId = CurrentUserId;
+
+            if (dto.ReceiverId == senderId)
+                return BadRequest(ResponseModel<string>.Fail("You cannot message yourself."));
+
             var message = await messageService.SaveMessageAsync(senderId, dto);
 
             await chatHub.Clients.User(dto.ReceiverId.ToString())

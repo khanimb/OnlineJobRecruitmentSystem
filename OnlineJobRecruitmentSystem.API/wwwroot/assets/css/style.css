@@ -1016,6 +1016,7 @@ footer {
     color: #334155;
     text-decoration: none;
     transition: all 0.15s;
+    white-space: nowrap;
 }
 
     .nav-item i {
@@ -1255,16 +1256,32 @@ footer {
 
 .dash-grid-2 {
     display: grid;
-    grid-template-columns: 1fr 380px;
+    grid-template-columns: 1fr 1fr;
     gap: 24px;
     margin-bottom: 24px;
+    align-items: stretch;
 }
+
+    .dash-grid-2 .dash-card {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
 
 .dash-card {
     background: #fff;
     border: 1px solid var(--border-color);
     border-radius: 16px;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+#recentJobsList, #recentAppsList {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 .dash-card-header {
@@ -1422,6 +1439,7 @@ footer {
     align-items: center;
     gap: 12px;
     transition: background 0.15s;
+    flex-wrap: wrap;
 }
 
     .applicant-item:last-child {
@@ -2067,6 +2085,35 @@ footer {
 }
 
 /* ========== RESPONSIVE ========== */
+@media (max-width: 1100px) {
+    .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.25s ease;
+        z-index: 200;
+        width: 260px;
+    }
+
+        .sidebar.open {
+            transform: translateX(0);
+        }
+
+    .dash-main {
+        margin-left: 0;
+    }
+
+    .dash-toggle-btn {
+        display: inline-flex;
+    }
+
+    .stats-row {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .dash-grid-2 {
+        grid-template-columns: 1fr;
+    }
+}
+
 @media (max-width: 768px) {
     .hero-inner {
         grid-template-columns: 1fr;

@@ -119,6 +119,41 @@ namespace OnlineJobRecruitmentSystem.Infrastructure.Services
             return true;
         }
 
+        public async Task<List<AdminContactMessageDto>> GetContactMessagesAsync()
+        {
+            return await _context.ContactMessages
+                .OrderByDescending(c => c.CreatedAt)
+                .Select(c => new AdminContactMessageDto
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    Email = c.Email,
+                    Message = c.Message,
+                    CreatedAt = c.CreatedAt,
+                    IsRead = c.IsRead
+                }).ToListAsync();
+        }
+
+        public async Task<bool> MarkContactMessageAsReadAsync(int id)
+        {
+            var msg = await _context.ContactMessages.FindAsync(id);
+            if (msg == null) return false;
+
+            msg.IsRead = true;
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> DeleteContactMessageAsync(int id)
+        {
+            var msg = await _context.ContactMessages.FindAsync(id);
+            if (msg == null) return false;
+
+            _context.ContactMessages.Remove(msg);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
         public async Task<List<AdminPaymentDto>> GetPaymentsAsync()
         {
             return await _context.Payments

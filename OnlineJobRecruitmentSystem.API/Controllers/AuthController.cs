@@ -124,7 +124,7 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
             if (tokenResult == null)
                 return Unauthorized(ResponseModel<string>.Fail("Invalid or expired verification code."));
 
-            return Ok(ResponseModel<object>.Ok(new { token = tokenResult.Token, refreshToken = tokenResult.RefreshToken, role = tokenResult.Role }, "Login successful."));
+            return Ok(ResponseModel<object>.Ok(new { id = tokenResult.Id, token = tokenResult.Token, refreshToken = tokenResult.RefreshToken, role = tokenResult.Role }, "Login successful."));
         }
     }
 }

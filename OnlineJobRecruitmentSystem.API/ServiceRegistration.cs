@@ -19,7 +19,11 @@ namespace OnlineJobRecruitmentSystem.API
         {
             StripeConfiguration.ApiKey = configuration["Stripe:SecretKey"];
 
-            services.AddControllers();
+            services.AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
+                });
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowConfiguredOrigin", policy =>
@@ -90,6 +94,7 @@ namespace OnlineJobRecruitmentSystem.API
             services.AddScoped<IEmployerService, EmployerService>();
             services.AddScoped<IJobSeekerService, JobSeekerService>();
             services.AddScoped<IContractService, ContractService>();
+            services.AddScoped<IContactService, ContactService>();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>

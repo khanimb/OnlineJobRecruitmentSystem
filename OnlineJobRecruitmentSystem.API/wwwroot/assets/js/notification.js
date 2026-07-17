@@ -47,8 +47,8 @@ async function loadNotifications() {
     } catch { }
 }
 
-function notifItemHtml(n, onclickFn) {
-    return `<div class="notif-item ${n.isRead ? '' : 'unread'}" onclick="${onclickFn}(${n.id})">
+function notifItemHtml(n, onclickFn, cls = 'notif-item') {
+    return `<div class="${cls} ${n.isRead ? '' : 'unread'}" onclick="${onclickFn}(${n.id})">
         <div class="notif-icon"><i class="ti ${notifIcon(n.type)}"></i></div>
         <div>
             <div class="notif-item-title">${escapeHtml(n.title)}</div>
@@ -57,6 +57,7 @@ function notifItemHtml(n, onclickFn) {
         </div>
     </div>`;
 }
+
 function renderDropdown(items) {
     const list = $('#notifList');
     if (!items.length) {

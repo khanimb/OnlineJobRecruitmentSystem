@@ -119,8 +119,8 @@
                     <div class="chart-area" id="chartArea"></div>
                     <div class="mini-stats">
                         <div class="mini-stat"><div class="mini-stat-num" id="miniNew">0</div><div class="mini-stat-label">New this week</div></div>
-                        <div class="mini-stat"><div class="mini-stat-num">0</div><div class="mini-stat-label">Under review</div></div>
-                        <div class="mini-stat"><div class="mini-stat-num">0</div><div class="mini-stat-label">Shortlisted</div></div>
+                        <div class="mini-stat"><div class="mini-stat-num" id="miniReview">0</div><div class="mini-stat-label">Under review</div></div>
+                        <div class="mini-stat"><div class="mini-stat-num" id="miniShortlisted">0</div><div class="mini-stat-label">Shortlisted</div></div>
                     </div>
                 </div>
             </div>
@@ -276,22 +276,26 @@
                             <div class="form-group"><label>Max Salary ($)</label><input type="number" id="salaryMax" placeholder="6000" /></div>
                         </div>
                         <div class="form-group">
-                            <label>Job Description *</label><textarea id="jobDesc" class="form-textarea tinted" style="min-height:90px" placeholder="Describe the role..."></textarea>
-                            <div class="form-group">
-                                <label>Requirements</label><textarea id="jobReqs" class="form-textarea tinted" style="min-height:70px" placeholder="Required skills..."></textarea>
-                                <div class="form-group"><label>Budget ($)</label><input type="number" id="jobBudget" placeholder="Optional project budget" /></div>
-                                <div class="form-group"><label>Payment Type</label><select id="jobPaymentType"><option value="Fixed">Fixed</option><option value="Hourly">Hourly</option></select></div>
-                                <div class="form-group">
-                                    <label>Application Deadline</label>
-                                    <input type="date" id="jobDeadline" />
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button class="btn-cancel" onclick="closeModal()">Cancel</button>
-                                <button class="btn-save" onclick="postJob()"><i class="ti ti-send"></i> Post Job</button>
-                            </div>
+                            <label>Job Description *</label>
+                            <textarea id="jobDesc" class="form-textarea tinted" style="min-height:90px" placeholder="Describe the role..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Requirements</label>
+                            <textarea id="jobReqs" class="form-textarea tinted" style="min-height:70px" placeholder="Required skills..."></textarea>
+                        </div>
+                        <div class="form-group"><label>Budget ($)</label><input type="number" id="jobBudget" placeholder="Optional project budget" /></div>
+                        <div class="form-group"><label>Payment Type</label><select id="jobPaymentType"><option value="Fixed">Fixed</option><option value="Hourly">Hourly</option></select></div>
+                        <div class="form-group">
+                            <label>Application Deadline</label>
+                            <input type="date" id="jobDeadline" />
                         </div>
                     </div>
+                    <div class="modal-footer">
+                        <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+                        <button class="btn-save" onclick="postJob()"><i class="ti ti-send"></i> Post Job</button>
+                    </div>
+                    </div>
+                </div>
 
                     <!-- PREMIUM TAB -->
                     <div id="tab-premium" style="display:none">

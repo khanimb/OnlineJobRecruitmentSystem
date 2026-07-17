@@ -66,6 +66,30 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
             return Ok(ResponseModel<string>.Ok(null!, "Review deleted."));
         }
 
+        [HttpGet("contact-messages")]
+        public async Task<IActionResult> GetContactMessages()
+            => Ok(ResponseModel<object>.Ok(await adminService.GetContactMessagesAsync()));
+
+        [HttpDelete("contact-messages/{id}")]
+        public async Task<IActionResult> DeleteContactMessage(int id)
+        {
+            var deleted = await adminService.DeleteContactMessageAsync(id);
+            if (!deleted)
+                return NotFound(ResponseModel<string>.Fail("Message not found."));
+
+            return Ok(ResponseModel<string>.Ok(null!, "Message deleted."));
+        }
+
+        [HttpPut("contact-messages/{id}/read")]
+        public async Task<IActionResult> MarkMessageRead(int id)
+        {
+            var updated = await adminService.MarkContactMessageAsReadAsync(id);
+            if (!updated)
+                return NotFound(ResponseModel<string>.Fail("Message not found."));
+
+            return Ok(ResponseModel<string>.Ok(null!, "Marked as read."));
+        }
+
         [HttpGet("payments")]
         public async Task<IActionResult> GetPayments()
             => Ok(ResponseModel<object>.Ok(await adminService.GetPaymentsAsync()));

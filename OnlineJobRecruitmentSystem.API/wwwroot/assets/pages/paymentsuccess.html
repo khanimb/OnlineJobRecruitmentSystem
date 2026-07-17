@@ -17,11 +17,22 @@
             <button class="btn-submit" id="backBtn" style="margin-top:20px">Back to dashboard</button>
         </div>
     </div>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="../../assets/js/api.js"></script>
     <script>
         const user = JSON.parse(localStorage.getItem('user') || 'null');
         document.getElementById('backBtn').onclick = function () {
             window.location.href = user && user.role === 'Employer' ? 'employerdashboard.html' : 'jobseekerdashboard.html';
         };
+
+        const params = new URLSearchParams(window.location.search);
+        const sessionId = params.get('session_id');
+        const type = params.get('type');
+        const endpoint = type === 'premium' ? '/PaymentPremium/verify/' : '/ContractPayment/verify/';
+
+        if (sessionId) {
+            apiFetch(endpoint + sessionId, { method: 'POST' }).catch(() => { });
+        }
     </script>
 </body>
 </html>

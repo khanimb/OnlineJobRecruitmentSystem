@@ -48,13 +48,13 @@ function appItemHTML(app, i) {
     const rawTitle = app.jobTitle || 'Position';
     const rawCompany = app.companyName || 'Company';
     const badgeMap = { Applied: 'badge-new', Reviewed: 'badge-review', Shortlisted: 'badge-hired', Rejected: 'badge-rejected' };
-    return `<div class="job-item">
-        <div class="job-logo" style="background:${c.bg};color:${c.color}">${safeInitial(rawCompany)}</div>
+    return `<div class="job-item" style="cursor:pointer" onclick="window.location.href='/assets/pages/jobdetail.html?id=${app.jobPostId}'">
+    <div class="job-logo" style="background:${c.bg};color:${c.color}">${safeInitial(rawCompany)}</div>
         <div class="job-info">
-            <div class="job-name">${escapeHtml(rawTitle)}</div>
-            <div class="job-meta"><span><i class="ti ti-building"></i> ${escapeHtml(rawCompany)}</span><span><i class="ti ti-calendar"></i> ${app.appliedAt ? new Date(app.appliedAt).toLocaleDateString() : 'Recently'}</span></div>
-        </div>
-        <span class="app-badge ${badgeMap[app.status] || 'badge-new'}">${app.status || 'Applied'}</span>
+        <div class="job-name">${escapeHtml(rawTitle)}</div>
+        <div class="job-meta"><span><i class="ti ti-building"></i> ${escapeHtml(rawCompany)}</span><span><i class="ti ti-calendar"></i> ${app.appliedAt ? new Date(app.appliedAt).toLocaleDateString() : 'Recently'}</span></div>
+    </div>
+    <span class="app-badge ${badgeMap[app.status] || 'badge-new'}">${app.status || 'Applied'}</span>
     </div>`;
 }
 
@@ -92,13 +92,13 @@ function renderSaved() {
 
     renderList('#recentSavedList', mySaved.slice(0, 3), (s, i) => {
         const c = colors[i % colors.length];
-        return `<div class="job-item">
-            <div class="job-logo" style="background:${c.bg};color:${c.color}">${safeInitial(s.job.companyName)}</div>
-            <div class="job-info">
-                <div class="job-name">${escapeHtml(s.job.title)}</div>
-                <div class="job-meta"><span><i class="ti ti-building"></i> ${escapeHtml(s.job.companyName)}</span></div>
-            </div>
-            <span class="tag tag-gray">${s.job.jobType}</span>
+        return `<div class="job-item" style="cursor:pointer" onclick="window.location.href='/assets/pages/jobdetail.html?id=${s.job.id}'">
+        <div class="job-logo" style="background:${c.bg};color:${c.color}">${safeInitial(s.job.companyName)}</div>
+        <div class="job-info">
+        <div class="job-name">${escapeHtml(s.job.title)}</div>
+        <div class="job-meta"><span><i class="ti ti-building"></i> ${escapeHtml(s.job.companyName)}</span></div>
+        </div>
+         <span class="tag tag-gray">${s.job.jobType}</span>
         </div>`;
     }, empty);
 }
@@ -222,6 +222,11 @@ async function downloadCvPdf() {
 // ── INIT ──
 $(function () {
     $('#sidebarToggleBtn').on('click', function () { $('.sidebar').toggleClass('open'); });
+    $('.dash-main').on('click', function (e) {
+        if ($('.sidebar').hasClass('open') && !$(e.target).closest('.sidebar').length && !$(e.target).closest('#sidebarToggleBtn').length) {
+            $('.sidebar').removeClass('open');
+        }
+    });
     const user = getUser();
     if (!user || user.role !== 'JobSeeker') { window.location.href = 'login.html'; return; }
     const name = user.firstName || user.username || user.email || 'Job Seeker';

@@ -152,5 +152,10 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
 
             return Ok(ResponseModel<EmployerDashboardDto>.Ok(dashboard));
         }
+
+        [HttpGet("companies")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetPublicCompanies()
+            => Ok(ResponseModel<List<PublicCompanyDto>>.Ok(await employerService.GetPublicCompaniesAsync()));
     }
 }

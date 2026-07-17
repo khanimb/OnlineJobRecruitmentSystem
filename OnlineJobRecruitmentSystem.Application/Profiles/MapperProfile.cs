@@ -98,6 +98,7 @@ namespace OnlineJobRecruitmentSystem.Application.Profiles
 
             CreateMap<JobPost, ReturnJobDto>()
                 .ForMember(d => d.CompanyName, o => o.MapFrom(s => s.EmployerProfile!.CompanyName))
+                .ForMember(d => d.EmployerUserId, o => o.MapFrom(s => s.EmployerProfile!.UserId))
                 .ForMember(d => d.ApplicationCount, o => o.MapFrom(s => s.Applications.Count));
 
             CreateMap<JobApplication, ReturnJobApplicationDto>()

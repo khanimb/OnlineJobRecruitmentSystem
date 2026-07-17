@@ -75,6 +75,45 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
             return Ok(ResponseModel<CvAnalysisResultDto>.Ok(result));
         }
 
+        [HttpPost("chat")]
+        public async Task<IActionResult> Chat(ChatMessageDto dto)
+        {
+            if (string.IsNullOrWhiteSpace(dto.Message))
+                return BadRequest(ResponseModel<string>.Fail("Message is required."));
+
+            var jobs = await context.JobPosts
+                .Where(j => j.IsActive)
+                .OrderByDescending(j => j.Id)
+                .Take(20)
+                .Select(j => new { j.Title, j.Category, j.Location, j.JobType, j.SalaryMin, j.SalaryMax })
+                .ToListAsync();
+
+            var jobsList = string.Join("\n", jobs.Select(j => $"- {j.Title} ({j.Category}, {j.JobType}, {j.Location}, ${j.SalaryMin}-${j.SalaryMax})"));
+
+            var prompt = $@"You are a helpful job search assistant for a job platform called NexHire.
+Available open jobs:
+{jobsList}
+
+User question: ""{dto.Message}""
+
+Answer the user's question helpfully, referring to specific jobs from the list above when relevant. Keep your reply concise (max 4-5 sentences).
+Respond ONLY in this JSON format: {{""reply"": ""your answer here""}}";
+
+            var raw = await geminiService.GenerateContentAsync(prompt);
+            string reply;
+            try
+            {
+                using var doc = JsonDocument.Parse(raw);
+                reply = doc.RootElement.GetProperty("reply").GetString() ?? "Sorry, I couldn't process that.";
+            }
+            catch
+            {
+                reply = raw;
+            }
+
+            return Ok(ResponseModel<string>.Ok(reply));
+        }
+
         [HttpGet("recommended-jobs")]
         public async Task<IActionResult> GetRecommendedJobs()
         {

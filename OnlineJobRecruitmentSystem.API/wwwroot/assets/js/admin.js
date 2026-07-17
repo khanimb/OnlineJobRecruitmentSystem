@@ -1,7 +1,7 @@
-﻿let allUsers = [], allJobs = [], allApps = [], allPayments = [], allReviews = [], allContracts = [];
+﻿let allUsers = [], allJobs = [], allApps = [], allPayments = [], allReviews = [], allContracts = [], allMessages = [];
 
 function showTab(tab, el) {
-    ['overview', 'users', 'jobs', 'applications', 'payments', 'reviews', 'contracts'].forEach(t => $('#tab-' + t).hide());
+    ['overview', 'users', 'jobs', 'applications', 'payments', 'reviews', 'contracts', 'messages'].forEach(t => $('#tab-' + t).hide());
     $('#tab-' + tab).show();
     $('.nav-item').removeClass('active');
     if (el) $(el).addClass('active');
@@ -12,6 +12,7 @@ function showTab(tab, el) {
         applications: ['Applications', 'View all applications'],
         payments: ['Payments', 'Transaction history'],
         reviews: ['Reviews', 'Platform-wide reviews'],
+        messages: ['Messages', 'Messages submitted via the Contact page'],
         contracts: ['Contracts', 'Active and completed contracts']
     };
     $('#pageTitle').text(titles[tab][0]);
@@ -27,7 +28,7 @@ async function loadUsers() {
 }
 
 async function loadJobs() {
-    try { const r = await apiFetch('/Job'); allJobs = r.data?.data || []; } catch { allJobs = []; }
+    try { const r = await apiFetch('/Admin/jobs'); allJobs = r.data || []; } catch { allJobs = []; }
     renderJobs(allJobs);
     $('#totalJobs').text(allJobs.length);
     $('#jobsBadge').text(allJobs.length);
@@ -102,6 +103,57 @@ async function deleteReview(id) {
     catch (err) { showToast(err.message || 'Failed', false); }
 }
 
+async function loadMessages() {
+    try { const r = await apiFetch('/Admin/contact-messages'); allMessages = r.data || []; } catch { allMessages = []; }
+    renderMessages(allMessages);
+}
+
+function renderMessages(messages) {
+    renderList('#allMessagesList', messages, messageItemHTML,
+        `<div class="empty-state"><div class="empty-icon"><i class="ti ti-mail-off"></i></div><div class="empty-title">No messages yet</div></div>`);
+}
+
+function messageItemHTML(m, i) {
+    const c = colors[i % colors.length];
+    return `<div class="job-item" style="cursor:pointer" onclick="openMessageModal(${m.id})">
+    <div class="job-logo" style="background:${c.bg};color:${c.color}">${safeInitial(m.name)}</div>
+    <div class="job-info">
+      <div class="job-name" style="font-weight:${m.isRead ? '400' : '700'}">${!m.isRead ? '<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#2563eb;margin-right:6px"></span>' : ''}${escapeHtml(m.name)} — ${escapeHtml(m.email)}</div>
+      <div class="job-meta"><span>${escapeHtml(m.message)}</span><span><i class="ti ti-calendar"></i> ${new Date(m.createdAt).toLocaleString()}</span></div>
+    </div>
+    <div class="job-actions">
+      <button class="act-btn danger" onclick="event.stopPropagation();deleteMessage(${m.id})" title="Delete"><i class="ti ti-trash"></i></button>
+    </div>
+  </div>`;
+}
+
+async function openMessageModal(id) {
+    const m = allMessages.find(x => x.id === id);
+    if (!m) return;
+    $('#msgModalName').val(m.name);
+    $('#msgModalEmail').val(m.email);
+    $('#msgModalDate').val(new Date(m.createdAt).toLocaleString());
+    $('#msgModalText').val(m.message);
+    $('#messageModalOverlay').addClass('open');
+
+    if (!m.isRead) {
+        try {
+            await apiFetch('/Admin/contact-messages/' + id + '/read', { method: 'PUT' });
+            m.isRead = true;
+            renderMessages(allMessages);
+        } catch { }
+    }
+}
+
+function closeMessageModal() { $('#messageModalOverlay').removeClass('open'); }
+function closeMessageModalOutside(e) { if (e.target.id === 'messageModalOverlay') closeMessageModal(); }
+
+async function deleteMessage(id) {
+    if (!confirm('Delete this message?')) return;
+    try { await apiFetch('/Admin/contact-messages/' + id, { method: 'DELETE' }); showToast('Message deleted'); await loadMessages(); }
+    catch (err) { showToast(err.message || 'Failed', false); }
+}
+
 async function loadContracts() {
     try { const r = await apiFetch('/Admin/contracts'); allContracts = r.data || []; } catch { allContracts = []; }
     renderContracts(allContracts);
@@ -131,7 +183,7 @@ function filterUsers() {
     renderUsers(filtered);
 }
 
-function userItemHTML(user, i) {
+function userItemHTML(user, i, prefix = '') {
     const c = colors[i % colors.length];
     const rawName = user.firstName ? `${user.firstName} ${user.lastName || ''}`.trim() : user.username || user.email;
     const name = escapeHtml(rawName);
@@ -147,17 +199,17 @@ function userItemHTML(user, i) {
       <option value="Admin" ${user.role === 'Admin' ? 'selected' : ''}>Admin</option>
     </select>
     <div class="job-actions">
-      <button class="act-btn" title="View" onclick="toggleUserDetail(${user.id})"><i class="ti ti-info-circle"></i></button>
+      <button class="act-btn" title="View" onclick="toggleUserDetail('${prefix}${user.id}')"><i class="ti ti-info-circle"></i></button>
       <button class="act-btn danger" onclick="deleteUser(${user.id})" title="Delete"><i class="ti ti-trash"></i></button>
     </div>
   </div>
-  <div id="user-detail-${user.id}" style="display:none;padding:12px 16px;background:#f8fafc;border-radius:10px;margin:-6px 0 10px"></div>`;
+  <div id="user-detail-${prefix}${user.id}" style="display:none;padding:12px 16px;background:#f8fafc;border-radius:10px;margin:-6px 0 10px"></div>`;
 }
 
 function renderUsers(users) {
     const empty = `<div class="empty-state"><div class="empty-icon"><i class="ti ti-user-off"></i></div><div class="empty-title">No users found</div></div>`;
-    renderList('#recentUsersList', users.slice(0, 5), userItemHTML, empty);
-    renderList('#allUsersList', users, userItemHTML, empty);
+    renderList('#recentUsersList', users.slice(0, 5), (u, i) => userItemHTML(u, i, 'recent-'), empty);
+    renderList('#allUsersList', users, (u, i) => userItemHTML(u, i, 'all-'), empty);
 }
 
 function jobItemHTML(job, i) {
@@ -219,12 +271,13 @@ async function toggleJobStatus(id, currentlyActive) {
     catch (err) { showToast(err.message || 'Failed', false); }
 }
 
-async function toggleUserDetail(id) {
-    const box = $('#user-detail-' + id);
+async function toggleUserDetail(key) {
+    const realId = key.replace(/^(recent-|all-)/, '');
+    const box = $('#user-detail-' + key);
     if (box.is(':visible')) { box.hide(); return; }
     box.show().html('<span style="color:#94a3b8;font-size:0.85rem">Loading...</span>');
     try {
-        const r = await apiFetch('/Admin/users/' + id);
+        const r = await apiFetch('/Admin/users/' + realId);
         const u = r.data;
         box.html(`<div style="font-size:0.85rem;line-height:1.6">
             <div><b>Username:</b> ${escapeHtml(u.username)}</div>
@@ -235,7 +288,12 @@ async function toggleUserDetail(id) {
 
 $(function () {
     $('#sidebarToggleBtn').on('click', function () { $('.sidebar').toggleClass('open'); });
+    $('.dash-main').on('click', function (e) {
+        if ($('.sidebar').hasClass('open') && !$(e.target).closest('.sidebar').length && !$(e.target).closest('#sidebarToggleBtn').length) {
+            $('.sidebar').removeClass('open');
+        }
+    });
     const user = getUser();
     if (!user || user.role !== 'Admin') { window.location.href = 'login.html'; return; }
-    Promise.all([loadUsers(), loadJobs(), loadApps(), loadPayments(), loadStats(), loadReviews(), loadContracts()]);
+    Promise.all([loadUsers(), loadJobs(), loadApps(), loadPayments(), loadStats(), loadReviews(), loadContracts(), loadMessages()]);
 });

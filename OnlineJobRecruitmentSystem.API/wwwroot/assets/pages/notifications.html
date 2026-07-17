@@ -78,7 +78,7 @@
                 $('#notifFullList').html('<div style="padding:20px;color:#94a3b8;font-size:0.85rem">No notifications yet.</div>');
                 return;
             }
-            $('#notifFullList').html(items.map(n => notifItemHtml(n, 'notifClickPage')).join(''));
+            $('#notifFullList').html(items.map(n => notifItemHtml(n, 'notifClickPage', 'notif-full-item')).join(''));
         }
 
         async function notifClickPage(id) {

@@ -29,7 +29,6 @@
     </nav>
 
     <div class="job-detail-page">
-
         <div class="job-detail-main">
             <a href="jobs.html" class="back-link"><i class="ti ti-arrow-left"></i> Back to jobs</a>
 
@@ -58,11 +57,15 @@
             <div class="detail-apply-card" id="applyCard" style="display:none">
                 <div class="detail-salary" id="detailSalary"></div>
                 <div class="detail-salary-label">Monthly salary</div>
+                <textarea id="coverLetterInput" placeholder="Write a short cover letter..." class="form-textarea" style="min-height:80px;margin-bottom:10px"></textarea>
                 <button class="btn-apply" id="applyBtn" onclick="applyJob()">
                     <i class="ti ti-send"></i> Apply Now
                 </button>
                 <button class="btn-save-job" onclick="saveJob()">
                     <i class="ti ti-bookmark"></i> Save Job
+                </button>
+                <button class="btn-save-job" onclick="messageEmployer()">
+                    <i class="ti ti-message"></i> Message Employer
                 </button>
                 <div class="detail-meta-list" id="detailMeta"></div>
             </div>
@@ -114,6 +117,11 @@
                 }).join(''));
                 $('#similarJobsSection').show();
             } catch { }
+        }
+
+        function messageEmployer() {
+            if (!currentJob?.employerUserId) return;
+            window.location.href = `message.html?userId=${currentJob.employerUserId}&name=${encodeURIComponent(currentJob.companyName || 'Employer')}`;
         }
 
         function renderJob(job) {
@@ -172,9 +180,11 @@
             btn.prop('disabled', true).html('<i class="ti ti-loader"></i> Applying...');
 
             try {
+                const coverLetter = $('#coverLetterInput').val().trim();
+                if (!coverLetter) { showToast('Please write a short cover letter', false); btn.prop('disabled', false).html('<i class="ti ti-send"></i> Apply Now'); return; }
                 await apiFetch('/JobApplication/' + currentJob.id, {
                     method: 'POST',
-                    body: JSON.stringify({ coverLetter: '' })
+                    body: JSON.stringify({ coverLetter })
                 });
                 showToast('Application submitted!');
                 btn.html('<i class="ti ti-check"></i> Applied');

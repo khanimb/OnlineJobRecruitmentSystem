@@ -28,6 +28,8 @@ namespace OnlineJobRecruitmentSystem.API.Hubs
 
             int senderId = int.Parse(senderIdClaim);
 
+            if (receiverId == senderId) return;
+
             var message = await _messageService.SaveMessageAsync(senderId, new SendMessageDto
             {
                 ReceiverId = receiverId,
@@ -35,14 +37,6 @@ namespace OnlineJobRecruitmentSystem.API.Hubs
             });
 
             await Clients.User(receiverId.ToString()).SendAsync("ReceiveMessage", new
-            {
-                message.Id,
-                message.SenderId,
-                message.Content,
-                message.CreatedAt
-            });
-
-            await Clients.Caller.SendAsync("ReceiveMessage", new
             {
                 message.Id,
                 message.SenderId,

@@ -33,5 +33,6 @@ namespace OnlineJobRecruitmentSystem.Application.Interfaces
         Task<EmployerJobApplicantsResult> GetApplicationsByJobAsync(int userId, int jobId);
         Task<EmployerApplicationStatusUpdateResult> UpdateApplicationStatusAsync(int userId, int applicationId, ApplicationStatus status, string notes);
         Task<EmployerDashboardDto?> GetDashboardAsync(int userId);
+        Task<List<PublicCompanyDto>> GetPublicCompaniesAsync();
     }
 }

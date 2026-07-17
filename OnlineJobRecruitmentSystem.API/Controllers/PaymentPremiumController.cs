@@ -58,7 +58,7 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
                     }
                 },
                 Mode = "payment",
-                SuccessUrl = $"{configuration["App:BaseUrl"]}/assets/pages/paymentsuccess.html?session_id={{CHECKOUT_SESSION_ID}}",
+                SuccessUrl = $"{configuration["App:BaseUrl"]}/assets/pages/paymentsuccess.html?session_id={{CHECKOUT_SESSION_ID}}&type=premium",
                 CancelUrl = $"{configuration["App:BaseUrl"]}/assets/pages/paymentcancel.html",
                 Metadata = new Dictionary<string, string>
                 {
@@ -114,6 +114,23 @@ namespace OnlineJobRecruitmentSystem.API.Controllers
                 logger.LogError(ex, "Stripe payment failed");
                 return BadRequest(ResponseModel<string>.Fail("Payment processing failed."));
             }
+        }
+
+        [HttpPost("verify/{sessionId}")]
+        public async Task<IActionResult> VerifyPayment(string sessionId)
+        {
+            var sessionService = new SessionService();
+            var session = await sessionService.GetAsync(sessionId);
+
+            if (session.PaymentStatus == "paid" &&
+                session.Metadata.TryGetValue("userId", out var userIdStr) &&
+                session.Metadata.TryGetValue("months", out var monthsStr))
+            {
+                await paymentService.CompleteCheckoutAsync(session.Id, int.Parse(userIdStr), int.Parse(monthsStr));
+                return Ok(ResponseModel<string>.Ok(null!, "Payment confirmed."));
+            }
+
+            return BadRequest(ResponseModel<string>.Fail("Payment not completed yet."));
         }
 
         [HttpGet]

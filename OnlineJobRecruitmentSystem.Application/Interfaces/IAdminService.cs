@@ -19,5 +19,8 @@ namespace OnlineJobRecruitmentSystem.Application.Interfaces
         Task<List<AdminContractDto>> GetContractsAsync();
         Task<AdminRoleUpdateResult> UpdateUserRoleAsync(int id, string role);
         Task<bool> UpdateJobStatusAsync(int id, bool isActive);
+        Task<List<AdminContactMessageDto>> GetContactMessagesAsync();
+        Task<bool> DeleteContactMessageAsync(int id);
+        Task<bool> MarkContactMessageAsReadAsync(int id);
     }
 }
