@@ -45,6 +45,17 @@ namespace OnlineJobRecruitmentSystem.Infrastructure.Services
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
+            if (user.Role == OnlineJobRecruitmentSystem.Domain.Common.Roles.JobSeeker)
+            {
+                _context.JobSeekerProfiles.Add(new JobSeekerProfile { UserId = user.Id });
+                await _context.SaveChangesAsync();
+            }
+            else if (user.Role == OnlineJobRecruitmentSystem.Domain.Common.Roles.Employer)
+            {
+                _context.EmployerProfiles.Add(new EmployerProfile { UserId = user.Id });
+                await _context.SaveChangesAsync();
+            }
+
             var baseUrl = _configuration["App:BaseUrl"];
             await _emailService.SendEmailAsync(
                 dto.Email,

@@ -22,7 +22,7 @@ function applyFilters() {
         .filter(v => ['FullTime', 'PartTime', 'Remote', 'Contract', 'Internship'].includes(v));
 
     const checkedCats = $('.filter-check input[type=checkbox]:checked').map(function () { return $(this).val(); }).get()
-        .filter(v => ['Technology', 'Finance', 'Healthcare', 'Education', 'Marketing', 'Design'].includes(v));
+        .filter(v => ['Technology', 'Finance', 'Healthcare', 'Education', 'Marketing', 'Design', 'Other'].includes(v));
 
     let filtered = allJobs.filter(job => {
         const title = (job.title || job.jobTitle || '').toLowerCase();

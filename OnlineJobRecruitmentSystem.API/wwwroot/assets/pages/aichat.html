@@ -27,12 +27,15 @@
     </nav>
 
     <div class="job-detail-page">
-        <div class="job-detail-main" style="max-width:700px;margin:30px auto;float:none">
-            <div class="job-detail-section">
+        <div style="max-width:950px;margin:30px auto;display:flex;gap:20px">
+            <div style="width:220px;flex-shrink:0;background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:14px;max-height:520px;display:flex;flex-direction:column">
+                <button class="btn-primary" style="width:100%;justify-content:center;margin-bottom:12px" onclick="newChat()"><i class="ti ti-plus"></i> New chat</button>
+                <div style="font-size:0.7rem;color:#94a3b8;text-transform:uppercase;margin-bottom:6px">Sessions</div>
+                <div id="sessionsList" style="overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:4px"></div>
+            </div>
+            <div class="job-detail-section" style="flex:1;margin:0">
                 <div class="job-detail-section-title"><i class="ti ti-sparkles" style="color:#2563EB"></i> AI Job Assistant</div>
-                <div id="chatMessages" style="max-height:420px;min-height:200px;overflow-y:auto;padding:10px 0;display:flex;flex-direction:column;gap:10px">
-                    <div style="align-self:flex-start;background:#f1f5f9;color:#334155;padding:8px 14px;border-radius:12px;max-width:80%;font-size:0.85rem">Hi! Ask me anything about open jobs — e.g. "Any remote developer jobs?"</div>
-                </div>
+                <div id="chatMessages" style="max-height:420px;min-height:200px;overflow-y:auto;padding:10px 0;display:flex;flex-direction:column;gap:10px"></div>
                 <div style="display:flex;gap:8px;margin-top:14px">
                     <input type="text" id="chatInput" placeholder="Type your question..." style="flex:1;padding:10px 14px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:0.875rem;font-family:Inter,sans-serif;outline:none" />
                     <button class="btn-primary" id="chatSendBtn" onclick="sendChatMessage()"><i class="ti ti-send"></i></button>
@@ -49,27 +52,71 @@
     <script>
         function toggleMenu() { $('.nav-links').toggleClass('open'); }
 
+        let currentSessionId = null;
+
         $(function () {
             const user = JSON.parse(localStorage.getItem('user') || 'null');
-            if (!user || user.role !== 'JobSeeker') { window.location.href = 'login.html'; return; }
+            if (!user || (user.role !== 'JobSeeker' && user.role !== 'Employer')) { window.location.href = 'login.html'; return; }
             $('#chatInput').on('keydown', function (e) { if (e.key === 'Enter') sendChatMessage(); });
-            loadChatHistory();
+            initChat();
         });
 
-        function getChatHistory() {
-            return JSON.parse(localStorage.getItem('aiChatHistory') || '[]');
+        function sessionsKey() {
+            const user = JSON.parse(localStorage.getItem('user') || 'null');
+            return 'aiChatSessions_' + (user ? user.id : 'anon');
         }
 
-        function saveChatMessage(role, text) {
-            const history = getChatHistory();
-            history.push({ role, text });
-            localStorage.setItem('aiChatHistory', JSON.stringify(history));
+        function getSessions() {
+            return JSON.parse(localStorage.getItem(sessionsKey()) || '[]');
         }
 
-        function loadChatHistory() {
-            const history = getChatHistory();
-            if (!history.length) return;
-            $('#chatMessages').html(history.map(m => renderBubble(m.role, m.text)).join(''));
+        function saveSessions(sessions) {
+            localStorage.setItem(sessionsKey(), JSON.stringify(sessions));
+        }
+
+        function initChat() {
+            const sessions = getSessions();
+            if (sessions.length) {
+                currentSessionId = sessions[0].id;
+                renderSessionsList();
+                renderMessages();
+            } else {
+                newChat();
+            }
+        }
+
+        function newChat() {
+            const sessions = getSessions();
+            const session = { id: Date.now(), title: 'New chat', messages: [] };
+            sessions.unshift(session);
+            saveSessions(sessions);
+            currentSessionId = session.id;
+            renderSessionsList();
+            renderMessages();
+        }
+
+        function loadSession(id) {
+            currentSessionId = id;
+            renderSessionsList();
+            renderMessages();
+        }
+
+        function renderSessionsList() {
+            const sessions = getSessions();
+            $('#sessionsList').html(sessions.map(s => `
+        <div onclick="loadSession(${s.id})" style="padding:8px 10px;border-radius:8px;font-size:0.8rem;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background:${s.id === currentSessionId ? '#eff6ff' : 'transparent'};color:${s.id === currentSessionId ? '#2563EB' : '#334155'}">${escapeHtml(s.title)}</div>
+    `).join(''));
+        }
+
+        function renderMessages() {
+            const sessions = getSessions();
+            const session = sessions.find(s => s.id === currentSessionId);
+            const messages = session ? session.messages : [];
+            if (!messages.length) {
+                $('#chatMessages').html('<div style="align-self:flex-start;background:#f1f5f9;color:#334155;padding:8px 14px;border-radius:12px;max-width:80%;font-size:0.85rem">Hi! Ask me anything about open jobs — e.g. "Any remote developer jobs?"</div>');
+                return;
+            }
+            $('#chatMessages').html(messages.map(m => renderBubble(m.role, m.text)).join(''));
             $('#chatMessages').scrollTop($('#chatMessages')[0].scrollHeight);
         }
 
@@ -79,6 +126,17 @@
                 : `<div style="align-self:flex-start;background:#f1f5f9;color:#334155;padding:8px 14px;border-radius:12px;max-width:80%;font-size:0.85rem">${escapeHtml(text)}</div>`;
         }
 
+        function saveChatMessage(role, text) {
+            const sessions = getSessions();
+            const session = sessions.find(s => s.id === currentSessionId);
+            if (!session) return;
+            session.messages.push({ role, text });
+            if (session.title === 'New chat' && role === 'user') {
+                session.title = text.length > 30 ? text.slice(0, 30) + '...' : text;
+            }
+            saveSessions(sessions);
+        }
+
         async function sendChatMessage() {
             const input = $('#chatInput');
             const msg = input.val().trim();
@@ -86,6 +144,7 @@
             input.val('');
             $('#chatMessages').append(renderBubble('user', msg));
             saveChatMessage('user', msg);
+            renderSessionsList();
 
             const loadingId = 'chat-loading-' + Date.now();
             $('#chatMessages').append(`<div id="${loadingId}" style="align-self:flex-start;background:#f1f5f9;color:#334155;padding:8px 14px;border-radius:12px;max-width:80%;font-size:0.85rem">Thinking...</div>`);

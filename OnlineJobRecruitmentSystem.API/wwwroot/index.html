@@ -158,18 +158,18 @@
         <div class="section-sub" style="margin-top:6px">Get hired in 3 simple steps</div>
         <div class="steps">
             <div class="step-line"></div>
-            <div class="step">
+            <div class="step" onclick="window.location.href='assets/pages/register.html'" style="cursor:pointer">
                 <div class="step-num"><i class="ti ti-user-plus"></i></div>
                 <div class="step-title">Create your profile</div>
                 <div class="step-desc">Sign up and build your professional profile. Upload your CV and let employers find you.</div>
             </div>
-            <div class="step">
+            <div class="step" onclick="window.location.href='assets/pages/jobs.html'" style="cursor:pointer">
                 <div class="step-num"><i class="ti ti-search"></i></div>
                 <div class="step-title">Find matching jobs</div>
                 <div class="step-desc">Browse thousands of listings or let our AI match you with the best opportunities.</div>
             </div>
-            <div class="step">
-                <div class="step-num"><i class="ti ti-send"></i></div>
+            <div class="step" onclick="window.location.href='assets/pages/jobs.html'" style="cursor:pointer">
+                <div class="step-num"><i class="ti ti-send-2"></i></div>
                 <div class="step-title">Apply with one click</div>
                 <div class="step-desc">Apply instantly and track your application status in real time.</div>
             </div>
@@ -246,7 +246,7 @@
                 if (!jobs.length) return;
                 $('#featuredJobs').html(jobs.map((j, i) => {
                     const c = colors[i % colors.length];
-                    return `<div class="job-card">
+                    return `<div class="job-card" onclick="window.location.href='assets/pages/jobdetail.html?id=${j.id}'" style="cursor:pointer">
                 <div class="card-top">
                     <div class="company-logo" style="background:${c.bg};color:${c.color}">${safeInitial(j.companyName)}</div>
                     <i class="ti ti-bookmark bookmark" onclick="quickSaveJob(${j.id}, event)"></i>
@@ -259,11 +259,17 @@
                 </div>
                 <div class="job-footer">
                     <span class="salary">${j.salaryMin ? '$' + j.salaryMin.toLocaleString() + ' / mo' : 'Negotiable'}</span>
-                    <button class="apply-btn" onclick="window.location.href='assets/pages/jobdetail.html?id=${j.id}'">Quick apply</button>
+                    <button class="apply-btn" onclick="event.stopPropagation();quickApply(${j.id})">Quick apply</button>
                 </div>
             </div>`;
                 }).join(''));
             } catch { }
+        }
+
+        function quickApply(jobId) {
+            const user = getUser();
+            if (!user) { window.location.href = 'assets/pages/login.html'; return; }
+            window.location.href = 'assets/pages/jobdetail.html?id=' + jobId;
         }
 
         async function loadStats() {

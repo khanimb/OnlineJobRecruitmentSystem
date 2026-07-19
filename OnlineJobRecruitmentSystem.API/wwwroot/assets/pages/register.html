@@ -147,7 +147,7 @@
                     body: JSON.stringify({ firstName, lastName, username, email, password, role: selectedRole })
                 });
 
-                successMsg.textContent = 'Account created! Redirecting to login...';
+                successMsg.textContent = 'Account created! Please check your email to verify your account, then sign in.';
                 successMsg.style.display = 'block';
 
                 setTimeout(() => {
